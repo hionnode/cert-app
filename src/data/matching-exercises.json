@@ -1,0 +1,66 @@
+[
+  {
+    "id": "me-service-data-type",
+    "title": "Service -> Data Type",
+    "pairs": [
+      { "left": "Comprehend", "right": "Text entities" },
+      { "left": "Transcribe", "right": "Audio" },
+      { "left": "Textract", "right": "Documents" },
+      { "left": "Rekognition", "right": "Images/Video" },
+      { "left": "Bedrock Data Automation", "right": "Mixed/multimodal" }
+    ]
+  },
+  {
+    "id": "me-problem-solution",
+    "title": "Problem -> Solution",
+    "pairs": [
+      { "left": "Hallucination", "right": "Contextual grounding" },
+      { "left": "PII leak", "right": "Sensitive info filter (ANONYMIZE)" },
+      { "left": "Rate limits", "right": "Circuit breaker (Step Functions)" },
+      { "left": "Mathematical incorrectness", "right": "Automated Reasoning" },
+      { "left": "Prompt injection", "right": "Prompt Attack filter" }
+    ]
+  },
+  {
+    "id": "me-architecture-service",
+    "title": "Architecture Pattern -> AWS Service",
+    "pairs": [
+      { "left": "Circuit breaker", "right": "Step Functions" },
+      { "left": "Model cascading", "right": "Lambda routing" },
+      { "left": "Semantic cache", "right": "Vector DB (ElastiCache/DynamoDB)" },
+      { "left": "Prompt governance", "right": "Bedrock Prompt Management + CloudTrail" },
+      { "left": "Agent deployment", "right": "AgentCore Runtime" }
+    ]
+  },
+  {
+    "id": "me-human-review",
+    "title": "Human Review Pattern -> Service",
+    "pairs": [
+      { "left": "Low-confidence routing", "right": "A2I (Augmented AI)" },
+      { "left": "Evaluation datasets", "right": "Ground Truth / Ground Truth Plus" },
+      { "left": "Approval workflows", "right": "Step Functions Wait-for-Callback" }
+    ]
+  },
+  {
+    "id": "me-guardrails-verification",
+    "title": "Guardrails Component -> Verification Type",
+    "pairs": [
+      { "left": "Content filter", "right": "Harmful content" },
+      { "left": "Contextual grounding", "right": "Hallucination" },
+      { "left": "Automated Reasoning", "right": "Logical correctness" },
+      { "left": "PII filter", "right": "Data protection" },
+      { "left": "Prompt Attack", "right": "Jailbreak / injection" }
+    ]
+  },
+  {
+    "id": "me-cost-optimization",
+    "title": "Cost Optimization -> Technique",
+    "pairs": [
+      { "left": "Repeated system prompts", "right": "Bedrock Prompt Caching" },
+      { "left": "Similar user queries", "right": "Semantic caching" },
+      { "left": "Mixed complexity queries", "right": "Model cascading / Intelligent Prompt Routing" },
+      { "left": "Non-real-time bulk processing", "right": "Batch inference (50% discount)" },
+      { "left": "Idle SageMaker endpoint", "right": "Auto-scaling to zero" }
+    ]
+  }
+]

@@ -1,0 +1,462 @@
+[
+  {
+    "id": "vector-store-comparison",
+    "title": "Vector Store Comparison",
+    "domain": 1,
+    "description": "The exam's favorite question pattern. Match the exam trigger phrase to the correct vector store.",
+    "columns": ["Vector Store", "Best For", "Hybrid Search?", "Managed?", "Key Exam Trigger"],
+    "rows": [
+      {
+        "Vector Store": "Bedrock KB (managed store)",
+        "Best For": "Fastest path, zero infra",
+        "Hybrid Search?": "Via Bedrock",
+        "Managed?": "Fully managed",
+        "Key Exam Trigger": "'simplest' or 'least operational overhead'"
+      },
+      {
+        "Vector Store": "OpenSearch Serverless",
+        "Best For": "Scale + analytics + hybrid",
+        "Hybrid Search?": "Yes (BM25 + k-NN)",
+        "Managed?": "Serverless",
+        "Key Exam Trigger": "'hybrid search' or 'analytics on retrieval data'"
+      },
+      {
+        "Vector Store": "Aurora PostgreSQL (pgvector)",
+        "Best For": "Existing RDS + SQL queries",
+        "Hybrid Search?": "Manual (SQL + vector)",
+        "Managed?": "Managed RDS",
+        "Key Exam Trigger": "'existing relational database' or 'SQL queries alongside vector'"
+      },
+      {
+        "Vector Store": "Neptune (graph)",
+        "Best For": "Knowledge graphs + relationships",
+        "Hybrid Search?": "No",
+        "Managed?": "Managed",
+        "Key Exam Trigger": "'entity relationships' or 'graph-based retrieval'"
+      },
+      {
+        "Vector Store": "Kendra GenAI Index",
+        "Best For": "Enterprise retrieval with connectors + ACL",
+        "Hybrid Search?": "Yes (native)",
+        "Managed?": "Fully managed",
+        "Key Exam Trigger": "'enterprise search' or 'high-accuracy retrieval' or 'respect source permissions'"
+      },
+      {
+        "Vector Store": "DocumentDB",
+        "Best For": "MongoDB-compatible, HNSW/IVFFlat, up to 2000-dim",
+        "Hybrid Search?": "No",
+        "Managed?": "Managed",
+        "Key Exam Trigger": "'existing MongoDB' or 'document-oriented database'"
+      },
+      {
+        "Vector Store": "DynamoDB (co-index)",
+        "Best For": "Metadata layer alongside vector stores",
+        "Hybrid Search?": "N/A (metadata only)",
+        "Managed?": "Fully managed",
+        "Key Exam Trigger": "'metadata filtering' alongside semantic search"
+      }
+    ],
+    "examTriggerColumn": "Key Exam Trigger"
+  },
+  {
+    "id": "chunking-decision-tree",
+    "title": "Chunking Decision Tree",
+    "domain": 1,
+    "description": "Select the right chunking strategy based on content type.",
+    "columns": ["Content Type", "Best Chunking", "Why"],
+    "rows": [
+      {
+        "Content Type": "Short FAQ answers",
+        "Best Chunking": "Sentence-level or small fixed-size",
+        "Why": "Each answer is self-contained"
+      },
+      {
+        "Content Type": "Technical manuals",
+        "Best Chunking": "Hierarchical (section -> subsection)",
+        "Why": "Preserves document structure"
+      },
+      {
+        "Content Type": "Legal contracts",
+        "Best Chunking": "Semantic (by clause/paragraph)",
+        "Why": "Clauses must stay intact"
+      },
+      {
+        "Content Type": "Chat transcripts",
+        "Best Chunking": "Fixed-size with overlap",
+        "Why": "Even content, overlap preserves context"
+      },
+      {
+        "Content Type": "Code documentation",
+        "Best Chunking": "Hierarchical (by class -> method)",
+        "Why": "Code structure matters"
+      }
+    ]
+  },
+  {
+    "id": "embedding-model-comparison",
+    "title": "Embedding Model Comparison",
+    "domain": 1,
+    "description": "Choose the right embedding model based on language and modality needs.",
+    "columns": ["Model", "Dimensions", "Multilingual?", "Best For"],
+    "rows": [
+      {
+        "Model": "Amazon Titan Text Embeddings v2",
+        "Dimensions": "256/512/1024",
+        "Multilingual?": "Limited",
+        "Best For": "Cost-effective, AWS-native"
+      },
+      {
+        "Model": "Cohere Embed v3",
+        "Dimensions": "1024",
+        "Multilingual?": "Yes (100+ languages)",
+        "Best For": "Multilingual, high accuracy"
+      },
+      {
+        "Model": "Amazon Nova Multimodal Embeddings",
+        "Dimensions": "Variable",
+        "Multilingual?": "Yes",
+        "Best For": "Text + image + video + audio crossmodal search"
+      }
+    ]
+  },
+  {
+    "id": "bedrock-agents-vs-agentcore",
+    "title": "Bedrock Agents vs AgentCore",
+    "domain": 2,
+    "description": "Critical distinction: managed agent service vs deployment platform for any agent framework.",
+    "columns": ["Aspect", "Bedrock Agents", "Bedrock AgentCore"],
+    "rows": [
+      {
+        "Aspect": "What",
+        "Bedrock Agents": "Managed agent service",
+        "Bedrock AgentCore": "Agent deployment platform"
+      },
+      {
+        "Aspect": "Framework",
+        "Bedrock Agents": "AWS-native only",
+        "Bedrock AgentCore": "Any (Strands, CrewAI, LangGraph, custom)"
+      },
+      {
+        "Aspect": "Model",
+        "Bedrock Agents": "Bedrock models only",
+        "Bedrock AgentCore": "Any FM (Bedrock, OpenAI, self-hosted)"
+      },
+      {
+        "Aspect": "Deployment",
+        "Bedrock Agents": "Fully managed",
+        "Bedrock AgentCore": "You deploy to AgentCore Runtime"
+      },
+      {
+        "Aspect": "Use when",
+        "Bedrock Agents": "Simple agent, fast setup, AWS-native",
+        "Bedrock AgentCore": "Custom framework, multi-model, complex orchestration"
+      }
+    ],
+    "examTriggerColumn": "Aspect"
+  },
+  {
+    "id": "agentcore-services",
+    "title": "AgentCore 9 Services",
+    "domain": 2,
+    "description": "Know all 9 AgentCore services and the exam trigger phrases that point to each.",
+    "columns": ["Service", "Function", "Exam Trigger"],
+    "rows": [
+      {
+        "Service": "Runtime",
+        "Function": "Serverless deployment, session isolation, microVMs",
+        "Exam Trigger": "'deploy agent' + 'scale' + 'isolate sessions'"
+      },
+      {
+        "Service": "Gateway",
+        "Function": "Transform APIs/Lambda/MCP into agent-ready tools",
+        "Exam Trigger": "'connect agent to existing APIs' + 'tool integration'"
+      },
+      {
+        "Service": "Policy",
+        "Function": "Cedar-based action boundaries, natural language authoring",
+        "Exam Trigger": "'control what agents can do' + 'governance'"
+      },
+      {
+        "Service": "Identity",
+        "Function": "Agent auth for AWS + third-party services",
+        "Exam Trigger": "'agent needs to access external APIs securely'"
+      },
+      {
+        "Service": "Memory",
+        "Function": "Session + long-term + episodic memory",
+        "Exam Trigger": "'maintain context across sessions' + 'learn from past'"
+      },
+      {
+        "Service": "Observability",
+        "Function": "CloudWatch dashboards, OpenTelemetry, quality metrics",
+        "Exam Trigger": "'monitor agent behavior' + 'debug agent decisions'"
+      },
+      {
+        "Service": "Evaluations",
+        "Function": "Correctness, helpfulness, safety scoring",
+        "Exam Trigger": "'measure agent quality' + 'evaluate before production'"
+      },
+      {
+        "Service": "Code Interpreter",
+        "Function": "Secure sandbox for code execution",
+        "Exam Trigger": "'agent needs to run code' + 'generate visualizations'"
+      },
+      {
+        "Service": "Browser",
+        "Function": "Web-based workflow execution",
+        "Exam Trigger": "'agent needs to interact with web pages'"
+      }
+    ],
+    "examTriggerColumn": "Exam Trigger"
+  },
+  {
+    "id": "mcp-server-patterns",
+    "title": "MCP Server Implementation Patterns",
+    "domain": 2,
+    "description": "The exam explicitly tests MCP server implementation. Know the stateless vs stateful distinction.",
+    "columns": ["MCP Server Type", "Implementation", "When to Use", "Exam Trigger"],
+    "rows": [
+      {
+        "MCP Server Type": "Stateless (lightweight)",
+        "Implementation": "Lambda function",
+        "When to Use": "Read-only queries, simple tools, no persistent state",
+        "Exam Trigger": "'lightweight tool access'"
+      },
+      {
+        "MCP Server Type": "Stateful (complex)",
+        "Implementation": "ECS container",
+        "When to Use": "DB connection pooling, transactions, persistent state",
+        "Exam Trigger": "'complex tools' + 'persistent connections'"
+      }
+    ],
+    "examTriggerColumn": "Exam Trigger"
+  },
+  {
+    "id": "q-business-vs-bedrock-kb",
+    "title": "Q Business vs Bedrock KB + Custom App",
+    "domain": 2,
+    "description": "Know when to use the managed enterprise search solution vs building custom.",
+    "columns": ["Feature", "Q Business", "Bedrock KB + Custom App"],
+    "rows": [
+      {
+        "Feature": "Setup",
+        "Q Business": "Plug-and-play, 40+ connectors (SharePoint, Confluence, Salesforce, Google Drive, Jira)",
+        "Bedrock KB + Custom App": "Custom build required"
+      },
+      {
+        "Feature": "ACL",
+        "Q Business": "Built-in -- respects source permissions",
+        "Bedrock KB + Custom App": "Must implement manually"
+      },
+      {
+        "Feature": "UI",
+        "Q Business": "Provided out of the box",
+        "Bedrock KB + Custom App": "Build with Amplify or custom"
+      },
+      {
+        "Feature": "Customization",
+        "Q Business": "Limited",
+        "Bedrock KB + Custom App": "Full control"
+      },
+      {
+        "Feature": "Identity",
+        "Q Business": "IAM Identity Center for SSO",
+        "Bedrock KB + Custom App": "Cognito or custom auth"
+      },
+      {
+        "Feature": "Use when",
+        "Q Business": "Enterprise internal search, quick deployment, existing permissions matter",
+        "Bedrock KB + Custom App": "Customer-facing, custom UX, complex retrieval logic"
+      }
+    ]
+  },
+  {
+    "id": "model-cascading-pattern",
+    "title": "Model Cascading Pattern",
+    "domain": 2,
+    "description": "Route queries to different models based on complexity. Frequently tested.",
+    "columns": ["Query Complexity", "Route To", "Characteristics"],
+    "rows": [
+      {
+        "Query Complexity": "Simple (70% of traffic)",
+        "Route To": "Nova Micro",
+        "Characteristics": "Cheapest, fastest"
+      },
+      {
+        "Query Complexity": "Medium (20% of traffic)",
+        "Route To": "Nova Pro",
+        "Characteristics": "Balanced cost/quality"
+      },
+      {
+        "Query Complexity": "Complex (10% of traffic)",
+        "Route To": "Claude Sonnet",
+        "Characteristics": "Highest quality"
+      }
+    ]
+  },
+  {
+    "id": "service-to-data-type",
+    "title": "Service-to-Data-Type Mapping",
+    "domain": 1,
+    "description": "Memorize which AWS service handles which data type in GenAI pipelines.",
+    "columns": ["Data Type", "AWS Service", "Use"],
+    "rows": [
+      {
+        "Data Type": "Text",
+        "AWS Service": "Comprehend",
+        "Use": "Entity extraction, sentiment, intent"
+      },
+      {
+        "Data Type": "Audio",
+        "AWS Service": "Transcribe",
+        "Use": "Speech-to-text"
+      },
+      {
+        "Data Type": "Documents (PDF, images)",
+        "AWS Service": "Textract",
+        "Use": "OCR, text extraction, table extraction"
+      },
+      {
+        "Data Type": "Images/Video",
+        "AWS Service": "Rekognition / Bedrock multimodal",
+        "Use": "Object detection / FM analysis"
+      },
+      {
+        "Data Type": "Tabular data",
+        "AWS Service": "Glue",
+        "Use": "ETL, data quality validation"
+      },
+      {
+        "Data Type": "Mixed/multimodal",
+        "AWS Service": "Bedrock Data Automation",
+        "Use": "Automated processing pipeline"
+      }
+    ]
+  },
+  {
+    "id": "guardrails-filter-types",
+    "title": "Guardrails Filter Types",
+    "domain": 3,
+    "description": "Know all 8 filter types, their configuration options, and what action they take.",
+    "columns": ["Filter", "Config", "Action"],
+    "rows": [
+      {
+        "Filter": "Content filters",
+        "Config": "6 categories x 4 strengths (NONE/LOW/MED/HIGH)",
+        "Action": "Block harmful input/output"
+      },
+      {
+        "Filter": "Prompt Attack",
+        "Config": "Separate from content filters",
+        "Action": "Detect jailbreaks, prompt injection"
+      },
+      {
+        "Filter": "Denied topics",
+        "Config": "Custom topic + example phrases",
+        "Action": "Block specific subjects"
+      },
+      {
+        "Filter": "Word filters",
+        "Config": "Custom word list + profanity toggle",
+        "Action": "Exact-match blocking"
+      },
+      {
+        "Filter": "PII (sensitive info)",
+        "Config": "Per-entity type: BLOCK or ANONYMIZE",
+        "Action": "Mask or reject PII"
+      },
+      {
+        "Filter": "Custom regex",
+        "Config": "Pattern-based detection",
+        "Action": "Org-specific identifiers"
+      },
+      {
+        "Filter": "Contextual grounding",
+        "Config": "Grounding threshold + relevance threshold",
+        "Action": "Detect hallucinations"
+      },
+      {
+        "Filter": "Automated Reasoning",
+        "Config": "Formal logic verification rules",
+        "Action": "Mathematically verify facts"
+      }
+    ]
+  },
+  {
+    "id": "caching-comparison",
+    "title": "Caching Comparison",
+    "domain": 4,
+    "description": "Critical exam distinction -- know all three caching layers and when to use each.",
+    "columns": ["Method", "How It Works", "When to Use", "Cost Impact"],
+    "rows": [
+      {
+        "Method": "Bedrock Prompt Caching",
+        "How It Works": "Caches system prompt at Bedrock API level. 5-min TTL (1.25x write, 0.1x read) or 1-hour TTL (2.0x write, 0.1x read). Min 1024 tokens.",
+        "When to Use": "Same long system prompt across many requests",
+        "Cost Impact": "Up to 90% reduction on cached tokens"
+      },
+      {
+        "Method": "Semantic Caching (ElastiCache/DynamoDB)",
+        "How It Works": "App-level: embed incoming query, compare against cached query embeddings via cosine similarity",
+        "When to Use": "Repeated similar user queries",
+        "Cost Impact": "Eliminates FM call entirely (86% cost reduction with ElastiCache)"
+      },
+      {
+        "Method": "Exact-match Caching (ElastiCache)",
+        "How It Works": "App-level: hash identical queries, return cached response",
+        "When to Use": "Identical queries",
+        "Cost Impact": "Eliminates FM call entirely"
+      },
+      {
+        "Method": "Intelligent Prompt Routing",
+        "How It Works": "Auto-analyzes each prompt and routes to most appropriate FM based on complexity",
+        "When to Use": "Mixed-complexity workloads",
+        "Cost Impact": "Automated model cascading without manual routing logic"
+      }
+    ]
+  },
+  {
+    "id": "evaluation-approaches",
+    "title": "Evaluation Approaches",
+    "domain": 5,
+    "description": "Match what you are evaluating to the correct method and AWS service.",
+    "columns": ["What You're Evaluating", "Method", "Service"],
+    "rows": [
+      {
+        "What You're Evaluating": "FM response quality",
+        "Method": "LLM-as-a-judge + human eval",
+        "Service": "Bedrock Evaluations"
+      },
+      {
+        "What You're Evaluating": "RAG retrieval relevance",
+        "Method": "Contextual grounding score",
+        "Service": "Bedrock Guardrails"
+      },
+      {
+        "What You're Evaluating": "RAG answer faithfulness",
+        "Method": "Grounding check against source",
+        "Service": "Bedrock Guardrails"
+      },
+      {
+        "What You're Evaluating": "Agent correctness",
+        "Method": "Automated eval on test cases",
+        "Service": "AgentCore Evaluations"
+      },
+      {
+        "What You're Evaluating": "Agent safety",
+        "Method": "Harmfulness scoring",
+        "Service": "AgentCore Evaluations"
+      },
+      {
+        "What You're Evaluating": "Production latency",
+        "Method": "End-to-end trace",
+        "Service": "X-Ray + CloudWatch"
+      },
+      {
+        "What You're Evaluating": "Prompt regression",
+        "Method": "Compare before/after on test set",
+        "Service": "Lambda + CloudWatch"
+      }
+    ]
+  }
+]

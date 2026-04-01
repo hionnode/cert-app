@@ -1,0 +1,3213 @@
+[
+  {
+    "number": 1,
+    "weekday": "Monday",
+    "title": "Exam Guide + Bedrock Foundations",
+    "week": 1,
+    "domain": 1,
+    "learningObjectives": [
+      "Understand the AIP-C01 exam structure, domains, and skill weighting",
+      "Identify architectural design patterns for GenAI on AWS",
+      "Understand when to use Bedrock vs SageMaker vs custom deployment",
+      "Learn the InvokeModel, Converse, and streaming APIs",
+      "Apply Well-Architected GenAI Lens principles"
+    ],
+    "tasks": [
+      {
+        "id": "d1-t1",
+        "type": "read",
+        "title": "Official Exam Guide PDF - Read End to End",
+        "description": "Mark every skill that feels unfamiliar. This is your roadmap for the next 28 days.",
+        "estimatedMinutes": 60,
+        "url": "https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-aip/AWS-Certified-Generative-AI-Developer-Pro_Exam-Guide.pdf"
+      },
+      {
+        "id": "d1-t2",
+        "type": "read",
+        "title": "Amazon Bedrock User Guide - Getting Started",
+        "description": "Covers InvokeModel, InvokeModelWithResponseStream, StartAsyncInvoke, and the Converse API. Understand the request/response format for each.",
+        "estimatedMinutes": 45,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/getting-started.html"
+      },
+      {
+        "id": "d1-t3",
+        "type": "read",
+        "title": "How to Choose Generative AI on AWS",
+        "description": "Service selection decision guide. Critical for exam questions asking 'which service should you use?'",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/generative-ai-on-aws-how-to-choose/"
+      },
+      {
+        "id": "d1-t4",
+        "type": "read",
+        "title": "Amazon Bedrock API Reference",
+        "description": "Skim the API operations: InvokeModel, InvokeModelWithResponseStream, StartAsyncInvoke, Converse, ConverseStream. Understand input/output schemas.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/welcome.html"
+      },
+      {
+        "id": "d1-t5",
+        "type": "watch",
+        "title": "Getting Started with Amazon Bedrock (AWS Official)",
+        "description": "AWS official walkthrough of the Bedrock console, model access, and playground.",
+        "estimatedMinutes": 15,
+        "url": "https://aws.amazon.com/video/watch/6ff4cd6fa97/"
+      }
+    ],
+    "scenarioIds": [
+      "s1"
+    ],
+    "examSkills": [
+      "1.1.1",
+      "1.1.2",
+      "1.1.3"
+    ],
+    "handsOn": [
+      {
+        "id": "d1-ho1",
+        "title": "Explore Bedrock Playground with Multiple Models",
+        "description": "Try the Bedrock console playground to invoke different model families and compare outputs.",
+        "estimatedMinutes": 30,
+        "url": "https://console.aws.amazon.com/bedrock/home#/chat-playground",
+        "difficulty": "beginner",
+        "steps": [
+          "Open the AWS Console and navigate to Amazon Bedrock",
+          "Go to Model access and enable Claude, Nova, and Llama models",
+          "Open the Chat playground and select Claude Sonnet",
+          "Enter a prompt like 'Explain the Well-Architected Framework for GenAI in 3 bullet points' and note the response",
+          "Switch to Amazon Nova Pro and resubmit the same prompt to compare outputs"
+        ]
+      },
+      {
+        "id": "d1-ho2",
+        "title": "Run Bedrock Workshop InvokeModel Notebook",
+        "description": "Clone the Bedrock workshop and run the text generation notebook to practice InvokeModel and Converse APIs.",
+        "estimatedMinutes": 45,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop",
+        "difficulty": "beginner",
+        "steps": [
+          "Clone the amazon-bedrock-workshop repository from GitHub",
+          "Open the 01_Generation notebook in SageMaker Studio or locally with Jupyter",
+          "Run the InvokeModel example with Claude and observe the request/response format",
+          "Run the Converse API example and compare the unified format to InvokeModel",
+          "Modify the prompt and temperature parameter to see how outputs change"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Amazon Bedrock Deep Dive — SimpleAWS Newsletter",
+        "url": "https://newsletter.simpleaws.dev/p/amazon-bedrock-deep-dive",
+        "type": "blog",
+        "description": "Comprehensive overview of Bedrock architecture: model access, inference options, agents, guardrails, and pricing tiers.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "Converse API Guide — Carry Out a Conversation",
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference.html",
+        "type": "docs",
+        "description": "Official guide covering Converse and ConverseStream operations — the unified, model-agnostic API for all Bedrock models.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Amazon Bedrock Complete Deep Dive — DEV Community",
+        "url": "https://dev.to/pratik_26/amazon-bedrock-beginner-guide-a-complete-deep-dive-into-aws-generative-ai-c5e",
+        "type": "blog",
+        "description": "End-to-end Bedrock walkthrough: model access, playground, APIs, Knowledge Bases, Agents, and Guardrails.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Well-Architected GenAI Lens",
+        "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/",
+        "type": "docs",
+        "description": "Architecture patterns and best practices for GenAI workloads tested in Domain 1.",
+        "estimatedMinutes": 45
+      },
+      {
+        "title": "Amazon Bedrock Recipes — All Hands-On Examples",
+        "url": "https://aws-samples.github.io/amazon-bedrock-samples/",
+        "type": "workshop",
+        "description": "Curated recipe portal: Converse API, agents, flows, guardrails, knowledge bases — runnable notebooks.",
+        "estimatedMinutes": 60
+      }
+    ]
+  },
+  {
+    "number": 2,
+    "weekday": "Tuesday",
+    "title": "FM Selection, Resilience, and Model Switching",
+    "week": 1,
+    "domain": 1,
+    "learningObjectives": [
+      "Compare all Bedrock model families and their modalities",
+      "Understand inference parameters (temperature, top-p, max tokens)",
+      "Design dynamic model selection with Lambda + AppConfig",
+      "Implement resilience with Cross-Region Inference and circuit breakers",
+      "Use Step Functions for circuit breaker patterns"
+    ],
+    "tasks": [
+      {
+        "id": "d2-t1",
+        "type": "read",
+        "title": "Bedrock Supported Models - Model Catalog",
+        "description": "Know every model family: Amazon Nova (Micro/Lite/Pro/Premier), Anthropic Claude, Meta Llama, Mistral, Cohere, Stability AI. Know modalities.",
+        "estimatedMinutes": 45,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html"
+      },
+      {
+        "id": "d2-t2",
+        "type": "read",
+        "title": "Bedrock Inference Parameters",
+        "description": "Temperature, top-p, top-k, max tokens, stop sequences. Know what each controls and when to adjust.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-parameters.html"
+      },
+      {
+        "id": "d2-t3",
+        "type": "read",
+        "title": "Bedrock Cross-Region Inference",
+        "description": "Automatic failover to another region when primary is unavailable. Key resilience pattern.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html"
+      },
+      {
+        "id": "d2-t4",
+        "type": "blog",
+        "title": "Intelligent Prompt Routing for Cost and Latency Benefits",
+        "description": "Auto-analyzes prompt complexity and routes to cheapest capable model. Automated model cascading.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/blogs/machine-learning/use-amazon-bedrock-intelligent-prompt-routing-for-cost-and-latency-benefits/"
+      },
+      {
+        "id": "d2-t5",
+        "type": "watch",
+        "title": "Amazon Bedrock: Simplifying GenAI Development",
+        "description": "Overview of model selection, customization, and deployment patterns in Bedrock.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/video/watch/1fec548f4d2/"
+      }
+    ],
+    "scenarioIds": [
+      "s2"
+    ],
+    "examSkills": [
+      "1.2.1",
+      "1.2.2",
+      "1.2.3"
+    ],
+    "handsOn": [
+      {
+        "id": "d2-ho1",
+        "title": "Compare Model Outputs in Bedrock Playground",
+        "description": "Systematically compare outputs from Claude, Nova, Llama, and Mistral for the same prompt to understand model family strengths.",
+        "estimatedMinutes": 30,
+        "url": "https://console.aws.amazon.com/bedrock/home#/chat-playground",
+        "difficulty": "beginner",
+        "steps": [
+          "Open Bedrock Chat playground and select Claude Sonnet",
+          "Enter a complex reasoning prompt: 'A company has 3 AWS accounts. Design a least-privilege IAM strategy for Bedrock access across accounts.'",
+          "Record the response quality, latency, and token count",
+          "Repeat with Amazon Nova Pro, Meta Llama, and Mistral",
+          "Compare results in a table: model, quality, tokens, latency"
+        ]
+      },
+      {
+        "id": "d2-ho2",
+        "title": "Test Inference Parameters (Temperature, Top-p)",
+        "description": "Experiment with temperature and top-p settings to understand their effect on model creativity and determinism.",
+        "estimatedMinutes": 25,
+        "url": "https://console.aws.amazon.com/bedrock/home#/chat-playground",
+        "difficulty": "beginner",
+        "steps": [
+          "Open Bedrock Chat playground with Claude Sonnet",
+          "Set temperature to 0 and enter: 'Write a haiku about cloud computing'",
+          "Run the same prompt 3 times and confirm identical outputs (deterministic)",
+          "Change temperature to 1.0 and run the same prompt 3 times — observe variation",
+          "Test top-p at 0.1 vs 0.9 with the same prompt and note the difference in creativity"
+        ]
+      },
+      {
+        "id": "d2-ho3",
+        "title": "Set Up Cross-Region Inference Profile",
+        "description": "Configure a Cross-Region Inference profile to enable automatic failover for Bedrock model invocations.",
+        "estimatedMinutes": 20,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/blob/main/07_Cross_Region_Inference/",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open the Bedrock console and navigate to Cross-Region Inference",
+          "Create an inference profile for Claude Sonnet targeting us-east-1 and us-west-2",
+          "Note the inference profile ARN",
+          "Use the AWS CLI to invoke the model via the inference profile ARN: aws bedrock-runtime invoke-model --model-id <profile-arn>",
+          "Verify in CloudWatch that the request was routed to one of the configured regions"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Bedrock Model Selection — Solution Architect's Guide",
+        "url": "https://quilltez.com/blog/amazon-bedrock-model-selection-solution-architects-guide-choosing-right-foundation-model",
+        "type": "blog",
+        "description": "How to choose the right FM for cost, quality, and latency — decision framework for Bedrock model families.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Intelligent Prompt Routing for Cost and Latency",
+        "url": "https://aws.amazon.com/blogs/machine-learning/use-amazon-bedrock-intelligent-prompt-routing-for-cost-and-latency-benefits/",
+        "type": "blog",
+        "description": "Auto-routes to cheapest capable model within a family for up to 30% cost savings.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "Cross-Region Inference Workshop Notebook",
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/blob/main/07_Cross_Region_Inference/",
+        "type": "github",
+        "description": "Jupyter notebook for setting up and testing Cross-Region Inference profiles.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Circuit Breaker with Step Functions and DynamoDB",
+        "url": "https://aws.amazon.com/blogs/compute/using-the-circuit-breaker-pattern-with-aws-step-functions-and-amazon-dynamodb/",
+        "type": "blog",
+        "description": "Resilience pattern for FM API calls with automatic failure detection and fallback.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Intelligent Prompt Routing — Understanding and Setup",
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-routing.html",
+        "type": "docs",
+        "description": "Configure prompt routers: auto-route to cheapest capable model within a family.",
+        "estimatedMinutes": 20
+      }
+    ]
+  },
+  {
+    "number": 3,
+    "weekday": "Wednesday",
+    "title": "SageMaker for GenAI",
+    "week": 1,
+    "domain": 1,
+    "learningObjectives": [
+      "Understand SageMaker endpoint deployment patterns",
+      "Know when to use SageMaker JumpStart vs Bedrock",
+      "Understand LoRA, QLoRA, and full fine-tuning trade-offs",
+      "Use SageMaker Model Registry for version management",
+      "Apply SageMaker Clarify for bias detection and Model Monitor for drift"
+    ],
+    "tasks": [
+      {
+        "id": "d3-t1",
+        "type": "read",
+        "title": "SageMaker JumpStart Foundation Models",
+        "description": "How to deploy foundation models via JumpStart. Understand the deployment configuration options.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models.html"
+      },
+      {
+        "id": "d3-t2",
+        "type": "read",
+        "title": "SageMaker Model Registry",
+        "description": "Version management, approval workflows, deployment pipelines for models.",
+        "estimatedMinutes": 20,
+        "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html"
+      },
+      {
+        "id": "d3-t3",
+        "type": "read",
+        "title": "SageMaker Clarify for Bias Detection",
+        "description": "Pre-training and post-training bias detection. Model explainability.",
+        "estimatedMinutes": 20,
+        "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-online-explainability.html"
+      },
+      {
+        "id": "d3-t4",
+        "type": "read",
+        "title": "SageMaker Ground Truth and Ground Truth Plus",
+        "description": "Generating evaluation datasets and human feedback loops for GenAI.",
+        "estimatedMinutes": 20,
+        "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html"
+      },
+      {
+        "id": "d3-t5",
+        "type": "blog",
+        "title": "Advanced Fine-Tuning Methods on SageMaker AI",
+        "description": "Compares LoRA, QLoRA, and full fine-tuning. Key for exam questions about model customization.",
+        "estimatedMinutes": 30,
+        "url": "https://aws.amazon.com/blogs/machine-learning/advanced-fine-tuning-methods-on-amazon-sagemaker-ai/"
+      },
+      {
+        "id": "d3-t6",
+        "type": "blog",
+        "title": "Tutorials Dojo AIP-C01 Exam Guide (SageMaker coverage)",
+        "description": "Community exam guide covering SageMaker topics for the certification.",
+        "estimatedMinutes": 20,
+        "url": "https://tutorialsdojo.com/aws-certified-generative-ai-developer-professional-certification-aip-c01-exam-guide-and-aip-c01-exam-topics-list/"
+      }
+    ],
+    "scenarioIds": [
+      "s3"
+    ],
+    "examSkills": [
+      "1.2.4",
+      "5.1.3"
+    ],
+    "handsOn": [
+      {
+        "id": "d3-ho1",
+        "title": "Deploy a JumpStart Foundation Model Endpoint",
+        "description": "Use SageMaker JumpStart to deploy a foundation model endpoint and test inference.",
+        "estimatedMinutes": 45,
+        "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/jumpstart-foundation-models.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open SageMaker Studio and navigate to JumpStart",
+          "Search for a foundation model (e.g., Llama 3 8B or Mistral 7B)",
+          "Click Deploy and select an ml.g5.2xlarge instance",
+          "Wait for the endpoint to reach InService status (5-10 minutes)",
+          "Send a test inference request using the Studio notebook or AWS CLI and verify the response"
+        ]
+      },
+      {
+        "id": "d3-ho2",
+        "title": "Explore LoRA Fine-Tuning Configuration on Bedrock",
+        "description": "Walk through the Bedrock fine-tuning console to understand LoRA configuration options.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-model-fine-tuning.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open the Bedrock console and navigate to Custom models → Fine-tuning",
+          "Select a supported model (e.g., Amazon Nova or Llama) and click Create fine-tuning job",
+          "Review the training data format requirements (JSONL with prompt/completion pairs)",
+          "Examine the hyperparameter options: epochs, batch size, learning rate, warmup steps",
+          "Note the S3 bucket requirements for training data and output artifacts (do not submit unless you have training data ready)"
+        ]
+      },
+      {
+        "id": "d3-ho3",
+        "title": "Review SageMaker Model Registry Workflow",
+        "description": "Explore Model Registry for versioning and approval workflows using the SageMaker console.",
+        "estimatedMinutes": 20,
+        "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/model-registry.html",
+        "difficulty": "beginner",
+        "steps": [
+          "Open SageMaker Studio and navigate to Model Registry",
+          "Create a new Model Package Group called 'genai-models'",
+          "Review the approval status workflow: PendingManualApproval → Approved → Deployed",
+          "Note how model versions are tracked with metadata, metrics, and lineage"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Advanced Fine-Tuning Methods on SageMaker",
+        "url": "https://aws.amazon.com/blogs/machine-learning/advanced-fine-tuning-methods-on-amazon-sagemaker-ai/",
+        "type": "blog",
+        "description": "Compares LoRA, QLoRA, and full fine-tuning. Key for exam questions about model customization.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Multi-LoRA Serving with vLLM on SageMaker",
+        "url": "https://aws.amazon.com/blogs/machine-learning/efficiently-serve-dozens-of-fine-tuned-models-with-vllm-on-amazon-sagemaker-ai-and-amazon-bedrock/",
+        "type": "blog",
+        "description": "Dozens of LoRA adapters sharing one GPU with hot-swapping.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Reinforcement Fine-Tuning — 66% Accuracy Gain",
+        "url": "https://aws.amazon.com/blogs/aws/improve-model-accuracy-with-reinforcement-fine-tuning-in-amazon-bedrock/",
+        "type": "blog",
+        "description": "66% average accuracy gain over base models with reinforcement fine-tuning on Bedrock.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "LLM Fine-Tuning on AWS — SFT, Continued Pre-Training, RLHF",
+        "url": "https://medium.com/data-science-collective/llm-fine-tuning-on-aws-supervised-fine-tuning-continued-pre-training-and-rlhf-b8844e5fdbb0",
+        "type": "blog",
+        "description": "Comprehensive SageMaker fine-tuning: SFT, continued pre-training, RLHF — QLoRA, LoRA, full fine-tuning compared.",
+        "estimatedMinutes": 35
+      },
+      {
+        "title": "Bedrock Customization Workshop (Fine-Tuning Notebooks)",
+        "url": "https://github.com/aws-samples/amazon-bedrock-customization-workshop",
+        "type": "workshop",
+        "description": "Hands-on model customization: continued pre-training, supervised fine-tuning, evaluation.",
+        "estimatedMinutes": 120
+      }
+    ]
+  },
+  {
+    "number": 4,
+    "weekday": "Thursday",
+    "title": "Data Pipelines + Processing for FM Consumption",
+    "week": 1,
+    "domain": 1,
+    "learningObjectives": [
+      "Map AWS services to data types (Comprehend=text, Transcribe=audio, Textract=docs, Rekognition=images)",
+      "Design multimodal data processing pipelines",
+      "Understand Bedrock Data Automation for automated processing",
+      "Use Macie for PII discovery and Lake Formation for data access control",
+      "Build Step Functions orchestrations for batch document processing"
+    ],
+    "tasks": [
+      {
+        "id": "d4-t1",
+        "type": "read",
+        "title": "Amazon Bedrock Data Automation",
+        "description": "Automated multimodal data processing pipeline. Key for questions about processing mixed content types.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-automation.html"
+      },
+      {
+        "id": "d4-t2",
+        "type": "read",
+        "title": "Amazon Comprehend Documentation",
+        "description": "Entity extraction, sentiment analysis, intent detection from text.",
+        "estimatedMinutes": 20,
+        "url": "https://docs.aws.amazon.com/comprehend/latest/dg/what-is.html"
+      },
+      {
+        "id": "d4-t3",
+        "type": "read",
+        "title": "Amazon Textract Documentation",
+        "description": "OCR, text extraction, table extraction from documents and images.",
+        "estimatedMinutes": 20,
+        "url": "https://docs.aws.amazon.com/textract/latest/dg/what-is.html"
+      },
+      {
+        "id": "d4-t4",
+        "type": "read",
+        "title": "Amazon Macie for PII Discovery",
+        "description": "Scan S3 buckets for PII BEFORE ingesting into Knowledge Bases. Critical pre-processing step.",
+        "estimatedMinutes": 15,
+        "url": "https://docs.aws.amazon.com/macie/latest/user/what-is-macie.html"
+      },
+      {
+        "id": "d4-t5",
+        "type": "read",
+        "title": "AWS Lake Formation for Granular Data Access",
+        "description": "Column/row/cell-level access control for data feeding GenAI pipelines.",
+        "estimatedMinutes": 15,
+        "url": "https://docs.aws.amazon.com/lake-formation/latest/dg/what-is-lake-formation.html"
+      },
+      {
+        "id": "d4-t6",
+        "type": "blog",
+        "title": "Bedrock Data Automation + Guardrails PII Pipeline",
+        "description": "End-to-end PII detection and redaction architecture using BDA and Guardrails.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/machine-learning/detect-and-redact-personally-identifiable-information-using-amazon-bedrock-data-automation-and-guardrails/"
+      },
+      {
+        "id": "d4-t7",
+        "type": "watch",
+        "title": "Amazon Bedrock Agents: Easy Data Pipelines",
+        "description": "Video walkthrough of building data pipelines with Bedrock.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/video/watch/d671ebacb24/"
+      }
+    ],
+    "scenarioIds": [
+      "s4"
+    ],
+    "examSkills": [
+      "1.3.1",
+      "1.3.2",
+      "1.3.3",
+      "1.3.4",
+      "3.2.1",
+      "3.2.2"
+    ],
+    "handsOn": [
+      {
+        "id": "d4-ho1",
+        "title": "Build a Textract → Comprehend → Bedrock Pipeline",
+        "description": "Create a simple document processing pipeline that extracts text, identifies entities, and generates a summary.",
+        "estimatedMinutes": 60,
+        "url": "https://github.com/aws-samples/sample-document-processing-with-amazon-bedrock-data-automation",
+        "difficulty": "intermediate",
+        "steps": [
+          "Upload a sample PDF document to an S3 bucket",
+          "Use the AWS CLI to call Textract DetectDocumentText and save the extracted text",
+          "Pass the extracted text to Comprehend DetectEntities to identify people, organizations, and dates",
+          "Send the extracted text and entities to Bedrock InvokeModel (Claude) with a prompt: 'Summarize this document and highlight key entities'",
+          "Compare the pipeline output with Bedrock Data Automation's single-API approach"
+        ]
+      },
+      {
+        "id": "d4-ho2",
+        "title": "Test Bedrock Data Automation (BDA) for Document Processing",
+        "description": "Use Bedrock Data Automation to process a document with a single API call instead of chaining services.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-automation.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open the Bedrock console and navigate to Data Automation",
+          "Create a new project and upload a sample multi-page document",
+          "Configure the extraction blueprint to extract key fields",
+          "Run the automation and review the structured output",
+          "Compare the result with the manual Textract → Comprehend pipeline from the previous activity"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Intelligent Document Processing at Scale with BDA",
+        "url": "https://aws.amazon.com/blogs/machine-learning/intelligent-document-processing-at-scale-with-generative-ai-and-amazon-bedrock-data-automation/",
+        "type": "blog",
+        "description": "End-to-end IDP with BDA: classification, extraction, normalization, validation — reusable IaC.",
+        "estimatedMinutes": 35
+      },
+      {
+        "title": "IDP with Textract, Bedrock, and LangChain",
+        "url": "https://aws.amazon.com/blogs/machine-learning/intelligent-document-processing-with-amazon-textract-amazon-bedrock-and-langchain/",
+        "type": "blog",
+        "description": "OCR + LLM pipeline: Textract extracts text, Bedrock generates structured output, LangChain orchestrates.",
+        "estimatedMinutes": 35
+      },
+      {
+        "title": "BDA Document Processing Samples",
+        "url": "https://github.com/aws-samples/sample-document-processing-with-amazon-bedrock-data-automation",
+        "type": "github",
+        "description": "Sample Bedrock Data Automation pipelines for document processing.",
+        "estimatedMinutes": 60
+      },
+      {
+        "title": "Multimodal Power of BDA for Unstructured Data",
+        "url": "https://aws.amazon.com/blogs/machine-learning/unleashing-the-multimodal-power-of-amazon-bedrock-data-automation-to-transform-unstructured-data-into-actionable-insights/",
+        "type": "blog",
+        "description": "Process documents, images, audio, video — multimodal data to structured output with BDA.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Lessons Learned with BDA in an IDP Product",
+        "url": "https://dev.to/jucelinux/lessons-learned-with-aws-bedrock-data-automation-in-an-idp-product-25pi",
+        "type": "blog",
+        "description": "Real-world BDA experience: gotchas, workarounds, regional limits.",
+        "estimatedMinutes": 20
+      }
+    ]
+  },
+  {
+    "number": 5,
+    "weekday": "Friday",
+    "title": "Vector Stores Deep Dive",
+    "week": 1,
+    "domain": 1,
+    "learningObjectives": [
+      "Compare all Bedrock KB vector store options (OpenSearch, Aurora pgvector, Neptune, Kendra, DocumentDB)",
+      "Understand hybrid search (BM25 + k-NN) and when it matters",
+      "Know the 'exam trigger' phrases for each vector store selection",
+      "Design vector store architecture for different use cases"
+    ],
+    "tasks": [
+      {
+        "id": "d5-t1",
+        "type": "read",
+        "title": "Bedrock Knowledge Bases - Vector Store Options",
+        "description": "Chunking strategies, vector store options, data source sync. Core reference.",
+        "estimatedMinutes": 60,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html"
+      },
+      {
+        "id": "d5-t2",
+        "type": "read",
+        "title": "AWS Prescriptive Guidance: Choosing a Vector Database for RAG",
+        "description": "Side-by-side comparison of all vector DB options. Essential exam reference.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-comparison.html"
+      },
+      {
+        "id": "d5-t3",
+        "type": "blog",
+        "title": "Hybrid Search in Bedrock Knowledge Bases",
+        "description": "8-12% improvement over keyword-only search. Know when hybrid search is the answer.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-knowledge-bases-now-supports-hybrid-search/"
+      },
+      {
+        "id": "d5-t4",
+        "type": "blog",
+        "title": "OpenSearch Managed vs Serverless for KB",
+        "description": "Key distinction: managed cluster vs serverless collection for Knowledge Bases.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-knowledge-bases-now-supports-amazon-opensearch-service-managed-cluster-as-vector-store/"
+      },
+      {
+        "id": "d5-t5",
+        "type": "hands-on",
+        "title": "Bedrock RAG Workshop - Knowledge Base Setup Notebooks",
+        "description": "Work through KB setup with different vector stores. Focus on OpenSearch Serverless setup.",
+        "estimatedMinutes": 90,
+        "url": "https://github.com/aws-samples/amazon-bedrock-rag-workshop"
+      }
+    ],
+    "scenarioIds": [
+      "s5"
+    ],
+    "examSkills": [
+      "1.4.1",
+      "1.4.2",
+      "1.4.3",
+      "1.4.4",
+      "1.4.5"
+    ],
+    "handsOn": [
+      {
+        "id": "d5-ho1",
+        "title": "Set Up OpenSearch Serverless Collection for Bedrock KB",
+        "description": "Create an OpenSearch Serverless vector collection and connect it to a Bedrock Knowledge Base.",
+        "estimatedMinutes": 45,
+        "url": "https://github.com/aws-samples/amazon-bedrock-rag-workshop",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open the OpenSearch Service console and click 'Create collection'",
+          "Select 'Vector search' as the collection type and name it 'bedrock-kb-vectors'",
+          "Configure the data access policy to allow Bedrock service principal",
+          "Navigate to Bedrock → Knowledge Bases → Create and select the OpenSearch Serverless collection",
+          "Upload a sample PDF to the S3 data source and sync — verify vectors are stored in OpenSearch"
+        ]
+      },
+      {
+        "id": "d5-ho2",
+        "title": "Compare Vector Store Options in the Console",
+        "description": "Walk through the Bedrock KB creation wizard to see all vector store options and their configuration differences.",
+        "estimatedMinutes": 20,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-create.html",
+        "difficulty": "beginner",
+        "steps": [
+          "Open Bedrock → Knowledge Bases → Create knowledge base",
+          "In the vector store selection step, note all available options: OpenSearch Serverless, Aurora pgvector, Neptune, Kendra GenAI Index, DocumentDB",
+          "Click through each option and note the required configuration fields",
+          "Document the key differences: managed vs self-managed, scaling model, cost model"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Deep Dive into Vector Data Stores for Bedrock KB",
+        "url": "https://aws.amazon.com/blogs/machine-learning/dive-deep-into-vector-data-stores-using-amazon-bedrock-knowledge-bases/",
+        "type": "blog",
+        "description": "Compare OpenSearch Serverless, Aurora pgvector, MongoDB Atlas, Pinecone — architecture, setup, and tradeoffs.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Vector Database Comparison — AWS Prescriptive Guidance",
+        "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/choosing-an-aws-vector-database-for-rag-use-cases/vector-db-comparison.html",
+        "type": "docs",
+        "description": "Side-by-side comparison of all AWS vector databases for RAG: features, scaling, cost, and use case fit.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "Auto-Optimize OpenSearch Vector Database",
+        "url": "https://aws.amazon.com/blogs/big-data/auto-optimize-your-amazon-opensearch-service-vector-database/",
+        "type": "blog",
+        "description": "Automated HNSW tuning: ef_construction, m, ef_search, quantization — balance recall, latency, and cost.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Using Aurora PostgreSQL as a Bedrock KB (pgvector)",
+        "url": "https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/AuroraPostgreSQL.VectorDB.html",
+        "type": "docs",
+        "description": "Setup pgvector extension, create schema, configure Data API, IAM role for Bedrock — ACID-compliant vector store.",
+        "estimatedMinutes": 40
+      },
+      {
+        "title": "Multi-Tenant RAG with JWT Isolation",
+        "url": "https://aws.amazon.com/blogs/machine-learning/multi-tenant-rag-implementation-with-amazon-bedrock-and-amazon-opensearch-service-for-saas-using-jwt/",
+        "type": "blog",
+        "description": "Per-tenant OpenSearch isolation with KMS encryption for SaaS applications.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Build Bedrock KB with Amazon Kendra GenAI Index",
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-build-kendra-genai-index.html",
+        "type": "docs",
+        "description": "Reuse Kendra's high-accuracy retrieval as Bedrock KB backend — cross-application index sharing.",
+        "estimatedMinutes": 30
+      }
+    ]
+  },
+  {
+    "number": 6,
+    "weekday": "Saturday",
+    "title": "RAG Architecture - Retrieval, Chunking, Embeddings",
+    "week": 1,
+    "domain": 1,
+    "learningObjectives": [
+      "Compare chunking strategies (fixed, semantic, hierarchical) and when to use each",
+      "Select embedding models (Titan Embeddings v2, Cohere Embed v3, Nova Multimodal)",
+      "Understand Retrieve vs RetrieveAndGenerate APIs",
+      "Implement query expansion, decomposition, and reranking",
+      "Use MCP for consistent vector query access patterns"
+    ],
+    "tasks": [
+      {
+        "id": "d6-t1",
+        "type": "read",
+        "title": "Bedrock Knowledge Bases - How It Works",
+        "description": "The authoritative reference for chunking, embedding, retrieval, and reranking.",
+        "estimatedMinutes": 45,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-how-it-works.html"
+      },
+      {
+        "id": "d6-t2",
+        "type": "blog",
+        "title": "Advanced Parsing, Chunking, and Query Reformulation in KB",
+        "description": "Deep dive into advanced chunking and query reformulation options.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-knowledge-bases-now-supports-advanced-parsing-chunking-and-query-reformulation-giving-greater-control-of-accuracy-in-rag-based-applications/"
+      },
+      {
+        "id": "d6-t3",
+        "type": "read",
+        "title": "Bedrock Reranker Models Documentation",
+        "description": "How reranker models rescore retrieved chunks for better relevance.",
+        "estimatedMinutes": 20,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/rerank.html"
+      },
+      {
+        "id": "d6-t4",
+        "type": "blog",
+        "title": "Amazon Nova Multimodal Embeddings",
+        "description": "Crossmodal search: text + image + video + audio embeddings in one model.",
+        "estimatedMinutes": 15,
+        "url": "https://aws.amazon.com/blogs/aws/amazon-nova-multimodal-embeddings-now-available-in-amazon-bedrock/"
+      },
+      {
+        "id": "d6-t5",
+        "type": "hands-on",
+        "title": "Bedrock RAG Workshop - Chunking and Embedding Notebooks",
+        "description": "Work through different chunking strategies and embedding model selections.",
+        "estimatedMinutes": 120,
+        "url": "https://github.com/aws-samples/amazon-bedrock-rag-workshop"
+      }
+    ],
+    "scenarioIds": [
+      "s6",
+      "s1b"
+    ],
+    "examSkills": [
+      "1.5.1",
+      "1.5.2",
+      "1.5.3",
+      "1.5.4",
+      "1.5.5",
+      "1.5.6"
+    ],
+    "handsOn": [
+      {
+        "id": "d6-ho1",
+        "title": "Build an End-to-End RAG Pipeline with Knowledge Bases",
+        "description": "Create a complete RAG pipeline from document upload to retrieval-augmented generation.",
+        "estimatedMinutes": 60,
+        "url": "https://github.com/aws-samples/amazon-bedrock-rag-workshop",
+        "difficulty": "intermediate",
+        "steps": [
+          "Create an S3 bucket and upload 5-10 PDF documents on a specific topic",
+          "Create a Bedrock Knowledge Base with OpenSearch Serverless, Titan Embeddings v2, and fixed-size chunking (300 tokens, 20% overlap)",
+          "Sync the data source and wait for indexing to complete",
+          "Test retrieval with the Retrieve API — try different queries and check chunk relevance",
+          "Switch to RetrieveAndGenerate API and compare the augmented response quality"
+        ]
+      },
+      {
+        "id": "d6-ho2",
+        "title": "Experiment with Chunking Strategies",
+        "description": "Compare fixed-size, semantic, and hierarchical chunking on the same document set.",
+        "estimatedMinutes": 45,
+        "url": "https://github.com/aws-samples/amazon-bedrock-rag-workshop",
+        "difficulty": "intermediate",
+        "steps": [
+          "Using your existing KB, note the retrieval quality with fixed-size chunking",
+          "Create a second KB with the same data source but semantic chunking enabled",
+          "Create a third KB with hierarchical chunking (parent: 1500 tokens, child: 300 tokens)",
+          "Run the same 3 test queries against all 3 KBs and compare chunk relevance scores",
+          "Document which strategy works best for your document type and why"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Advanced Parsing, Chunking, and Query Reformulation in KB",
+        "url": "https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-knowledge-bases-now-supports-advanced-parsing-chunking-and-query-reformulation-giving-greater-control-of-accuracy-in-rag-based-applications/",
+        "type": "blog",
+        "description": "Deep dive into advanced chunking and query reformulation options for Bedrock Knowledge Bases.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "End-to-End RAG with CDK",
+        "url": "https://aws.amazon.com/blogs/machine-learning/build-an-end-to-end-rag-solution-using-knowledge-bases-for-amazon-bedrock-and-the-aws-cdk/",
+        "type": "blog",
+        "description": "IaC deployment of full RAG stack (IAM, OpenSearch, KB) using AWS CDK.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Advanced RAG with Terraform: Chunking, Hybrid Search, Reranking",
+        "url": "https://dev.to/suhas_mallesh/bedrock-knowledge-base-advanced-rag-with-terraform-chunking-hybrid-search-and-reranking-4m3d",
+        "type": "blog",
+        "description": "IaC deployment of advanced RAG: 4 chunking strategies, hybrid search, Cohere reranking.",
+        "estimatedMinutes": 40
+      },
+      {
+        "title": "re:Invent 2024 — Build Scalable RAG with Bedrock KB (AIM305)",
+        "url": "https://www.classcentral.com/course/youtube-aws-re-invent-2024-build-scalable-rag-applications-using-amazon-bedrock-knowledge-bases-aim305-405633",
+        "type": "video",
+        "description": "Advanced techniques for improving RAG accuracy and cost optimization with Bedrock Knowledge Bases.",
+        "estimatedMinutes": 60
+      },
+      {
+        "title": "Implementing RAG with Bedrock and Lambda",
+        "url": "https://heeki.medium.com/implementing-rag-with-amazon-bedrock-and-aws-lambda-db1476089b23",
+        "type": "blog",
+        "description": "Serverless RAG pattern: Lambda invokes KB retrieval, augments prompt, calls FM — production-ready architecture.",
+        "estimatedMinutes": 30
+      }
+    ]
+  },
+  {
+    "number": 7,
+    "weekday": "Sunday",
+    "title": "Prompt Engineering + Week 1 Checkpoint",
+    "week": 1,
+    "domain": 1,
+    "learningObjectives": [
+      "Use Bedrock Prompt Management for centralized prompt templates",
+      "Build Prompt Flows with conditional branching",
+      "Implement prompt versioning and governance with CloudTrail",
+      "Apply advanced prompting patterns (chain-of-thought, JSON Schema enforcement)",
+      "Validate learning with the AWS Official 20-question Practice Set"
+    ],
+    "tasks": [
+      {
+        "id": "d7-t1",
+        "type": "read",
+        "title": "Amazon Bedrock Prompt Management Documentation",
+        "description": "Centralized prompt templates, versioning, parameterization. Eliminates prompts in code.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management.html"
+      },
+      {
+        "id": "d7-t2",
+        "type": "read",
+        "title": "Amazon Bedrock Prompt Flows Documentation",
+        "description": "No-code workflow builder for sequential prompt chains with conditional branching.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/flows.html"
+      },
+      {
+        "id": "d7-t3",
+        "type": "read",
+        "title": "Prompt Engineering Guidelines for Bedrock",
+        "description": "Best practices for prompting each model family on Bedrock.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html"
+      },
+      {
+        "id": "d7-t4",
+        "type": "blog",
+        "title": "Implementing Advanced Prompt Engineering with Bedrock",
+        "description": "Chain-of-thought, few-shot, structured output patterns.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/machine-learning/implementing-advanced-prompt-engineering-with-amazon-bedrock/"
+      },
+      {
+        "id": "d7-t5",
+        "type": "hands-on",
+        "title": "Build a Bedrock Prompt Flow with Conditional Branching",
+        "description": "Hands-on notebook for Prompt Management and Flows.",
+        "estimatedMinutes": 60,
+        "url": "https://aws-samples.github.io/amazon-bedrock-samples/agents-and-function-calling/bedrock-agents/bedrock-flows/Getting_started_with_Prompt_Management_Flows/"
+      },
+      {
+        "id": "d7-t6",
+        "type": "practice-exam",
+        "title": "AWS Official 20-Question Practice Set (Week 1 Checkpoint)",
+        "description": "Score yourself. For every wrong answer, note which skill number it maps to.",
+        "estimatedMinutes": 60,
+        "url": "https://skillbuilder.aws/learn/HSEKTD11NX"
+      }
+    ],
+    "scenarioIds": [
+      "s7"
+    ],
+    "examSkills": [
+      "1.6.1",
+      "1.6.2",
+      "1.6.3",
+      "1.6.4",
+      "1.6.5",
+      "1.6.6"
+    ],
+    "handsOn": [
+      {
+        "id": "d7-ho1",
+        "title": "Create a Prompt Flow with Conditional Branching",
+        "description": "Build a Bedrock Prompt Flow that routes different query types to specialized prompts.",
+        "estimatedMinutes": 45,
+        "url": "https://aws-samples.github.io/amazon-bedrock-samples/agents-and-function-calling/bedrock-agents/bedrock-flows/Getting_started_with_Prompt_Management_Flows/",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open Bedrock console → Prompt Management → Create prompt",
+          "Create two prompt templates: one for 'summarization' and one for 'question-answering'",
+          "Navigate to Flows → Create flow",
+          "Add a condition node that checks if the input contains 'summarize' and routes to the appropriate prompt",
+          "Test the flow with both types of queries and verify correct routing"
+        ]
+      },
+      {
+        "id": "d7-ho2",
+        "title": "Practice Advanced Prompting Patterns",
+        "description": "Implement chain-of-thought, few-shot, and JSON schema enforcement in the Bedrock playground.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-engineering-guidelines.html",
+        "difficulty": "beginner",
+        "steps": [
+          "Open Bedrock playground and test a zero-shot prompt: 'Is 17 a prime number?'",
+          "Add chain-of-thought: 'Think step by step. Is 17 a prime number?'",
+          "Create a few-shot prompt with 2 examples of the desired output format before the actual question",
+          "Add JSON schema enforcement: 'Respond in this exact JSON format: {\"answer\": boolean, \"reasoning\": string}'",
+          "Compare output quality and consistency across all 4 approaches"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Prompt Evaluation with Prompt Management and Flows (Notebook)",
+        "url": "https://github.com/aws-samples/amazon-bedrock-samples/blob/main/articles-guides/prompt-engineering/Prompt_Management_Flows/Prompts_evaluation_with_Prompt_Management_Flows.ipynb",
+        "type": "github",
+        "description": "Hands-on notebook: create prompt variants, build evaluation flows, compare outputs programmatically.",
+        "estimatedMinutes": 60
+      },
+      {
+        "title": "Guide to Prompt Optimization in Amazon Bedrock",
+        "url": "https://stackpioneers.com/2025/04/24/guide-to-prompt-optimization-in-amazon-bedrock/",
+        "type": "blog",
+        "description": "Auto-rewrite prompts for better accuracy: Prompt Optimization feature reduces trial-and-error.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "Implementing Advanced Prompt Engineering with Bedrock",
+        "url": "https://aws.amazon.com/blogs/machine-learning/implementing-advanced-prompt-engineering-with-amazon-bedrock/",
+        "type": "blog",
+        "description": "Chain-of-thought, few-shot, role-play, and structured output techniques with Bedrock models.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Getting Started with Prompt Management Flows",
+        "url": "https://aws-samples.github.io/amazon-bedrock-samples/agents-and-function-calling/bedrock-agents/bedrock-flows/Getting_started_with_Prompt_Management_Flows/",
+        "type": "workshop",
+        "description": "Step-by-step: build prompt chains with Flows visual builder, integrate KB retrieval nodes.",
+        "estimatedMinutes": 45
+      },
+      {
+        "title": "Implement Prompt Caching on Bedrock — Cut Costs in Half",
+        "url": "https://dev.to/sachinm207/how-to-implement-prompt-caching-on-amazon-bedrock-and-cut-inference-costs-in-half-3g00",
+        "type": "blog",
+        "description": "Practical implementation: cache static context, automatic vs manual checkpoints, 90% input token savings.",
+        "estimatedMinutes": 20
+      }
+    ]
+  },
+  {
+    "number": 8,
+    "weekday": "Monday",
+    "title": "Agentic AI - Bedrock Agents + AgentCore",
+    "week": 2,
+    "domain": 2,
+    "learningObjectives": [
+      "Distinguish Bedrock Agents (managed) from AgentCore (deployment platform)",
+      "Know all 9 AgentCore services and their exam triggers",
+      "Understand MCP server implementation patterns (Lambda vs ECS)",
+      "Design multi-agent orchestration (supervisor vs routing mode)",
+      "Implement Strands Agents SDK with tool use"
+    ],
+    "tasks": [
+      {
+        "id": "d8-t1",
+        "type": "read",
+        "title": "Amazon Bedrock AgentCore Developer Guide",
+        "description": "All 9 AgentCore services: Runtime, Gateway, Policy, Identity, Memory, Observability, Evaluations, Code Interpreter, Browser.",
+        "estimatedMinutes": 45,
+        "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/what-is-bedrock-agentcore.html"
+      },
+      {
+        "id": "d8-t2",
+        "type": "read",
+        "title": "Bedrock Agents User Guide",
+        "description": "Managed agent service. Action groups, tool use, knowledge base integration.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html"
+      },
+      {
+        "id": "d8-t3",
+        "type": "blog",
+        "title": "Strands Agents SDK Technical Deep Dive",
+        "description": "Architecture, tool definitions, observability for the Strands framework.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/machine-learning/strands-agents-sdk-a-technical-deep-dive-into-agent-architectures-and-observability/"
+      },
+      {
+        "id": "d8-t4",
+        "type": "blog",
+        "title": "Multi-Agent Orchestration with Reasoning",
+        "description": "Supervisor mode vs routing mode. Key for multi-agent architecture questions.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/machine-learning/design-multi-agent-orchestration-with-reasoning-using-amazon-bedrock-and-open-source-frameworks/"
+      },
+      {
+        "id": "d8-t5",
+        "type": "blog",
+        "title": "MCP on AWS - Unlocking Model Context Protocol",
+        "description": "AWS API MCP Server, IAM permissions, CloudTrail auditing for MCP.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/blogs/machine-learning/unlocking-the-power-of-model-context-protocol-mcp-on-aws/"
+      },
+      {
+        "id": "d8-t6",
+        "type": "watch",
+        "title": "Mike Chambers AgentCore Full Walkthrough",
+        "description": "Hands-on deploy, Gateway, Memory, Observability demo by AWS Dev Advocate.",
+        "estimatedMinutes": 30,
+        "url": "https://aws.amazon.com/bedrock/agentcore/resources/"
+      }
+    ],
+    "scenarioIds": [
+      "s8",
+      "s8b",
+      "s9b"
+    ],
+    "examSkills": [
+      "2.1.1",
+      "2.1.2",
+      "2.1.3",
+      "2.1.4",
+      "2.1.5",
+      "2.1.6",
+      "2.1.7"
+    ],
+    "handsOn": [
+      {
+        "id": "d8-ho1",
+        "title": "Build a Bedrock Agent with Action Groups",
+        "description": "Create a Bedrock Agent with a Lambda-backed action group that can perform a real-world task.",
+        "estimatedMinutes": 60,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agent-tutorial.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open Bedrock console → Agents → Create agent",
+          "Set the agent instructions: 'You are a helpful assistant that can look up order status and process returns'",
+          "Create a Lambda function that simulates order lookup (returns mock data)",
+          "Define an action group with an OpenAPI schema describing the getOrderStatus and processReturn actions",
+          "Test the agent in the console: 'What is the status of order 12345?' and verify it calls the Lambda function"
+        ]
+      },
+      {
+        "id": "d8-ho2",
+        "title": "Explore Bedrock Agents Quickstart Workshop",
+        "description": "Work through the quickstart workshop to build an agent for Well-Architected queries.",
+        "estimatedMinutes": 90,
+        "url": "https://github.com/build-on-aws/amazon-bedrock-agents-quickstart",
+        "difficulty": "intermediate",
+        "steps": [
+          "Clone the amazon-bedrock-agents-quickstart repository",
+          "Follow the setup instructions to deploy the Lambda function and agent",
+          "Test the agent with Well-Architected queries",
+          "Examine how the action group schema maps to Lambda invocations",
+          "Review the agent trace to understand the ReAct reasoning loop"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "InterWorks — Bedrock Agents Walkthrough",
+        "url": "https://interworks.com/blog/2026/03/06/building-ai-agents-in-aws-a-hands-on-amazon-bedrock-walkthrough/",
+        "type": "blog",
+        "description": "Coffee shop agent with tool use, step-by-step console screenshots.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Bedrock Agents Action Groups",
+        "url": "https://aws.plainenglish.io/how-bedrock-agents-use-action-groups-to-trigger-real-world-tasks-with-aws-lambda-0f79f9c5b59f",
+        "type": "blog",
+        "description": "Lambda-backed tools for real-world tasks with detailed walkthrough.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Multi-Agent Collaboration — GA Announcement",
+        "url": "https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-announces-general-availability-of-multi-agent-collaboration/",
+        "type": "blog",
+        "description": "Supervisor-collaborator architecture: designate supervisor agent, associate collaborators for complex workflows.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Introducing Strands Agents — Open Source SDK",
+        "url": "https://aws.amazon.com/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/",
+        "type": "blog",
+        "description": "Model-driven agent framework: build agents in a few lines of code with @tool decorators and streaming.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "MCP vs Strands vs RAG vs A2A — Agents Compared",
+        "url": "https://aws.plainenglish.io/mcp-vs-strands-vs-rag-vs-a2a-vs-bedrock-vs-agentcore-vs-q-aws-ai-agents-compared-2025-788089e7ed33",
+        "type": "blog",
+        "description": "Comprehensive comparison of all agent options on AWS.",
+        "estimatedMinutes": 30
+      }
+    ]
+  },
+  {
+    "number": 9,
+    "weekday": "Tuesday",
+    "title": "Deployment Strategies + Enterprise Integration",
+    "week": 2,
+    "domain": 2,
+    "learningObjectives": [
+      "Design model cascading patterns (small -> large based on complexity)",
+      "Understand container-based LLM deployment (ECS/EKS with GPU)",
+      "Know edge/hybrid options (Outposts, Wavelength, Lambda@Edge)",
+      "Implement WebSocket streaming with API Gateway + Lambda + Bedrock",
+      "Apply the AI Gateway pattern for rate limiting and access control"
+    ],
+    "tasks": [
+      {
+        "id": "d9-t1",
+        "type": "read",
+        "title": "GenAI Application Builder Architecture Overview",
+        "description": "End-to-end reference architecture for production GenAI applications.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/solutions/latest/generative-ai-application-builder-on-aws/architecture-overview.html"
+      },
+      {
+        "id": "d9-t2",
+        "type": "blog",
+        "title": "Building an AI Gateway to Bedrock with API Gateway",
+        "description": "Rate limiting, access control, usage tracking for GenAI APIs. Enterprise pattern.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/architecture/building-an-ai-gateway-to-amazon-bedrock-with-amazon-api-gateway/"
+      },
+      {
+        "id": "d9-t3",
+        "type": "blog",
+        "title": "Serverless Generative AI Architectural Patterns",
+        "description": "API Gateway + Lambda + Bedrock foundational patterns.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/compute/serverless-generative-ai-architectural-patterns/"
+      },
+      {
+        "id": "d9-t4",
+        "type": "blog",
+        "title": "Orchestrate GenAI Workflows with Bedrock and Step Functions",
+        "description": "Parallel API calls, error handling, complex orchestration.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/machine-learning/orchestrate-generative-ai-workflows-with-amazon-bedrock-and-aws-step-functions/"
+      },
+      {
+        "id": "d9-t5",
+        "type": "watch",
+        "title": "AWS Step Functions for Generative AI",
+        "description": "Video overview of Step Functions integration with GenAI services.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/video/watch/de313da02ff/"
+      }
+    ],
+    "scenarioIds": [
+      "s9"
+    ],
+    "examSkills": [
+      "2.2.1",
+      "2.2.2",
+      "2.2.3",
+      "2.3.1",
+      "2.3.2",
+      "2.3.3",
+      "2.3.4",
+      "2.4.1",
+      "2.4.2",
+      "2.4.3",
+      "2.4.4"
+    ],
+    "handsOn": [
+      {
+        "id": "d9-ho1",
+        "title": "Set Up API Gateway → Lambda → Bedrock Pattern",
+        "description": "Build the foundational serverless pattern for exposing Bedrock as a REST API.",
+        "estimatedMinutes": 45,
+        "url": "https://aws.amazon.com/blogs/compute/serverless-generative-ai-architectural-patterns/",
+        "difficulty": "intermediate",
+        "steps": [
+          "Create a Lambda function (Python) that calls bedrock-runtime InvokeModel with Claude",
+          "Add the bedrock:InvokeModel permission to the Lambda execution role",
+          "Create a REST API in API Gateway with a POST /chat resource",
+          "Configure the Lambda proxy integration",
+          "Test with curl: curl -X POST <api-url>/chat -d '{\"prompt\": \"Hello\"}' and verify the Bedrock response"
+        ]
+      },
+      {
+        "id": "d9-ho2",
+        "title": "Deploy the AI Gateway Pattern with Rate Limiting",
+        "description": "Extend the basic API Gateway pattern with usage plans and API keys for rate limiting.",
+        "estimatedMinutes": 30,
+        "url": "https://aws.amazon.com/blogs/architecture/building-an-ai-gateway-to-amazon-bedrock-with-amazon-api-gateway/",
+        "difficulty": "intermediate",
+        "steps": [
+          "In API Gateway, create a Usage Plan with rate limit: 100 requests/second, burst: 200",
+          "Create an API key and associate it with the usage plan",
+          "Enable API key requirement on the /chat resource",
+          "Test that requests without the API key return 403",
+          "Test that requests exceeding the rate limit return 429 (Too Many Requests)"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Serverless Generative AI Architectural Patterns",
+        "url": "https://aws.amazon.com/blogs/compute/serverless-generative-ai-architectural-patterns/",
+        "type": "blog",
+        "description": "API Gateway + Lambda + Bedrock foundational patterns for production GenAI APIs.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Building an AI Gateway to Bedrock with API Gateway",
+        "url": "https://aws.amazon.com/blogs/architecture/building-an-ai-gateway-to-amazon-bedrock-with-amazon-api-gateway/",
+        "type": "blog",
+        "description": "Rate limiting, access control, usage tracking for GenAI APIs. Enterprise pattern.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Orchestrate GenAI Workflows with Bedrock and Step Functions",
+        "url": "https://aws.amazon.com/blogs/machine-learning/orchestrate-generative-ai-workflows-with-amazon-bedrock-and-aws-step-functions/",
+        "type": "blog",
+        "description": "Parallel API calls, error handling, complex orchestration with Step Functions.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Serverless Prompt Chaining — GitHub Repo",
+        "url": "https://github.com/aws-samples/amazon-bedrock-serverless-prompt-chaining",
+        "type": "github",
+        "description": "CDK code: sequential chains, parallel jobs, loops, conditions — Streamlit demo with meal planner example.",
+        "estimatedMinutes": 90
+      },
+      {
+        "title": "GenAI Application Builder Architecture Overview",
+        "url": "https://docs.aws.amazon.com/solutions/latest/generative-ai-application-builder-on-aws/architecture-overview.html",
+        "type": "docs",
+        "description": "End-to-end reference architecture for production GenAI applications.",
+        "estimatedMinutes": 30
+      }
+    ]
+  },
+  {
+    "number": 10,
+    "weekday": "Wednesday",
+    "title": "Integration Patterns + CI/CD + Q Business/Developer",
+    "week": 2,
+    "domain": 2,
+    "learningObjectives": [
+      "Distinguish Q Business (enterprise internal search) from Q Developer (coding assistant)",
+      "Design CI/CD pipelines for GenAI applications with Bedrock Evaluations",
+      "Understand Bedrock Flows as a no-code workflow builder",
+      "Know Q Business 40+ connectors and ACL-respecting retrieval",
+      "Apply GenAIOps principles for scaling GenAI workloads"
+    ],
+    "tasks": [
+      {
+        "id": "d10-t1",
+        "type": "read",
+        "title": "Amazon Bedrock Flows Documentation",
+        "description": "No-code workflow builder for sequential prompt chains with conditional branching.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/flows.html"
+      },
+      {
+        "id": "d10-t2",
+        "type": "read",
+        "title": "Amazon Q Business Documentation",
+        "description": "Enterprise internal search, 40+ connectors, built-in ACL, provided UI.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/what-is.html"
+      },
+      {
+        "id": "d10-t3",
+        "type": "read",
+        "title": "Amazon Q Developer Documentation",
+        "description": "Code generation, completion, security scanning, /transform for Java upgrades.",
+        "estimatedMinutes": 20,
+        "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html"
+      },
+      {
+        "id": "d10-t4",
+        "type": "blog",
+        "title": "GenAIOps - Operationalizing GenAI at Scale",
+        "description": "Standardized repos, reusable components, automated evaluation at scale.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/machine-learning/operationalize-generative-ai-workloads-and-scale-to-hundreds-of-use-cases-with-amazon-bedrock-part-1-genaiops/"
+      },
+      {
+        "id": "d10-t5",
+        "type": "hands-on",
+        "title": "AWS GenAI CI/CD Suite (GitHub Actions + Bedrock Code Review)",
+        "description": "Explore the CI/CD integration patterns for GenAI applications.",
+        "estimatedMinutes": 45,
+        "url": "https://github.com/aws-samples/aws-genai-cicd-suite"
+      }
+    ],
+    "scenarioIds": [
+      "s10"
+    ],
+    "examSkills": [
+      "2.5.1",
+      "2.5.2",
+      "2.5.3",
+      "2.5.4",
+      "2.5.5",
+      "2.5.6"
+    ],
+    "handsOn": [
+      {
+        "id": "d10-ho1",
+        "title": "Configure Q Business with an S3 Data Source",
+        "description": "Set up Amazon Q Business with S3 documents to create an enterprise search assistant.",
+        "estimatedMinutes": 45,
+        "url": "https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/what-is.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open Amazon Q Business console and click 'Create application'",
+          "Name the application and configure IAM Identity Center for user access",
+          "Add an S3 data source and point it to a bucket containing company documents",
+          "Configure the sync schedule and start the initial sync",
+          "Open the Q Business web experience and test queries against your documents"
+        ]
+      },
+      {
+        "id": "d10-ho2",
+        "title": "Explore Q Developer Code Generation Features",
+        "description": "Use Q Developer in your IDE to test code generation, completion, and security scanning.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/what-is.html",
+        "difficulty": "beginner",
+        "steps": [
+          "Install the Amazon Q extension in VS Code or JetBrains IDE",
+          "Open a Python file and type a comment: '# Function to invoke Bedrock Claude with streaming'",
+          "Accept the auto-generated code suggestion",
+          "Open Q Developer chat and ask: 'Write a Lambda handler that calls Bedrock InvokeModel'",
+          "Run Q Developer security scan on the generated code to check for vulnerabilities"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Q Business Enterprise KB Integration",
+        "url": "https://aws.amazon.com/blogs/machine-learning/amazon-q-business-simplifies-integration-of-enterprise-knowledge-bases-at-scale/",
+        "type": "blog",
+        "description": "How Q Business integrates with enterprise knowledge bases at scale.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "Agentic RAG in Amazon Q Business",
+        "url": "https://aws.amazon.com/blogs/machine-learning/bringing-agentic-retrieval-augmented-generation-to-amazon-q-business/",
+        "type": "blog",
+        "description": "Q Business evolves beyond simple RAG: agent-driven retrieval, multi-step reasoning.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "GenAIOps — Operationalizing GenAI at Scale",
+        "url": "https://aws.amazon.com/blogs/machine-learning/operationalize-generative-ai-workloads-and-scale-to-hundreds-of-use-cases-with-amazon-bedrock-part-1-genaiops/",
+        "type": "blog",
+        "description": "Standardized repos, reusable components, automated evaluation for scaling GenAI workloads.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "AWS GenAI CI/CD Suite",
+        "url": "https://github.com/aws-samples/aws-genai-cicd-suite",
+        "type": "github",
+        "description": "Code review with Bedrock, GitHub Actions integration for CI/CD.",
+        "estimatedMinutes": 45
+      },
+      {
+        "title": "Q Developer Capabilities — Code Reviews, Docs, Tests",
+        "url": "https://aws.amazon.com/blogs/aws/new-amazon-q-developer-agent-capabilities-include-generating-documentation-code-reviews-and-unit-tests/",
+        "type": "blog",
+        "description": "Code generation, completion, security scanning features in Q Developer.",
+        "estimatedMinutes": 20
+      }
+    ]
+  },
+  {
+    "number": 11,
+    "weekday": "Thursday",
+    "title": "Hands-On Build - RAG App with Guardrails (Part 1)",
+    "week": 2,
+    "domain": 2,
+    "learningObjectives": [
+      "Create a Bedrock Knowledge Base with OpenSearch Serverless",
+      "Configure chunking strategies and compare results",
+      "Create a Bedrock Guardrail with content filters, PII, denied topics",
+      "Test retrieval quality via the console"
+    ],
+    "tasks": [
+      {
+        "id": "d11-t1",
+        "type": "read",
+        "title": "Bedrock Knowledge Base Tutorial",
+        "description": "Step-by-step guide to creating a Knowledge Base in the console.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-create.html"
+      },
+      {
+        "id": "d11-t2",
+        "type": "blog",
+        "title": "Guardrails Content Filters, PII, and Streaming",
+        "description": "Follow this as a practical guide for setting up guardrails.",
+        "estimatedMinutes": 25,
+        "url": "https://dev.to/aws-builders/amazon-bedrock-guardrails-content-filters-pii-and-streaming-562a"
+      },
+      {
+        "id": "d11-t3",
+        "type": "hands-on",
+        "title": "Build: RAG App with Guardrails (Steps 1-5)",
+        "description": "1) Create S3 bucket + upload PDF, 2) Create KB with OpenSearch + Titan Embeddings, 3) Configure chunking, 4) Test retrieval, 5) Create Guardrail with content filters, PII, contextual grounding.",
+        "estimatedMinutes": 120,
+        "url": "https://github.com/aws-samples/amazon-bedrock-samples"
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [
+      "1.4.1",
+      "1.5.1",
+      "3.1.1"
+    ],
+    "handsOn": [
+      {
+        "id": "d11-ho1",
+        "title": "Create a Knowledge Base with Different Chunking Strategies",
+        "description": "Build the first half of the RAG app by creating the KB and testing chunking options.",
+        "estimatedMinutes": 60,
+        "url": "https://github.com/aws-samples/amazon-bedrock-samples",
+        "difficulty": "intermediate",
+        "steps": [
+          "Create an S3 bucket called 'rag-build-data' and upload 3-5 PDF documents",
+          "Create a Bedrock Knowledge Base with OpenSearch Serverless and Titan Embeddings v2",
+          "Set chunking to 'Fixed size' with 300 tokens and 20% overlap",
+          "Sync the data source and test retrieval with 3 queries in the console",
+          "Note the chunk relevance scores for comparison later"
+        ]
+      },
+      {
+        "id": "d11-ho2",
+        "title": "Create a Guardrail with Content Filters and PII Detection",
+        "description": "Configure a comprehensive Bedrock Guardrail with multiple filter types.",
+        "estimatedMinutes": 45,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open Bedrock → Guardrails → Create guardrail",
+          "Add content filters: set HATE, INSULTS, SEXUAL, VIOLENCE, MISCONDUCT to HIGH strength",
+          "Add PII detection: enable SSN, credit card, email with ANONYMIZE action",
+          "Add a denied topic: 'competitor product comparisons'",
+          "Enable contextual grounding with threshold 0.7 for grounding and 0.5 for relevance"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Bedrock Knowledge Base Tutorial",
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-create.html",
+        "type": "docs",
+        "description": "Step-by-step guide to creating a Knowledge Base in the Bedrock console.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "AI Safety Controls at Scale with Bedrock Guardrails",
+        "url": "https://dev.to/aws/ai-safety-controls-at-scale-with-amazon-bedrock-guardrails-1o2g",
+        "type": "blog",
+        "description": "Production guardrails patterns: content moderation, PII redaction, ApplyGuardrail API.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Build Responsible AI Applications with Guardrails",
+        "url": "https://aws.amazon.com/blogs/machine-learning/build-responsible-ai-applications-with-amazon-bedrock-guardrails/",
+        "type": "blog",
+        "description": "End-to-end responsible AI: content filters + PII + grounding checks + topic denial in one guardrail.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "End-to-End RAG with Bedrock KB and CloudFormation",
+        "url": "https://aws.amazon.com/blogs/machine-learning/build-an-end-to-end-rag-solution-using-knowledge-bases-for-amazon-bedrock-and-aws-cloudformation/",
+        "type": "blog",
+        "description": "Automate full RAG deployment: S3 data source, OpenSearch vector store, embedding model, KB creation via IaC.",
+        "estimatedMinutes": 45
+      }
+    ]
+  },
+  {
+    "number": 12,
+    "weekday": "Friday",
+    "title": "Hands-On Build - RAG App with Guardrails (Part 2)",
+    "week": 2,
+    "domain": 2,
+    "learningObjectives": [
+      "Wire Guardrail to Knowledge Base and test filter triggers",
+      "Use ApplyGuardrail API independently (works with non-Bedrock models)",
+      "Add CloudWatch logging for prompts, responses, and guardrail interventions",
+      "Deploy a Bedrock Agent with KB tool + Lambda tool"
+    ],
+    "tasks": [
+      {
+        "id": "d12-t1",
+        "type": "blog",
+        "title": "Detecting and Filtering Harmful Content with Guardrails",
+        "description": "Practical guide to testing guardrail interventions.",
+        "estimatedMinutes": 25,
+        "url": "https://dev.to/aws-builders/detecting-and-filtering-harmful-content-with-amazon-bedrock-guardrails-1b1d"
+      },
+      {
+        "id": "d12-t2",
+        "type": "read",
+        "title": "Bedrock Agent Tutorial",
+        "description": "Step-by-step creation and testing of a simple Bedrock Agent.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agent-tutorial.html"
+      },
+      {
+        "id": "d12-t3",
+        "type": "hands-on",
+        "title": "Build: RAG App with Guardrails (Steps 6-10)",
+        "description": "6) Wire Guardrail to KB, 7) Test ApplyGuardrail API, 8) Add CloudWatch logging, 9) Deploy Bedrock Agent with KB + Lambda tools, 10) Test agent tool selection.",
+        "estimatedMinutes": 120,
+        "url": "https://github.com/aws-samples/amazon-bedrock-samples"
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [
+      "2.1.1",
+      "3.1.2",
+      "5.2.1"
+    ],
+    "handsOn": [
+      {
+        "id": "d12-ho1",
+        "title": "Wire Guardrail to Knowledge Base and Test Interventions",
+        "description": "Attach the guardrail created on Day 11 to the KB and test various filter triggers.",
+        "estimatedMinutes": 45,
+        "url": "https://github.com/aws-samples/amazon-bedrock-samples",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open your Knowledge Base and edit the retrieval settings",
+          "Attach the guardrail created on Day 11 by selecting it from the dropdown",
+          "Test with a normal query and verify the response is unfiltered",
+          "Test with a prompt containing PII: 'My SSN is 123-45-6789, find my records' — verify PII is anonymized",
+          "Test with the denied topic: 'Compare your product with competitor X' — verify the guardrail blocks the response"
+        ]
+      },
+      {
+        "id": "d12-ho2",
+        "title": "Test the ApplyGuardrail API Independently",
+        "description": "Use the standalone ApplyGuardrail API to apply guardrails to any text, including non-Bedrock model outputs.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open CloudShell or a terminal with AWS CLI configured",
+          "Call ApplyGuardrail: aws bedrock-runtime apply-guardrail --guardrail-identifier <id> --guardrail-version DRAFT --source OUTPUT --content '[{\"text\":{\"text\":\"Test content with SSN 123-45-6789\"}}]'",
+          "Verify the response shows ANONYMIZED PII",
+          "Test with harmful content and verify BLOCKED action",
+          "Note that this API works with ANY text — not just Bedrock model outputs"
+        ]
+      },
+      {
+        "id": "d12-ho3",
+        "title": "Deploy a Bedrock Agent with KB and Lambda Tools",
+        "description": "Create an agent that combines Knowledge Base retrieval with Lambda-backed actions.",
+        "estimatedMinutes": 60,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/agent-tutorial.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Create a Bedrock Agent with instructions describing both KB search and action capabilities",
+          "Attach your Knowledge Base as an agent knowledge base",
+          "Create a simple Lambda function for a custom action (e.g., 'create support ticket')",
+          "Add the Lambda as an action group with an OpenAPI schema",
+          "Test the agent: ask a question that requires KB retrieval, then ask it to create a support ticket"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Detecting and Filtering Harmful Content with Guardrails",
+        "url": "https://dev.to/aws-builders/detecting-and-filtering-harmful-content-with-amazon-bedrock-guardrails-1b1d",
+        "type": "blog",
+        "description": "Content filters, PII, streaming, prompt attacks — practical testing guide.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Guardrails Practical — PII Config, Sync vs Async",
+        "url": "https://dev.to/aws-builders/amazon-bedrock-guardrails-content-filters-pii-and-streaming-562a",
+        "type": "blog",
+        "description": "Content filters, PII config, sync vs async guardrails in practice.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Bedrock Guardrails Expands to Code Domain",
+        "url": "https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-guardrails-expands-support-for-code-domain/",
+        "type": "blog",
+        "description": "Apply guardrails to code generation: detect insecure patterns, block credential leakage.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "Bedrock Agents Quickstart Workshop (300-level)",
+        "url": "https://github.com/build-on-aws/amazon-bedrock-agents-quickstart",
+        "type": "workshop",
+        "description": "Build agent for Well-Architected queries and code generation — Lambda, ECR, Python.",
+        "estimatedMinutes": 120
+      }
+    ]
+  },
+  {
+    "number": 13,
+    "weekday": "Saturday",
+    "title": "Hands-On AgentCore + Service Comparison Drilling",
+    "week": 2,
+    "domain": 2,
+    "learningObjectives": [
+      "Deploy an agent with AgentCore CLI in 2 commands",
+      "Implement AgentCore Memory (session + episodic)",
+      "Try AgentCore Code Interpreter for data analysis",
+      "Build comprehensive service comparison tables from memory"
+    ],
+    "tasks": [
+      {
+        "id": "d13-t1",
+        "type": "blog",
+        "title": "Deploy Production AI Agents in 2 Commands",
+        "description": "AgentCore CLI: agentcore create, agentcore deploy, test endpoint.",
+        "estimatedMinutes": 30,
+        "url": "https://dev.to/aws/deploy-production-ai-agents-with-amazon-bedrock-agentcore-in-2-commands-obg"
+      },
+      {
+        "id": "d13-t2",
+        "type": "blog",
+        "title": "AgentCore Memory Management (Mike Chambers)",
+        "description": "Short-term vs long-term vs episodic memory. Code walkthrough.",
+        "estimatedMinutes": 25,
+        "url": "https://blog.mikegchambers.com/posts/building-smarter-ai-agents-memory-management-with-agentcore/"
+      },
+      {
+        "id": "d13-t3",
+        "type": "blog",
+        "title": "AgentCore Code Interpreter",
+        "description": "Secure sandbox for Python execution. Supports pandas, numpy, matplotlib.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/blogs/machine-learning/introducing-the-amazon-bedrock-agentcore-code-interpreter/"
+      },
+      {
+        "id": "d13-t4",
+        "type": "hands-on",
+        "title": "AgentCore Samples Repository - Deploy and Test",
+        "description": "Install CLI, create Strands agent, deploy, test endpoint, check CloudWatch.",
+        "estimatedMinutes": 120,
+        "url": "https://github.com/awslabs/amazon-bedrock-agentcore-samples"
+      },
+      {
+        "id": "d13-t5",
+        "type": "study",
+        "title": "Build Your Own Service Comparison Tables",
+        "description": "From memory, build tables for: Bedrock vs SageMaker, Agents vs AgentCore, Vector stores, Caching, Guardrails filters.",
+        "estimatedMinutes": 120
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [
+      "2.1.1",
+      "2.1.2",
+      "2.1.5",
+      "2.1.6"
+    ],
+    "handsOn": [
+      {
+        "id": "d13-ho1",
+        "title": "Deploy an Agent with AgentCore CLI",
+        "description": "Use the AgentCore CLI to create and deploy a Strands agent to production in minutes.",
+        "estimatedMinutes": 60,
+        "url": "https://github.com/awslabs/amazon-bedrock-agentcore-samples",
+        "difficulty": "intermediate",
+        "steps": [
+          "Install the AgentCore CLI: pip install agentcore-cli",
+          "Run agentcore create my-agent --template strands to scaffold a new agent project",
+          "Review the generated agent code: agent.py, tools.py, requirements.txt",
+          "Run agentcore dev to test locally with hot-reloading",
+          "Run agentcore deploy to deploy to AgentCore Runtime and note the endpoint URL"
+        ]
+      },
+      {
+        "id": "d13-ho2",
+        "title": "Test AgentCore Memory (Session and Episodic)",
+        "description": "Implement short-term session memory and long-term episodic memory in your deployed agent.",
+        "estimatedMinutes": 45,
+        "url": "https://blog.mikegchambers.com/posts/building-smarter-ai-agents-memory-management-with-agentcore/",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open the AgentCore console and navigate to your deployed agent",
+          "Enable session memory and set the TTL to 1 hour",
+          "Send a series of messages: 'My name is Alice', then 'What is my name?' — verify session context",
+          "Enable long-term memory and configure it for episodic storage",
+          "In a new session, ask 'What do you remember about me?' to verify cross-session memory recall"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Introducing Amazon Bedrock AgentCore — Danilo Poccia",
+        "url": "https://aws.amazon.com/blogs/aws/introducing-amazon-bedrock-agentcore-securely-deploy-and-operate-ai-agents-at-any-scale/",
+        "type": "blog",
+        "description": "Deep walkthrough with Strands Agents code for AgentCore deployment.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "AgentCore CLI: Deploy an AI Agent in Four Commands",
+        "url": "https://shinyaz.com/en/blog/2026/03/24/agentcore-cli-create-dev-deploy",
+        "type": "blog",
+        "description": "Hands-on CLI walkthrough: agentcore create, dev, deploy with Strands SDK.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "AgentCore Code Interpreter",
+        "url": "https://aws.amazon.com/blogs/machine-learning/introducing-the-amazon-bedrock-agentcore-code-interpreter/",
+        "type": "blog",
+        "description": "Secure sandbox for Python execution. Supports pandas, numpy, matplotlib.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "What is Amazon Bedrock AgentCore? — Tutorials Dojo",
+        "url": "https://tutorialsdojo.com/what-is-amazon-bedrock-agentcore/",
+        "type": "blog",
+        "description": "Bedrock vs AgentCore distinction, 7 services explained clearly.",
+        "estimatedMinutes": 15
+      },
+      {
+        "title": "AgentCore Samples",
+        "url": "https://github.com/awslabs/amazon-bedrock-agentcore-samples",
+        "type": "github",
+        "description": "Production agent deployment, Gateway, Memory, Identity sample code.",
+        "estimatedMinutes": 60
+      }
+    ]
+  },
+  {
+    "number": 14,
+    "weekday": "Sunday",
+    "title": "Week 2 Checkpoint - Full Practice Exam",
+    "week": 2,
+    "domain": 2,
+    "learningObjectives": [
+      "Validate Week 1-2 learning with a full-length practice exam",
+      "Identify weakest domains and specific skill gaps",
+      "Categorize errors: service comparison, architecture pattern, or knowledge gap"
+    ],
+    "tasks": [
+      {
+        "id": "d14-t1",
+        "type": "practice-exam",
+        "title": "CertificationPractice.com Free Exam #1 (85 questions)",
+        "description": "Full timed practice exam. Score yourself and track errors by domain.",
+        "estimatedMinutes": 180,
+        "url": "https://certificationpractice.com/practice-exams/aws-certified-generative-ai-developer-professional"
+      },
+      {
+        "id": "d14-t2",
+        "type": "review",
+        "title": "Post-Exam Analysis",
+        "description": "For every wrong answer, identify domain, skill number, and error type (service comparison, architecture pattern, knowledge gap).",
+        "estimatedMinutes": 120
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [],
+    "handsOn": [],
+    "furtherReading": [
+      {
+        "title": "AWS Official Practice Question Set (20 free questions)",
+        "url": "https://skillbuilder.aws/learn/HSEKTD11NX",
+        "type": "docs",
+        "description": "20 free exam-caliber questions from AWS for additional practice.",
+        "estimatedMinutes": 40
+      },
+      {
+        "title": "Tutorials Dojo Free Sampler (30 questions)",
+        "url": "https://portal.tutorialsdojo.com/courses/free-aws-certified-generative-ai-developer-professional-practice-exams-sampler/",
+        "type": "docs",
+        "description": "Free 30-question practice exam sampler with detailed explanations.",
+        "estimatedMinutes": 60
+      },
+      {
+        "title": "Tutorials Dojo AIP-C01 Exam Guide",
+        "url": "https://tutorialsdojo.com/aws-certified-generative-ai-developer-professional-certification-aip-c01-exam-guide-and-aip-c01-exam-topics-list/",
+        "type": "blog",
+        "description": "Community exam guide covering all domains and topic areas.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "MakendranG's Handwritten Study Notes",
+        "url": "https://github.com/MakendranG/aws-genai-professional-certification-notes",
+        "type": "github",
+        "description": "Early Adopter badge winner's comprehensive notes for review.",
+        "estimatedMinutes": 45
+      }
+    ]
+  },
+  {
+    "number": 15,
+    "weekday": "Monday",
+    "title": "AI Safety - Guardrails Deep Dive",
+    "week": 3,
+    "domain": 3,
+    "learningObjectives": [
+      "Know all 8 Guardrails filter types and their configuration options",
+      "Distinguish BLOCK vs ANONYMIZE for PII handling",
+      "Distinguish Contextual Grounding (RAG faithfulness) from Automated Reasoning (logical correctness)",
+      "Understand Standard tier PII detection in code elements",
+      "Design defense-in-depth architectures with multiple safety layers"
+    ],
+    "tasks": [
+      {
+        "id": "d15-t1",
+        "type": "read",
+        "title": "Bedrock Guardrails Components",
+        "description": "Every filter type, configuration options, and behavior. The authoritative reference.",
+        "estimatedMinutes": 45,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html"
+      },
+      {
+        "id": "d15-t2",
+        "type": "read",
+        "title": "Amazon Bedrock Guardrails Product Page",
+        "description": "High-level overview and capabilities summary.",
+        "estimatedMinutes": 15,
+        "url": "https://aws.amazon.com/bedrock/guardrails/"
+      },
+      {
+        "id": "d15-t3",
+        "type": "blog",
+        "title": "Automated Reasoning - 99% Verification Accuracy",
+        "description": "Formal logic verification for mathematical correctness. Key exam distinction from Contextual Grounding.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/aws/minimize-ai-hallucinations-and-deliver-up-to-99-verification-accuracy-with-automated-reasoning-checks-now-available/"
+      },
+      {
+        "id": "d15-t4",
+        "type": "blog",
+        "title": "Safeguard GenAI from Prompt Injections",
+        "description": "Prompt injection defense strategies and Guardrails Prompt Attack filter.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/blogs/security/safeguard-your-generative-ai-workloads-from-prompt-injections/"
+      },
+      {
+        "id": "d15-t5",
+        "type": "blog",
+        "title": "Securing Bedrock Agents from Indirect Prompt Injections",
+        "description": "Tag external data as 'user input' to protect agents from indirect injection.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/blogs/machine-learning/securing-amazon-bedrock-agents-a-guide-to-safeguarding-against-indirect-prompt-injections/"
+      }
+    ],
+    "scenarioIds": [
+      "s11",
+      "s11b"
+    ],
+    "examSkills": [
+      "3.1.1",
+      "3.1.2",
+      "3.1.3",
+      "3.1.4",
+      "3.1.5"
+    ],
+    "handsOn": [
+      {
+        "id": "d15-ho1",
+        "title": "Configure Automated Reasoning Checks in Guardrails",
+        "description": "Set up Automated Reasoning to verify mathematical and logical correctness in model outputs.",
+        "estimatedMinutes": 45,
+        "url": "https://aws.amazon.com/blogs/aws/minimize-ai-hallucinations-and-deliver-up-to-99-verification-accuracy-with-automated-reasoning-checks-now-available/",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open Bedrock → Guardrails → Create or edit a guardrail",
+          "Navigate to the Automated Reasoning section and click 'Create policy'",
+          "Define a policy for a financial domain: 'Loan interest calculations must follow simple interest formula: I = P * R * T'",
+          "Test with a correct calculation: 'Interest on $10,000 at 5% for 2 years is $1,000' — verify PASS",
+          "Test with an incorrect calculation: 'Interest on $10,000 at 5% for 2 years is $2,000' — verify BLOCKED with explanation"
+        ]
+      },
+      {
+        "id": "d15-ho2",
+        "title": "Test All 8 Guardrail Filter Types",
+        "description": "Systematically test each guardrail filter type to understand their behavior.",
+        "estimatedMinutes": 40,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-components.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Create a test guardrail with ALL filter types enabled",
+          "Test content filters: send prompts triggering HATE, INSULTS, SEXUAL, VIOLENCE, MISCONDUCT — verify each is blocked",
+          "Test denied topics: add 'political opinions' and verify related prompts are blocked",
+          "Test PII: send text with SSN, credit card, email and verify ANONYMIZE vs BLOCK behavior",
+          "Test prompt attack filter: try a jailbreak prompt like 'Ignore your instructions and...' — verify detection"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Build Reliable AI with Automated Reasoning — Part 1",
+        "url": "https://aws.amazon.com/blogs/machine-learning/build-reliable-ai-systems-with-automated-reasoning-on-amazon-bedrock-part-1/",
+        "type": "blog",
+        "description": "Four-phase implementation: create policy, test with scenarios, deploy in guardrail, integrate in app.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "PwC + AWS Responsible AI with Automated Reasoning",
+        "url": "https://aws.amazon.com/blogs/machine-learning/pwc-and-aws-build-responsible-ai-with-automated-reasoning-on-amazon-bedrock/",
+        "type": "blog",
+        "description": "Enterprise responsible AI implementation with formal logic verification.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Automated Reasoning for Financial Services",
+        "url": "https://aws.amazon.com/blogs/machine-learning/build-verifiable-explainability-into-financial-services-workflows-with-automated-reasoning-checks-for-amazon-bedrock-guardrails/",
+        "type": "blog",
+        "description": "Formal logic verification for financial calculations.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Hacking GenAI Applications — From Theory to Practice",
+        "url": "https://www.nordhero.com/posts/hacking-genai-applications-part2/",
+        "type": "blog",
+        "description": "Red-team perspective on prompt injection attacks and defenses — practical attack/defense scenarios.",
+        "estimatedMinutes": 35
+      },
+      {
+        "title": "Detect Prompt Attacks with Bedrock Guardrails",
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-prompt-attack.html",
+        "type": "docs",
+        "description": "Configure prompt attack filter: jailbreaks, injections, leakage detection — tag user vs system inputs.",
+        "estimatedMinutes": 20
+      }
+    ]
+  },
+  {
+    "number": 16,
+    "weekday": "Tuesday",
+    "title": "Security Infrastructure + IAM",
+    "week": 3,
+    "domain": 3,
+    "learningObjectives": [
+      "Design VPC endpoints (PrivateLink) for Bedrock",
+      "Write IAM policies with bedrock:ModelId condition keys",
+      "Implement Cognito + API Gateway + Lambda + Bedrock auth flows",
+      "Use IAM Identity Center for SSO to Bedrock and Q Business",
+      "Design defense-in-depth with multiple security layers"
+    ],
+    "tasks": [
+      {
+        "id": "d16-t1",
+        "type": "read",
+        "title": "Amazon Bedrock Security Documentation",
+        "description": "VPC endpoints, IAM policies, encryption, logging. Comprehensive security reference.",
+        "estimatedMinutes": 45,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/security.html"
+      },
+      {
+        "id": "d16-t2",
+        "type": "read",
+        "title": "Amazon Cognito Documentation",
+        "description": "User authentication for GenAI apps. Cognito -> API Gateway -> Lambda -> Bedrock.",
+        "estimatedMinutes": 20,
+        "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/what-is-amazon-cognito.html"
+      },
+      {
+        "id": "d16-t3",
+        "type": "study",
+        "title": "Security Patterns for GenAI Workloads",
+        "description": "Study VPC endpoints, IAM condition keys, Macie, Lake Formation, defense-in-depth architecture.",
+        "estimatedMinutes": 60
+      }
+    ],
+    "scenarioIds": [
+      "s12"
+    ],
+    "examSkills": [
+      "3.2.1",
+      "3.2.2",
+      "3.2.3",
+      "3.2.4",
+      "3.2.5"
+    ],
+    "handsOn": [
+      {
+        "id": "d16-ho1",
+        "title": "Set Up a VPC Endpoint for Amazon Bedrock",
+        "description": "Create a PrivateLink endpoint to keep Bedrock traffic within your VPC.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/vpc-interface-endpoints.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open VPC console → Endpoints → Create endpoint",
+          "Search for 'bedrock-runtime' and select com.amazonaws.<region>.bedrock-runtime",
+          "Select your VPC and at least 2 subnets in different AZs",
+          "Create or select a security group allowing HTTPS (port 443) from your application subnets",
+          "Test connectivity from an EC2 instance in the VPC: aws bedrock-runtime invoke-model --endpoint-url https://vpce-xxx.bedrock-runtime.<region>.vpce.amazonaws.com"
+        ]
+      },
+      {
+        "id": "d16-ho2",
+        "title": "Write an IAM Policy with Bedrock Condition Keys",
+        "description": "Create a restrictive IAM policy that limits which models can be invoked using condition keys.",
+        "estimatedMinutes": 25,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/security-iam-awsmanpol.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open IAM console → Policies → Create policy",
+          "Use the JSON editor to create a policy allowing bedrock:InvokeModel only for Claude models",
+          "Add a condition: 'StringLike': {'bedrock:ModelId': 'anthropic.claude-*'}",
+          "Add a second statement denying access to non-approved regions",
+          "Attach the policy to a test role and verify that invoking a non-Claude model returns AccessDenied"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "VPC Endpoints (PrivateLink) for Amazon Bedrock",
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/vpc-interface-endpoints.html",
+        "type": "docs",
+        "description": "Private connectivity from VPC to Bedrock — never expose traffic to public internet, endpoint policies.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "AWS Managed Policies for Amazon Bedrock",
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/security-iam-awsmanpol.html",
+        "type": "docs",
+        "description": "All predefined IAM policies: AmazonBedrockFullAccess, ReadOnly, service roles — least-privilege patterns.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "Securing Amazon Bedrock: What Enterprises Need to Get Right",
+        "url": "https://interworks.com/blog/2026/03/06/securing-amazon-bedrock-what-enterprises-need-to-get-right/",
+        "type": "blog",
+        "description": "Enterprise security checklist: IAM layers, CloudTrail, CloudWatch AppSignals, compliance frameworks.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Security Best Practices for Fine-Tuning in Bedrock",
+        "url": "https://aws.amazon.com/blogs/machine-learning/security-best-practices-to-consider-while-fine-tuning-models-in-amazon-bedrock/",
+        "type": "blog",
+        "description": "S3 encryption, VPC configs, IAM roles, CloudTrail logging during model customization.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "VPC Endpoints for AgentCore Gateway",
+        "url": "https://aws.amazon.com/blogs/machine-learning/secure-ingress-connectivity-to-amazon-bedrock-agentcore-gateway-using-interface-vpc-endpoints/",
+        "type": "blog",
+        "description": "Secure agent-to-tool traffic within VPC: configure interface endpoints, restrict with endpoint policies.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Understanding IAM for Managed AWS MCP Servers",
+        "url": "https://aws.amazon.com/blogs/security/understanding-iam-for-managed-aws-mcp-servers/",
+        "type": "blog",
+        "description": "IAM permission model for MCP servers: tool-level access control, CloudTrail auditing, security boundaries.",
+        "estimatedMinutes": 20
+      }
+    ]
+  },
+  {
+    "number": 17,
+    "weekday": "Wednesday",
+    "title": "Governance + Responsible AI + AgentCore Policy",
+    "week": 3,
+    "domain": 3,
+    "learningObjectives": [
+      "Use AgentCore Policy with Cedar rules for agent action boundaries",
+      "Apply SageMaker Clarify for bias detection in GenAI outputs",
+      "Create model cards for documentation and transparency",
+      "Design multi-account governance with SCPs",
+      "Understand LLM-as-a-judge for fairness evaluations"
+    ],
+    "tasks": [
+      {
+        "id": "d17-t1",
+        "type": "blog",
+        "title": "AgentCore Policy and Evaluations Blog",
+        "description": "Cedar policies, natural language authoring, trust-but-verify approach.",
+        "estimatedMinutes": 30,
+        "url": "https://aws.amazon.com/blogs/aws/amazon-bedrock-agentcore-adds-quality-evaluations-and-policy-controls-for-deploying-trusted-ai-agents/"
+      },
+      {
+        "id": "d17-t2",
+        "type": "read",
+        "title": "SageMaker Clarify for Bias Detection",
+        "description": "Pre-training and post-training bias analysis. Model explainability.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-online-explainability.html"
+      },
+      {
+        "id": "d17-t3",
+        "type": "blog",
+        "title": "Self-Service Digital Assistant with Lex and Bedrock KB",
+        "description": "Amazon Lex + Bedrock for structured dialogue chatbots. Contact center pattern.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/blogs/machine-learning/build-a-self-service-digital-assistant-using-amazon-lex-and-amazon-bedrock-knowledge-bases/"
+      },
+      {
+        "id": "d17-t4",
+        "type": "study",
+        "title": "Governance Topics Review",
+        "description": "Multi-account SCPs, adversarial testing, LLM-as-a-judge for fairness, Connect + Lex + Bedrock for contact centers.",
+        "estimatedMinutes": 60
+      }
+    ],
+    "scenarioIds": [
+      "s13"
+    ],
+    "examSkills": [
+      "3.3.1",
+      "3.3.2",
+      "3.3.3",
+      "3.3.4",
+      "3.4.1",
+      "3.4.2",
+      "3.4.3"
+    ],
+    "handsOn": [
+      {
+        "id": "d17-ho1",
+        "title": "Configure AgentCore Policy with Cedar Rules",
+        "description": "Set up Cedar policies to control agent behavior and limit which tools an agent can invoke.",
+        "estimatedMinutes": 45,
+        "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-getting-started.html",
+        "difficulty": "advanced",
+        "steps": [
+          "Open the AgentCore console and navigate to Policy",
+          "Create a new policy store for your agent",
+          "Write a Cedar policy: permit (principal, action == Action::\"invokeToolGroup\", resource == ToolGroup::\"approved-tools\")",
+          "Add a deny rule: forbid (principal, action, resource) when { context.sensitivityLevel > 3 }",
+          "Test the policy by invoking the agent with both permitted and denied tool requests"
+        ]
+      },
+      {
+        "id": "d17-ho2",
+        "title": "Review SageMaker Clarify Bias Reports",
+        "description": "Explore SageMaker Clarify bias detection capabilities for understanding model fairness.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-online-explainability.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open SageMaker Studio and navigate to the Clarify section",
+          "Review the pre-training bias metrics: Class Imbalance (CI), Difference in Proportions of Labels (DPL)",
+          "Review post-training bias metrics: Disparate Impact (DI), Difference in Positive Proportions in Predicted Labels (DPPL)",
+          "Understand the SHAP-based feature attribution for model explainability",
+          "Note how these apply to GenAI: evaluate model outputs for fairness across demographic groups"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "AgentCore Policy — Cedar Policies for Agent Governance",
+        "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-getting-started.html",
+        "type": "docs",
+        "description": "Getting started: write Cedar policies via natural language or code, intercept agent-tool calls, audit trail.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "AgentCore Policy (GA) — Cedar Policies",
+        "url": "https://aws.amazon.com/blogs/aws/amazon-bedrock-agentcore-adds-quality-evaluations-and-policy-controls-for-deploying-trusted-ai-agents/",
+        "type": "blog",
+        "description": "Cedar policies, natural language authoring, trust-but-verify approach for agent governance.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Self-Service Digital Assistant with Lex and Bedrock KB",
+        "url": "https://aws.amazon.com/blogs/machine-learning/build-a-self-service-digital-assistant-using-amazon-lex-and-amazon-bedrock-knowledge-bases/",
+        "type": "blog",
+        "description": "Amazon Lex + Bedrock for structured dialogue chatbots. Contact center pattern.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "PII Redaction Architecture — BDA + Guardrails",
+        "url": "https://aws.amazon.com/blogs/machine-learning/detect-and-redact-personally-identifiable-information-using-amazon-bedrock-data-automation-and-guardrails/",
+        "type": "blog",
+        "description": "Bedrock Data Automation + Guardrails for email PII pipeline.",
+        "estimatedMinutes": 25
+      }
+    ]
+  },
+  {
+    "number": 18,
+    "weekday": "Thursday",
+    "title": "Cost Optimization + Performance (Domain 4)",
+    "week": 3,
+    "domain": 4,
+    "learningObjectives": [
+      "Distinguish 3 caching layers: Prompt Caching, Semantic Caching, Exact-Match Caching",
+      "Design model cascading and Intelligent Prompt Routing architectures",
+      "Know batch inference (50% discount) for non-real-time workloads",
+      "Implement cost monitoring with CloudWatch + Cost Explorer",
+      "Understand provisioned throughput vs on-demand pricing"
+    ],
+    "tasks": [
+      {
+        "id": "d18-t1",
+        "type": "blog",
+        "title": "Effective Cost Optimization Strategies for Amazon Bedrock",
+        "description": "Comprehensive guide: model cascading, caching, batch inference, provisioned throughput.",
+        "estimatedMinutes": 30,
+        "url": "https://aws.amazon.com/blogs/machine-learning/effective-cost-optimization-strategies-for-amazon-bedrock/"
+      },
+      {
+        "id": "d18-t2",
+        "type": "blog",
+        "title": "Prompt Caching on Bedrock - Up to 85% Cost Reduction",
+        "description": "5-min TTL (1.25x write, 0.1x read) or 1-hour TTL (2.0x write, 0.1x read). Min 1024 tokens.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/blogs/machine-learning/effectively-use-prompt-caching-on-amazon-bedrock/"
+      },
+      {
+        "id": "d18-t3",
+        "type": "blog",
+        "title": "ElastiCache Semantic Cache - 86% Cost Reduction",
+        "description": "Application-level semantic caching using embeddings and cosine similarity.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/blogs/database/lower-cost-and-latency-for-ai-using-amazon-elasticache-as-a-semantic-cache-with-amazon-bedrock/"
+      },
+      {
+        "id": "d18-t4",
+        "type": "blog",
+        "title": "Intelligent Prompt Routing",
+        "description": "Auto-routes to cheapest capable model. Automated model cascading.",
+        "estimatedMinutes": 15,
+        "url": "https://aws.amazon.com/blogs/machine-learning/use-amazon-bedrock-intelligent-prompt-routing-for-cost-and-latency-benefits/"
+      },
+      {
+        "id": "d18-t5",
+        "type": "read",
+        "title": "Model Invocation Logging",
+        "description": "Log all prompts/responses to CloudWatch or S3. Essential for cost analysis and debugging.",
+        "estimatedMinutes": 15,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
+      }
+    ],
+    "scenarioIds": [
+      "s14"
+    ],
+    "examSkills": [
+      "4.1.1",
+      "4.1.2",
+      "4.1.3",
+      "4.1.4",
+      "4.2.1",
+      "4.2.2",
+      "4.2.3",
+      "4.2.4",
+      "4.2.5",
+      "4.2.6",
+      "4.3.1",
+      "4.3.2",
+      "4.3.3",
+      "4.3.4",
+      "4.3.5",
+      "4.3.6"
+    ],
+    "handsOn": [
+      {
+        "id": "d18-ho1",
+        "title": "Implement Semantic Caching with ElastiCache",
+        "description": "Set up a semantic cache using ElastiCache to reduce Bedrock API costs for similar queries.",
+        "estimatedMinutes": 60,
+        "url": "https://aws.amazon.com/blogs/database/lower-cost-and-latency-for-ai-using-amazon-elasticache-as-a-semantic-cache-with-amazon-bedrock/",
+        "difficulty": "advanced",
+        "steps": [
+          "Create an ElastiCache Serverless Redis cluster with vector search enabled",
+          "Write a Lambda function that generates embeddings for incoming queries using Titan Embeddings",
+          "Before calling Bedrock, search ElastiCache for a cached response with cosine similarity > 0.95",
+          "If cache hit: return cached response (saving the Bedrock API call). If cache miss: call Bedrock, store the query embedding and response in ElastiCache",
+          "Test with 10 similar queries and measure the cache hit rate and cost savings"
+        ]
+      },
+      {
+        "id": "d18-ho2",
+        "title": "Enable and Analyze Model Invocation Logging",
+        "description": "Set up model invocation logging to CloudWatch to track token usage and cost per request.",
+        "estimatedMinutes": 25,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open Bedrock console → Settings → Model invocation logging",
+          "Enable logging to CloudWatch Logs and select a log group",
+          "Make several Bedrock API calls with different models",
+          "Open CloudWatch Logs Insights and run: fields @timestamp, inputTokenCount, outputTokenCount, modelId | sort @timestamp desc",
+          "Calculate the cost per request using the token counts and published pricing"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Effective Cost Optimization Strategies for Bedrock",
+        "url": "https://aws.amazon.com/blogs/machine-learning/effective-cost-optimization-strategies-for-amazon-bedrock/",
+        "type": "blog",
+        "description": "Comprehensive guide: model cascading, caching, batch inference, provisioned throughput, distillation.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Prompt Caching on Bedrock — Up to 85% Cost Reduction",
+        "url": "https://aws.amazon.com/blogs/machine-learning/effectively-use-prompt-caching-on-amazon-bedrock/",
+        "type": "blog",
+        "description": "Up to 85% cost reduction for repeated contexts. TTL options and pricing.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "Track, Allocate, and Manage GenAI Cost with Bedrock",
+        "url": "https://aws.amazon.com/blogs/machine-learning/track-allocate-and-manage-your-generative-ai-cost-and-usage-with-amazon-bedrock/",
+        "type": "blog",
+        "description": "Application Inference Profiles, cost allocation tags, Cost Explorer integration.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Batch Job Orchestration with Step Functions",
+        "url": "https://aws.amazon.com/blogs/machine-learning/build-a-serverless-amazon-bedrock-batch-job-orchestration-workflow-using-aws-step-functions/",
+        "type": "blog",
+        "description": "50% savings with batch inference: S3 Map state, parallel processing.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Build a Proactive AI Cost Management System",
+        "url": "https://aws.amazon.com/blogs/machine-learning/build-a-proactive-ai-cost-management-system-for-amazon-bedrock-part-1/",
+        "type": "blog",
+        "description": "Automated cost monitoring and alerting for Bedrock workloads.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Optimizing Cost for FMs with Amazon Bedrock — FinOps Blog",
+        "url": "https://aws.amazon.com/blogs/aws-cloud-financial-management/optimizing-cost-for-using-foundational-models-with-amazon-bedrock/",
+        "type": "blog",
+        "description": "FinOps perspective: pricing options, model selection for cost, KB optimization.",
+        "estimatedMinutes": 25
+      }
+    ]
+  },
+  {
+    "number": 19,
+    "weekday": "Friday",
+    "title": "Testing, Validation, Troubleshooting (Domain 5)",
+    "week": 3,
+    "domain": 5,
+    "learningObjectives": [
+      "Use Bedrock Evaluations for FM and RAG quality assessment",
+      "Apply LLM-as-a-judge for automated evaluation (98% cost savings)",
+      "Use AgentCore Evaluations for agent correctness and safety",
+      "Implement X-Ray tracing for end-to-end FM call debugging",
+      "Design RAG evaluation with precision, recall, MRR, NDCG metrics"
+    ],
+    "tasks": [
+      {
+        "id": "d19-t1",
+        "type": "read",
+        "title": "Amazon Bedrock Model Evaluation",
+        "description": "LLM-as-a-judge, human evaluation, automated metrics.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-evaluation.html"
+      },
+      {
+        "id": "d19-t2",
+        "type": "blog",
+        "title": "LLM-as-a-Judge on Bedrock - 98% Cost Savings",
+        "description": "Use a judge model to evaluate another model's outputs. Massive cost savings vs human eval.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/machine-learning/llm-as-a-judge-on-amazon-bedrock-model-evaluation/"
+      },
+      {
+        "id": "d19-t3",
+        "type": "blog",
+        "title": "Evaluating RAG with Bedrock KB Evaluation",
+        "description": "RAG-specific evaluation: retrieval relevance, answer faithfulness, completeness.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/machine-learning/evaluating-rag-applications-with-amazon-bedrock-knowledge-base-evaluation/"
+      },
+      {
+        "id": "d19-t4",
+        "type": "blog",
+        "title": "Evaluate Agents with RAGAS and LLM-as-Judge",
+        "description": "Agent evaluation: task completion, tool usage, reasoning quality.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/blogs/machine-learning/evaluate-amazon-bedrock-agents-with-ragas-and-llm-as-a-judge/"
+      },
+      {
+        "id": "d19-t5",
+        "type": "blog",
+        "title": "CloudWatch GenAI Observability",
+        "description": "Purpose-built GenAI tracing, end-to-end across LLMs/agents/KBs.",
+        "estimatedMinutes": 15,
+        "url": "https://aws.amazon.com/blogs/mt/launching-amazon-cloudwatch-generative-ai-observability-preview/"
+      },
+      {
+        "id": "d19-t6",
+        "type": "hands-on",
+        "title": "Evaluating LLMs Using LLM-as-a-Judge (Sample Notebooks)",
+        "description": "Work through the evaluation notebooks for hands-on practice.",
+        "estimatedMinutes": 60,
+        "url": "https://github.com/aws-samples/evaluating-large-language-models-using-llm-as-a-judge"
+      }
+    ],
+    "scenarioIds": [
+      "s15"
+    ],
+    "examSkills": [
+      "5.1.1",
+      "5.1.2",
+      "5.1.3",
+      "5.1.4",
+      "5.1.5",
+      "5.1.6",
+      "5.1.7",
+      "5.1.8",
+      "5.1.9",
+      "5.2.1",
+      "5.2.2",
+      "5.2.3",
+      "5.2.4",
+      "5.2.5"
+    ],
+    "handsOn": [
+      {
+        "id": "d19-ho1",
+        "title": "Run Bedrock Evaluations with LLM-as-a-Judge",
+        "description": "Set up an automated evaluation job using LLM-as-a-judge to assess model quality.",
+        "estimatedMinutes": 45,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-judge.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open Bedrock console → Evaluations → Create evaluation job",
+          "Select 'LLM-as-a-judge' evaluation type",
+          "Choose Claude as the judge model and Nova as the target model",
+          "Upload a test dataset with 10-20 prompt-response pairs in JSONL format",
+          "Configure evaluation criteria: accuracy, relevance, coherence, and safety"
+        ]
+      },
+      {
+        "id": "d19-ho2",
+        "title": "Explore LLM-as-a-Judge Sample Notebooks",
+        "description": "Work through the evaluation notebooks to understand automated model assessment.",
+        "estimatedMinutes": 45,
+        "url": "https://github.com/aws-samples/evaluating-large-language-models-using-llm-as-a-judge",
+        "difficulty": "intermediate",
+        "steps": [
+          "Clone the evaluating-large-language-models-using-llm-as-a-judge repository",
+          "Open the main evaluation notebook",
+          "Follow the setup to configure the judge model and evaluation criteria",
+          "Run the evaluation on a sample dataset and review the scores",
+          "Experiment with different judge prompts to understand how judge instructions affect scoring"
+        ]
+      },
+      {
+        "id": "d19-ho3",
+        "title": "Enable CloudWatch GenAI Observability",
+        "description": "Set up the CloudWatch GenAI observability dashboard for monitoring Bedrock invocations.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/GenAI-observability.html",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open CloudWatch console and navigate to GenAI Observability (in the left nav)",
+          "Enable the pre-configured Bedrock dashboard",
+          "Review the available metrics: invocation count, token usage, error rates, latency percentiles",
+          "Create a custom alarm for high error rates: trigger when error count > 10 in 5 minutes",
+          "Make several Bedrock API calls and verify the metrics appear in the dashboard"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "RAG Evaluation and LLM-as-a-Judge on Bedrock (GA)",
+        "url": "https://aws.amazon.com/blogs/aws/new-rag-evaluation-and-llm-as-a-judge-capabilities-in-amazon-bedrock/",
+        "type": "blog",
+        "description": "GA capabilities: quality, user experience, instruction compliance, safety metrics — 98% cost savings.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Evaluate RAG with Bedrock, LlamaIndex, and RAGAS",
+        "url": "https://aws.amazon.com/blogs/machine-learning/evaluate-rag-responses-with-amazon-bedrock-llamaindex-and-ragas/",
+        "type": "blog",
+        "description": "Open-source RAG evaluation: context relevance, answer faithfulness, answer relevancy metrics.",
+        "estimatedMinutes": 35
+      },
+      {
+        "title": "AgentCore Observability — OTEL-Based Tracing",
+        "url": "https://aws.amazon.com/blogs/machine-learning/build-trustworthy-ai-agents-with-amazon-bedrock-agentcore-observability/",
+        "type": "blog",
+        "description": "OTEL-based tracing, debugging agent workflows end-to-end.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "CloudWatch AppSignals for Bedrock",
+        "url": "https://aws.amazon.com/blogs/mt/improve-amazon-bedrock-observability-with-amazon-cloudwatch-appsignals/",
+        "type": "blog",
+        "description": "Native tracing, LangChain/Strands compatible for production monitoring.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "GenAIOps on AWS: End-to-End Observability Stack",
+        "url": "https://dev.to/shoaibalimir/genaiops-on-aws-end-to-end-observability-stack-part-3-3d12",
+        "type": "blog",
+        "description": "Full observability architecture: CloudWatch + X-Ray + AppSignals + OTEL for GenAI production workloads.",
+        "estimatedMinutes": 30
+      }
+    ]
+  },
+  {
+    "number": 20,
+    "weekday": "Saturday",
+    "title": "Full Timed Practice Exam + Weak Area Drilling",
+    "week": 3,
+    "domain": 5,
+    "learningObjectives": [
+      "Simulate real exam conditions with timed 180-minute practice exam",
+      "Identify remaining weak domains after 3 weeks of study",
+      "Drill domain-specific questions for weakest areas"
+    ],
+    "tasks": [
+      {
+        "id": "d20-t1",
+        "type": "practice-exam",
+        "title": "CertificationPractice.com Free Exam #2 (Timed, 180 min)",
+        "description": "Simulate real conditions. No phone, no breaks, no reference material.",
+        "estimatedMinutes": 180,
+        "url": "https://certificationpractice.com/practice-exams/aws-certified-generative-ai-developer-professional"
+      },
+      {
+        "id": "d20-t2",
+        "type": "review",
+        "title": "Score Analysis + Weak Area Drilling",
+        "description": "Drill weakest domain using domain-specific questions from remaining CertificationPractice.com exams.",
+        "estimatedMinutes": 180
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [],
+    "handsOn": [
+      {
+        "id": "d20-ho1",
+        "title": "Build the Production RAG Pipeline Reference Architecture",
+        "description": "Trace the full Production RAG Pipeline architecture on paper and identify all service interactions.",
+        "estimatedMinutes": 30,
+        "difficulty": "intermediate",
+        "steps": [
+          "Draw the architecture: User → API Gateway → Lambda → Bedrock KB (Retrieve) → OpenSearch Serverless",
+          "Add the generation path: Lambda → Bedrock InvokeModel (with retrieved context) → Response",
+          "Add guardrails: Guardrail applied on both input and output",
+          "Add monitoring: CloudWatch Logs, X-Ray tracing, model invocation logging",
+          "Label every IAM role and permission needed for each service interaction"
+        ]
+      },
+      {
+        "id": "d20-ho2",
+        "title": "Build the Multi-Agent System Reference Architecture",
+        "description": "Trace the Multi-Agent System architecture and identify the orchestration patterns.",
+        "estimatedMinutes": 30,
+        "difficulty": "intermediate",
+        "steps": [
+          "Draw the architecture: User → Supervisor Agent → Routing Decision",
+          "Add collaborator agents: Research Agent (KB tool), Action Agent (Lambda tools), Analysis Agent (Code Interpreter)",
+          "Add AgentCore components: Gateway for routing, Memory for context, Policy for access control",
+          "Add the observability layer: AgentCore Observability with OTEL spans",
+          "Note the exam-critical distinction: supervisor mode (one agent delegates) vs supervisor-with-routing mode (dynamic selection)"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "GenAI Application Builder Architecture Overview",
+        "url": "https://docs.aws.amazon.com/solutions/latest/generative-ai-application-builder-on-aws/architecture-overview.html",
+        "type": "docs",
+        "description": "End-to-end reference architecture for production GenAI applications.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Multi-Agent Orchestration with Reasoning",
+        "url": "https://aws.amazon.com/blogs/machine-learning/design-multi-agent-orchestration-with-reasoning-using-amazon-bedrock-and-open-source-frameworks/",
+        "type": "blog",
+        "description": "Supervisor mode vs supervisor-with-routing mode for multi-agent systems.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Serverless Generative AI Architectural Patterns",
+        "url": "https://aws.amazon.com/blogs/compute/serverless-generative-ai-architectural-patterns/",
+        "type": "blog",
+        "description": "API Gateway + Lambda + Bedrock foundational patterns for production deployments.",
+        "estimatedMinutes": 25
+      },
+      {
+        "title": "Well-Architected GenAI Lens",
+        "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/",
+        "type": "docs",
+        "description": "Architecture patterns and best practices for GenAI workloads.",
+        "estimatedMinutes": 45
+      }
+    ]
+  },
+  {
+    "number": 21,
+    "weekday": "Sunday",
+    "title": "Architecture Patterns + End-to-End Review",
+    "week": 3,
+    "domain": 5,
+    "learningObjectives": [
+      "Trace 4 complete architecture patterns across all domains",
+      "Identify which services and patterns each architecture combines",
+      "Validate understanding by explaining each architecture from memory"
+    ],
+    "tasks": [
+      {
+        "id": "d21-t1",
+        "type": "read",
+        "title": "GenAI Application Builder Architecture Overview",
+        "description": "End-to-end reference architecture for production GenAI applications.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/solutions/latest/generative-ai-application-builder-on-aws/architecture-overview.html"
+      },
+      {
+        "id": "d21-t2",
+        "type": "blog",
+        "title": "Human-in-the-Loop Prompt Chaining",
+        "description": "Step Functions Wait-for-Callback pattern for human review workflows.",
+        "estimatedMinutes": 25,
+        "url": "https://aws.amazon.com/blogs/machine-learning/building-generative-ai-prompt-chaining-workflows-with-human-in-the-loop/"
+      },
+      {
+        "id": "d21-t3",
+        "type": "blog",
+        "title": "Circuit Breaker with Step Functions and DynamoDB",
+        "description": "Resilience pattern for FM API calls with failure detection.",
+        "estimatedMinutes": 20,
+        "url": "https://aws.amazon.com/blogs/compute/using-the-circuit-breaker-pattern-with-aws-step-functions-and-amazon-dynamodb/"
+      },
+      {
+        "id": "d21-t4",
+        "type": "study",
+        "title": "Review 4 Architecture Patterns",
+        "description": "Trace from memory: Production RAG Pipeline, Multi-Agent System, Document Processing Pipeline, Human-in-the-Loop Agent Workflow.",
+        "estimatedMinutes": 120
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [],
+    "handsOn": [
+      {
+        "id": "d21-ho1",
+        "title": "Build the Document Processing Pipeline Reference Architecture",
+        "description": "Trace the Document Processing Pipeline and identify the service chain for different document types.",
+        "estimatedMinutes": 30,
+        "difficulty": "intermediate",
+        "steps": [
+          "Draw the architecture: S3 upload event → EventBridge → Step Functions orchestrator",
+          "Add the processing branches: PDF → Textract, Audio → Transcribe, Image → Rekognition, Text → Comprehend",
+          "Add the enrichment step: all extracted data → Bedrock InvokeModel for summarization and structuring",
+          "Add PII handling: Macie scans S3 objects before processing, Guardrails filter PII in outputs",
+          "Add the storage layer: processed results → DynamoDB + S3, vectors → OpenSearch for KB"
+        ]
+      },
+      {
+        "id": "d21-ho2",
+        "title": "Build the Human-in-the-Loop Agent Workflow Reference Architecture",
+        "description": "Trace the Human-in-the-Loop workflow using Step Functions Wait-for-Callback pattern.",
+        "estimatedMinutes": 30,
+        "difficulty": "advanced",
+        "steps": [
+          "Draw the architecture: User request → Bedrock Agent → Step Functions workflow",
+          "Add the automated steps: agent generates proposal → guardrails check → approval needed decision",
+          "Add the human review: Step Functions Wait-for-Callback → SNS notification → human reviewer",
+          "Add the callback path: reviewer approves/rejects → callback token resumes Step Functions",
+          "Add the completion path: approved → agent executes action → response to user"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Human-in-the-Loop Prompt Chaining",
+        "url": "https://aws.amazon.com/blogs/machine-learning/building-generative-ai-prompt-chaining-workflows-with-human-in-the-loop/",
+        "type": "blog",
+        "description": "Step Functions Wait-for-Callback pattern for human review workflows.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Circuit Breaker with Step Functions and DynamoDB",
+        "url": "https://aws.amazon.com/blogs/compute/using-the-circuit-breaker-pattern-with-aws-step-functions-and-amazon-dynamodb/",
+        "type": "blog",
+        "description": "Resilience pattern for FM API calls with failure detection and automatic fallback.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "Build GenAI Agent Workflows with Step Functions",
+        "url": "https://github.com/aws-samples/build-genai-agent-workflows-with-step-functions",
+        "type": "github",
+        "description": "Multi-agent Step Functions patterns: supervisor routing, parallel execution, human-in-the-loop review.",
+        "estimatedMinutes": 90
+      },
+      {
+        "title": "Large-Scale Document Processing with Step Functions + Batch Inference",
+        "url": "https://aws.amazon.com/blogs/compute/orchestrating-large-scale-document-processing-with-aws-step-functions-and-amazon-bedrock-batch-inference/",
+        "type": "blog",
+        "description": "Map state iterates S3 objects, Bedrock batch inference, concurrency management.",
+        "estimatedMinutes": 30
+      }
+    ]
+  },
+  {
+    "number": 22,
+    "weekday": "Monday",
+    "title": "Full Practice Exam #3",
+    "week": 4,
+    "domain": 1,
+    "learningObjectives": [
+      "Score 75%+ on a full-length practice exam",
+      "Validate readiness across all domains"
+    ],
+    "tasks": [
+      {
+        "id": "d22-t1",
+        "type": "practice-exam",
+        "title": "CertificationPractice.com Exam #3 or Tutorials Dojo",
+        "description": "Target: 75%+. Full timed conditions.",
+        "estimatedMinutes": 180,
+        "url": "https://certificationpractice.com/practice-exams/aws-certified-generative-ai-developer-professional"
+      },
+      {
+        "id": "d22-t2",
+        "type": "review",
+        "title": "Post-Exam Analysis",
+        "description": "Score analysis and error categorization by domain.",
+        "estimatedMinutes": 60
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [],
+    "handsOn": [
+      {
+        "id": "d22-ho1",
+        "title": "Timed Practice with Domain-Specific Focus",
+        "description": "After the practice exam, do a targeted lab on your weakest domain identified from the score analysis.",
+        "estimatedMinutes": 45,
+        "difficulty": "intermediate",
+        "steps": [
+          "Complete the practice exam and identify your weakest domain from the score breakdown",
+          "If Domain 1 (Design): revisit the Bedrock playground and test model selection scenarios",
+          "If Domain 2 (Develop): build a quick agent with action groups in the console",
+          "If Domain 3 (Safety): configure guardrails with all filter types and test edge cases",
+          "If Domain 4/5 (Cost/Testing): set up invocation logging and run a quick evaluation job"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "CertificationPractice.com (510 questions, 6 exams)",
+        "url": "https://certificationpractice.com/practice-exams/aws-certified-generative-ai-developer-professional",
+        "type": "docs",
+        "description": "Free — 510 questions across 6 practice exams for additional practice.",
+        "estimatedMinutes": 180
+      },
+      {
+        "title": "Tutorials Dojo Practice Exams (275+ questions)",
+        "url": "https://portal.tutorialsdojo.com/courses/aws-certified-generative-ai-developer-professional-practice-exams-aip-c01-2025/",
+        "type": "docs",
+        "description": "~$15 — 275+ questions with detailed explanations.",
+        "estimatedMinutes": 180
+      },
+      {
+        "title": "Tutorials Dojo Study Path (Free Guide)",
+        "url": "https://tutorialsdojo.com/aws-certified-generative-ai-developer-professional-study-path-aip-c01-exam-guide/",
+        "type": "blog",
+        "description": "Free exam study path guide for structured review.",
+        "estimatedMinutes": 30
+      }
+    ]
+  },
+  {
+    "number": 23,
+    "weekday": "Tuesday",
+    "title": "Ordering + Matching Question Drill",
+    "week": 4,
+    "domain": 1,
+    "learningObjectives": [
+      "Master ordering sequences unique to AIP-C01",
+      "Master matching patterns (service -> use case)",
+      "Build muscle memory for the unique question formats"
+    ],
+    "tasks": [
+      {
+        "id": "d23-t1",
+        "type": "study",
+        "title": "Practice Ordering Sequences",
+        "description": "Memorize all 8 ordering sequences: RAG pipeline, Agent loop, Security layers, KB setup, Deployment pipeline, Prompt Flow, Evaluation pipeline, Cross-Region Inference setup.",
+        "estimatedMinutes": 90
+      },
+      {
+        "id": "d23-t2",
+        "type": "study",
+        "title": "Practice Matching Patterns",
+        "description": "Drill all 6 matching categories: Service->Data Type, Problem->Solution, Architecture->Service, Human Review->Service, Guardrails->Verification, Cost->Technique.",
+        "estimatedMinutes": 90
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [],
+    "handsOn": [
+      {
+        "id": "d23-ho1",
+        "title": "Practice Ordering Sequences on Paper",
+        "description": "Write out all 8 ordering sequences from memory, then check against reference materials.",
+        "estimatedMinutes": 45,
+        "difficulty": "intermediate",
+        "steps": [
+          "On a blank sheet, write the RAG pipeline ordering: S3 upload → Chunking → Embedding → Vector store → Retrieve → Augment → Generate",
+          "Write the Agent loop: User input → Plan → Select tool → Execute → Observe → Decide (repeat or respond)",
+          "Write the KB setup: Create S3 bucket → Upload docs → Create vector store → Create KB → Sync → Test",
+          "Write the remaining 5 sequences from memory",
+          "Check each against the study app and correct any errors — focus on the steps you got wrong"
+        ]
+      },
+      {
+        "id": "d23-ho2",
+        "title": "Flash Card Drill for Service Matching",
+        "description": "Create and drill flash cards matching services to use cases and data types.",
+        "estimatedMinutes": 45,
+        "difficulty": "intermediate",
+        "steps": [
+          "Create cards for Service → Data Type: Textract→Documents, Transcribe→Audio, Comprehend→Text, Rekognition→Images",
+          "Create cards for Problem → Solution: 'Too expensive' → Model cascading, 'Hallucinating' → Contextual Grounding, 'Slow responses' → Prompt caching",
+          "Create cards for Architecture → Service: 'RAG' → KB+OpenSearch, 'Agent' → Bedrock Agents, 'Deploy agent' → AgentCore",
+          "Shuffle and drill until you can match all pairs in under 60 seconds",
+          "Focus extra time on the pairs you hesitate on"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "AWS Skill Builder Exam Prep Plan",
+        "url": "https://skillbuilder.aws/category/exam-prep/generative-ai-developer-professional-aip-c01",
+        "type": "docs",
+        "description": "Free lessons per domain, SimuLearn labs, and practice assessments.",
+        "estimatedMinutes": 60
+      },
+      {
+        "title": "How to Choose GenAI on AWS",
+        "url": "https://docs.aws.amazon.com/generative-ai-on-aws-how-to-choose/",
+        "type": "docs",
+        "description": "Service selection decision guide — critical for matching questions.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "Reddit OP's AWS Service Comparison Table",
+        "url": "https://notion.so/3042d0eec1a980439aa6d608585c3766?v=3042d0eec1a981ac82b8000c3b4c293c",
+        "type": "docs",
+        "description": "Community service comparison table on Notion — useful for drilling service distinctions.",
+        "estimatedMinutes": 20
+      }
+    ]
+  },
+  {
+    "number": 24,
+    "weekday": "Wednesday",
+    "title": "Exam Guide Re-Read + Wrong Answer Rules",
+    "week": 4,
+    "domain": 1,
+    "learningObjectives": [
+      "Re-read the exam guide and self-test on every skill",
+      "Compile all wrong answers from all practice exams into one-line rules",
+      "Create a one-page exam cheat sheet"
+    ],
+    "tasks": [
+      {
+        "id": "d24-t1",
+        "type": "read",
+        "title": "Official Exam Guide PDF - Re-Read",
+        "description": "For every skill, test yourself: can you explain it without notes?",
+        "estimatedMinutes": 60,
+        "url": "https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-aip/AWS-Certified-Generative-AI-Developer-Pro_Exam-Guide.pdf"
+      },
+      {
+        "id": "d24-t2",
+        "type": "study",
+        "title": "Compile Wrong Answer Rules",
+        "description": "Review all practice exam errors. Create one-line trigger->answer rules for every wrong answer pattern.",
+        "estimatedMinutes": 120
+      },
+      {
+        "id": "d24-t3",
+        "type": "study",
+        "title": "Create One-Page Rules Sheet",
+        "description": "Distill all key rules, service comparisons, and exam triggers onto a single page.",
+        "estimatedMinutes": 60
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [],
+    "handsOn": [
+      {
+        "id": "d24-ho1",
+        "title": "Self-Test Every Exam Skill from the Exam Guide",
+        "description": "Go through every skill in the exam guide and explain each one aloud without notes.",
+        "estimatedMinutes": 60,
+        "difficulty": "advanced",
+        "steps": [
+          "Open the exam guide PDF and go to the skills list",
+          "For each skill, cover the description and try to explain what it means in your own words",
+          "Mark skills as: Green (confident), Yellow (partial), Red (need review)",
+          "For every Red skill, find the relevant day in the study plan and re-read the key resource",
+          "Re-test Red skills until they move to at least Yellow"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Official Exam Guide PDF",
+        "url": "https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-aip/AWS-Certified-Generative-AI-Developer-Pro_Exam-Guide.pdf",
+        "type": "docs",
+        "description": "Every skill, task, and in-scope service for the AIP-C01 exam.",
+        "estimatedMinutes": 60
+      },
+      {
+        "title": "Reddit OP's Service Features & Scenarios Table",
+        "url": "https://notion.so/3042d0eec1a98038935bf8706c78d25d?v=3042d0eec1a981d8a32f000c3662526e",
+        "type": "docs",
+        "description": "Community service features and scenarios on Notion for final review.",
+        "estimatedMinutes": 20
+      },
+      {
+        "title": "GenAI Workload Assessment",
+        "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-workload-assessment/introduction.html",
+        "type": "docs",
+        "description": "Framework for evaluating GenAI implementations — covers all domains.",
+        "estimatedMinutes": 30
+      }
+    ]
+  },
+  {
+    "number": 25,
+    "weekday": "Thursday",
+    "title": "Final Full Practice Exam",
+    "week": 4,
+    "domain": 1,
+    "learningObjectives": [
+      "Score 80%+ on a full-length practice exam",
+      "Final confidence check before exam day"
+    ],
+    "tasks": [
+      {
+        "id": "d25-t1",
+        "type": "practice-exam",
+        "title": "CertificationPractice.com Exam #4 or #5 (Full 180 min)",
+        "description": "Target: 80%+. Full timed conditions.",
+        "estimatedMinutes": 180,
+        "url": "https://certificationpractice.com/practice-exams/aws-certified-generative-ai-developer-professional"
+      },
+      {
+        "id": "d25-t2",
+        "type": "review",
+        "title": "Final Score Analysis",
+        "description": "Analyze any remaining weak areas. Note specific skills still causing errors.",
+        "estimatedMinutes": 60
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [],
+    "handsOn": [
+      {
+        "id": "d25-ho1",
+        "title": "Targeted Lab for Remaining Weak Areas",
+        "description": "After the final practice exam, do a focused 30-minute lab on any remaining weak spots.",
+        "estimatedMinutes": 30,
+        "difficulty": "advanced",
+        "steps": [
+          "Review your final practice exam results and identify the top 2-3 error patterns",
+          "For each error pattern, open the relevant AWS console or documentation",
+          "Walk through the specific service configuration that you got wrong on the exam",
+          "Write a one-line rule for each error: 'When I see X, the answer is Y because Z'",
+          "Add these rules to your exam cheat sheet"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "CertificationPractice.com (510 questions, 6 exams)",
+        "url": "https://certificationpractice.com/practice-exams/aws-certified-generative-ai-developer-professional",
+        "type": "docs",
+        "description": "Additional free practice exams if you want more question exposure.",
+        "estimatedMinutes": 180
+      },
+      {
+        "title": "Tutorials Dojo Free Sampler (30 questions)",
+        "url": "https://portal.tutorialsdojo.com/courses/free-aws-certified-generative-ai-developer-professional-practice-exams-sampler/",
+        "type": "docs",
+        "description": "Quick 30-question sampler for a final confidence check.",
+        "estimatedMinutes": 60
+      },
+      {
+        "title": "AWS Official Practice Question Set (20 free questions)",
+        "url": "https://skillbuilder.aws/learn/HSEKTD11NX",
+        "type": "docs",
+        "description": "Official AWS questions — re-take to verify improvement from Day 7.",
+        "estimatedMinutes": 40
+      }
+    ]
+  },
+  {
+    "number": 26,
+    "weekday": "Friday",
+    "title": "Last Weak Spots + Skim",
+    "week": 4,
+    "domain": 1,
+    "learningObjectives": [
+      "Drill final weak domain based on practice exam analysis",
+      "Skim Well-Architected GenAI Lens for any missed patterns",
+      "Final review of service comparison tables"
+    ],
+    "tasks": [
+      {
+        "id": "d26-t1",
+        "type": "read",
+        "title": "Well-Architected GenAI Lens (Final Skim)",
+        "description": "Skim for any architecture patterns you may have missed.",
+        "estimatedMinutes": 45,
+        "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/"
+      },
+      {
+        "id": "d26-t2",
+        "type": "study",
+        "title": "Drill Final Weak Domain",
+        "description": "Use CertificationPractice.com domain-specific questions to drill your weakest remaining area.",
+        "estimatedMinutes": 120
+      },
+      {
+        "id": "d26-t3",
+        "type": "review",
+        "title": "Review Service Comparison Tables",
+        "description": "Final pass through all comparison tables and wrong answer rules.",
+        "estimatedMinutes": 60
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [],
+    "handsOn": [
+      {
+        "id": "d26-ho1",
+        "title": "Quick Console Walkthrough of Key Services",
+        "description": "Spend 5 minutes in each key console to reinforce visual memory of service configurations.",
+        "estimatedMinutes": 30,
+        "difficulty": "advanced",
+        "steps": [
+          "Bedrock console: review Knowledge Bases, Agents, Guardrails, Evaluations sections",
+          "OpenSearch console: review a vector collection's index settings",
+          "CloudWatch console: review GenAI Observability dashboard and metrics",
+          "IAM console: review Bedrock-related managed policies",
+          "Step Functions console: review a sample state machine with Bedrock integration"
+        ]
+      }
+    ],
+    "furtherReading": [
+      {
+        "title": "Well-Architected GenAI Lens",
+        "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/",
+        "type": "docs",
+        "description": "Final skim for any architecture patterns you may have missed.",
+        "estimatedMinutes": 45
+      },
+      {
+        "title": "How to Choose GenAI on AWS",
+        "url": "https://docs.aws.amazon.com/generative-ai-on-aws-how-to-choose/",
+        "type": "docs",
+        "description": "Service selection decision guide — last review of when to use which service.",
+        "estimatedMinutes": 30
+      },
+      {
+        "title": "MakendranG's Handwritten Study Notes",
+        "url": "https://github.com/MakendranG/aws-genai-professional-certification-notes",
+        "type": "github",
+        "description": "Early Adopter badge winner's notes — good for spotting any gaps.",
+        "estimatedMinutes": 30
+      }
+    ]
+  },
+  {
+    "number": 27,
+    "weekday": "Saturday",
+    "title": "Rest Day",
+    "week": 4,
+    "domain": 1,
+    "learningObjectives": [
+      "Light review only. Rest and sleep well."
+    ],
+    "tasks": [
+      {
+        "id": "d27-t1",
+        "type": "review",
+        "title": "Light Skim of Rules Sheet",
+        "description": "Light skim of your one-page rules sheet only. No full practice exam. Sleep well.",
+        "estimatedMinutes": 30
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [],
+    "handsOn": [],
+    "furtherReading": [
+      {
+        "title": "Official Exam Guide PDF",
+        "url": "https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-aip/AWS-Certified-Generative-AI-Developer-Pro_Exam-Guide.pdf",
+        "type": "docs",
+        "description": "Light skim of the exam guide for last-minute confidence. Do not deep study.",
+        "estimatedMinutes": 15
+      },
+      {
+        "title": "AWS Certification Exam Day Tips",
+        "url": "https://aws.amazon.com/certification/certification-prep/",
+        "type": "docs",
+        "description": "Practical exam day preparation: what to bring, testing center logistics, online proctoring tips.",
+        "estimatedMinutes": 10
+      }
+    ]
+  },
+  {
+    "number": 28,
+    "weekday": "Sunday",
+    "title": "Exam Day",
+    "week": 4,
+    "domain": 1,
+    "learningObjectives": [
+      "Pass the AIP-C01 exam"
+    ],
+    "tasks": [
+      {
+        "id": "d28-t1",
+        "type": "review",
+        "title": "Pre-Exam: Read Rules Sheet",
+        "description": "Read your one-page rules sheet. Review exam answer patterns: 'Most cost-effective' = managed, 'Most secure' = restrictive, 'Min overhead' = serverless.",
+        "estimatedMinutes": 30
+      },
+      {
+        "id": "d28-t2",
+        "type": "study",
+        "title": "Take the AIP-C01 Exam",
+        "description": "Time management: First pass 45min (confident), Second pass 70min (flagged), Third pass 30min (review), Buffer 35min. Never leave blanks.",
+        "estimatedMinutes": 180
+      }
+    ],
+    "scenarioIds": [],
+    "examSkills": [],
+    "handsOn": [],
+    "furtherReading": [
+      {
+        "title": "Official Exam Guide PDF",
+        "url": "https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/certification/approved/pdfs/docs-aip/AWS-Certified-Generative-AI-Developer-Pro_Exam-Guide.pdf",
+        "type": "docs",
+        "description": "Quick reference before the exam for any last-minute skill checks.",
+        "estimatedMinutes": 15
+      },
+      {
+        "title": "AWS Certification Benefits",
+        "url": "https://aws.amazon.com/certification/benefits/",
+        "type": "docs",
+        "description": "After the exam: claim your 50% discount voucher, digital badge, and AWS certification benefits.",
+        "estimatedMinutes": 5
+      }
+    ]
+  }
+]

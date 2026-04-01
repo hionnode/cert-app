@@ -1,0 +1,108 @@
+[
+  {
+    "id": "os-rag-pipeline",
+    "title": "RAG Pipeline",
+    "steps": [
+      "Ingest",
+      "Chunk",
+      "Embed",
+      "Index",
+      "Query",
+      "Retrieve",
+      "Augment prompt",
+      "Generate",
+      "Filter output"
+    ]
+  },
+  {
+    "id": "os-agent-loop",
+    "title": "Agent Loop",
+    "steps": [
+      "Receive query",
+      "Plan/reason",
+      "Select tool",
+      "Execute",
+      "Observe result",
+      "Decide (continue/respond)",
+      "Return"
+    ]
+  },
+  {
+    "id": "os-security-layers",
+    "title": "Security Layers",
+    "steps": [
+      "IAM auth",
+      "API Gateway validation",
+      "Guardrails input",
+      "Model invocation",
+      "Guardrails output",
+      "Response encryption"
+    ]
+  },
+  {
+    "id": "os-kb-setup",
+    "title": "Knowledge Base Setup",
+    "steps": [
+      "Create S3 bucket",
+      "Upload docs",
+      "Create KB",
+      "Select embeddings model",
+      "Select vector store",
+      "Configure chunking",
+      "Sync data source",
+      "Test retrieval"
+    ]
+  },
+  {
+    "id": "os-deployment-pipeline",
+    "title": "Deployment Pipeline",
+    "steps": [
+      "Code",
+      "Build",
+      "Test",
+      "Stage",
+      "Canary",
+      "Production",
+      "Monitor",
+      "Rollback if needed"
+    ]
+  },
+  {
+    "id": "os-prompt-flow",
+    "title": "Prompt Flow Execution",
+    "steps": [
+      "Input",
+      "Pre-processing node",
+      "Condition check",
+      "Branch A (prompt chain) OR Branch B (direct response)",
+      "Post-processing",
+      "Guardrails",
+      "Output"
+    ]
+  },
+  {
+    "id": "os-evaluation-pipeline",
+    "title": "Evaluation Pipeline",
+    "steps": [
+      "Define metrics",
+      "Create evaluation dataset",
+      "Select evaluator model",
+      "Run evaluation job",
+      "Analyze results",
+      "Compare models",
+      "Deploy winner",
+      "Monitor in production"
+    ]
+  },
+  {
+    "id": "os-cross-region-inference",
+    "title": "Cross-Region Inference Setup",
+    "steps": [
+      "Enable inference profile",
+      "Update app to use inference profile ARN",
+      "Configure IAM with region conditions",
+      "Test failover",
+      "Monitor with CloudWatch"
+    ]
+  }
+]

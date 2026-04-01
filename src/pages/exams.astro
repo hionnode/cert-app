@@ -1,0 +1,68 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { EXAM_INFO, DOMAINS } from "../lib/constants";
+---
+
+<Layout title="Exam Tracker">
+	<div class="page-container py-8">
+		<h1 class="heading-1 mb-2">Exam Tracker</h1>
+		<p class="body-text mb-8">Track your practice exam scores and identify weak domains</p>
+
+		<!-- Exam Info Card -->
+		<div class="card-padded mb-8 bg-secondary-50 border-secondary-200">
+			<h2 class="heading-3 text-secondary-700 mb-4">Exam Quick Reference</h2>
+			<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+				<div><div class="text-2xl font-bold text-secondary-600">{EXAM_INFO.duration}m</div><div class="caption">Duration</div></div>
+				<div><div class="text-2xl font-bold text-secondary-600">{EXAM_INFO.totalQuestions}</div><div class="caption">Questions ({EXAM_INFO.scoredQuestions} scored)</div></div>
+				<div><div class="text-2xl font-bold text-primary-500">{EXAM_INFO.passingScore}/{EXAM_INFO.maxScore}</div><div class="caption">Passing Score</div></div>
+				<div><div class="text-2xl font-bold text-ink">${EXAM_INFO.cost}</div><div class="caption">Cost (${EXAM_INFO.voucherCost} w/ voucher)</div></div>
+			</div>
+		</div>
+
+		<!-- Domain Weights -->
+		<div class="card-padded mb-8">
+			<h2 class="heading-3 mb-4">Domain Weights</h2>
+			<div class="space-y-3">
+				{DOMAINS.map((d) => (
+					<div class="flex items-center gap-4">
+						<span class={`badge-domain-${d.id} w-24`}>D{d.id}</span>
+						<div class="flex-1 bg-surface-2 rounded-full h-6 overflow-hidden">
+							<div class="h-full rounded-full flex items-center px-3" style={`width: ${d.weight}%; background-color: ${d.color}`}>
+								<span class="text-xs font-bold text-white">{d.weight}%</span>
+							</div>
+						</div>
+						<span class="text-sm text-ink-muted w-16 text-right">~{d.approxQuestions} Qs</span>
+					</div>
+				))}
+			</div>
+		</div>
+
+		<!-- Practice Exams List -->
+		<div class="card-padded">
+			<h2 class="heading-3 mb-4">Recommended Practice Exams</h2>
+			<div class="space-y-4">
+				<a href="https://explore.skillbuilder.aws/" target="_blank" rel="noopener" class="flex items-center justify-between p-4 rounded-button bg-surface-1 hover:bg-surface-2 transition-colors">
+					<div>
+						<div class="font-semibold">AWS Official Practice Set</div>
+						<div class="text-sm text-ink-muted">20 free exam-caliber questions from AWS</div>
+					</div>
+					<span class="badge bg-primary-100 text-primary-700">Free</span>
+				</a>
+				<a href="https://certificationpractice.com/practice-exams/aws-certified-generative-ai-developer-professional" target="_blank" rel="noopener" class="flex items-center justify-between p-4 rounded-button bg-surface-1 hover:bg-surface-2 transition-colors">
+					<div>
+						<div class="font-semibold">CertificationPractice.com</div>
+						<div class="text-sm text-ink-muted">510 questions across 6 practice exams</div>
+					</div>
+					<span class="badge bg-primary-100 text-primary-700">Free</span>
+				</a>
+				<a href="https://portal.tutorialsdojo.com/courses/aws-certified-generative-ai-developer-professional-practice-exams-aip-c01-2025/" target="_blank" rel="noopener" class="flex items-center justify-between p-4 rounded-button bg-surface-1 hover:bg-surface-2 transition-colors">
+					<div>
+						<div class="font-semibold">Tutorials Dojo</div>
+						<div class="text-sm text-ink-muted">275+ questions with detailed explanations</div>
+					</div>
+					<span class="badge bg-accent-gold text-white">~$15</span>
+				</a>
+			</div>
+		</div>
+	</div>
+</Layout>

@@ -1,0 +1,30 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ScenarioCard from "../components/scenarios/ScenarioCard";
+import scenarios from "../data/scenarios.json";
+import { DOMAINS } from "../lib/constants";
+---
+
+<Layout title="Scenarios">
+	<div class="page-container py-8">
+		<h1 class="heading-1 mb-2">Exam Scenarios</h1>
+		<p class="body-text mb-8">{scenarios.length} real-world scenarios to master. Think first, then reveal.</p>
+
+		<!-- Domain filter tabs -->
+		<div class="flex flex-wrap gap-2 mb-8">
+			<span class="badge bg-primary-100 text-primary-700 cursor-pointer">All ({scenarios.length})</span>
+			{DOMAINS.map((d) => {
+				const count = (scenarios as any[]).filter((s: any) => s.domain === d.id).length;
+				return count > 0 ? (
+					<span class={`badge-domain-${d.id} cursor-pointer`}>D{d.id}: {d.shortName} ({count})</span>
+				) : null;
+			})}
+		</div>
+
+		<div class="space-y-6">
+			{(scenarios as any[]).map((scenario: any) => (
+				<ScenarioCard client:visible scenario={scenario} />
+			))}
+		</div>
+	</div>
+</Layout>

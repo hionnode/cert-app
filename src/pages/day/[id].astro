@@ -1,0 +1,247 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import TaskChecklist from "../../components/study/TaskChecklist";
+import ScenarioCard from "../../components/scenarios/ScenarioCard";
+import days from "../../data/days.json";
+import scenarios from "../../data/scenarios.json";
+import { DOMAINS } from "../../lib/constants";
+
+export function getStaticPaths() {
+	return (days as any[]).map((day: any) => ({
+		params: { id: String(day.number) },
+	}));
+}
+
+const { id } = Astro.params;
+const day = (days as any[]).find((d: any) => d.number === Number(id));
+if (!day) return Astro.redirect("/plan");
+
+const dayScenarios = (scenarios as any[]).filter((s: any) => day.scenarioIds.includes(s.id));
+const domain = DOMAINS.find((d) => d.id === day.domain);
+const prevDay = day.number > 1 ? day.number - 1 : null;
+const nextDay = day.number < 28 ? day.number + 1 : null;
+
+const HANDS_ON_DIFFICULTY_STYLES: Record<string, string> = {
+	beginner: "bg-primary-100 text-primary-700",
+	intermediate: "bg-accent-gold/15 text-amber-700",
+	advanced: "bg-red-100 text-red-700",
+};
+
+const FURTHER_READING_ICONS: Record<string, string> = {
+	blog: "i-lucide-newspaper",
+	video: "i-lucide-play-circle",
+	docs: "i-lucide-file-text",
+	github: "i-lucide-code",
+	workshop: "i-lucide-flask-conical",
+};
+---
+
+<Layout title={`Day ${day.number}: ${day.title}`}>
+	<div class="page-container py-8">
+		<!-- Navigation -->
+		<div class="flex items-center justify-between mb-6">
+			{prevDay ? (
+				<a href={`/day/${prevDay}`} class="btn-ghost text-sm">
+					<div class="i-lucide-chevron-left w-4 h-4" /> Day {prevDay}
+				</a>
+			) : <div />}
+			<a href="/plan" class="btn-ghost text-sm">
+				<div class="i-lucide-calendar w-4 h-4" /> All Days
+			</a>
+			{nextDay ? (
+				<a href={`/day/${nextDay}`} class="btn-ghost text-sm">
+					Day {nextDay} <div class="i-lucide-chevron-right w-4 h-4" />
+				</a>
+			) : <div />}
+		</div>
+
+		<!-- Header -->
+		<div class="mb-8">
+			<div class="flex items-center gap-3 mb-2">
+				<span class={`badge-domain-${day.domain}`}>{domain?.shortName}</span>
+				<span class="caption">Week {day.week} - {day.weekday}</span>
+			</div>
+			<h1 class="heading-1">Day {day.number}: {day.title}</h1>
+		</div>
+
+		<!-- Learning Objectives -->
+		{day.learningObjectives?.length > 0 && (
+			<section class="card-padded mb-6 bg-primary-50 border-primary-200">
+				<h2 class="heading-3 text-primary-700 mb-3">
+					<span class="i-lucide-target w-5 h-5 inline-block mr-2" />
+					Learning Objectives
+				</h2>
+				<ul class="space-y-2">
+					{day.learningObjectives.map((obj: string) => (
+						<li class="flex items-start gap-2 text-sm text-primary-800">
+							<div class="i-lucide-check-circle w-4 h-4 mt-0.5 text-primary-500 flex-shrink-0" />
+							{obj}
+						</li>
+					))}
+				</ul>
+			</section>
+		)}
+
+		<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+			<!-- Tasks (2/3 width) -->
+			<div class="xl:col-span-2">
+				<h2 class="heading-3 mb-4">
+					<span class="i-lucide-list-todo w-5 h-5 inline-block mr-2" />
+					Tasks
+				</h2>
+				<TaskChecklist client:load tasks={day.tasks} dayNumber={day.number} />
+			</div>
+
+			<!-- Sidebar: Exam Skills + Spaced Repetition -->
+			<div class="space-y-6">
+				<div class="card-padded">
+					<h3 class="heading-3 mb-3">
+						<span class="i-lucide-shield-check w-5 h-5 inline-block mr-2 text-secondary-500" />
+						Exam Skills
+					</h3>
+					<div class="flex flex-wrap gap-2">
+						{day.examSkills.map((skill: string) => (
+							<span class="badge bg-secondary-100 text-secondary-700">{skill}</span>
+						))}
+					</div>
+				</div>
+
+				{day.spacedRepetitionReview?.length > 0 && (
+					<div class="card-padded bg-accent-gold/5 border-accent-gold/30">
+						<h3 class="heading-3 mb-3">
+							<span class="i-lucide-refresh-cw w-5 h-5 inline-block mr-2 text-accent-gold" />
+							Review Today
+						</h3>
+						<p class="caption mb-3">Spaced repetition - revisit these earlier topics:</p>
+						<ul class="space-y-2">
+							{day.spacedRepetitionReview.map((topic: string) => (
+								<li class="flex items-start gap-2 text-sm text-ink-secondary">
+									<div class="i-lucide-rotate-ccw w-3.5 h-3.5 mt-0.5 text-accent-gold flex-shrink-0" />
+									{topic}
+								</li>
+							))}
+						</ul>
+					</div>
+				)}
+			</div>
+		</div>
+
+		<!-- Hands-On Activities -->
+		{day.handsOn?.length > 0 && (
+			<section class="mt-10">
+				<h2 class="heading-2 mb-2">
+					<span class="i-lucide-wrench w-6 h-6 inline-block mr-2 text-primary-500" />
+					Hands-On Lab
+				</h2>
+				<p class="body-text mb-6">Get your hands dirty. These activities build real muscle memory.</p>
+
+				<div class="space-y-4">
+					{day.handsOn.map((activity: any) => (
+						<div class="card overflow-hidden">
+							<div class="flex items-center gap-3 px-5 pt-5 pb-3">
+								<span class={`badge ${HANDS_ON_DIFFICULTY_STYLES[activity.difficulty] ?? "bg-surface-2 text-ink-secondary"}`}>
+									{activity.difficulty}
+								</span>
+								{activity.estimatedMinutes && (
+									<span class="caption flex items-center gap-1">
+										<div class="i-lucide-clock w-3.5 h-3.5" />
+										{activity.estimatedMinutes} min
+									</span>
+								)}
+							</div>
+							<div class="px-5 pb-5">
+								<h3 class="heading-3 mb-2">{activity.title}</h3>
+								<p class="body-text mb-4">{activity.description}</p>
+
+								{activity.steps?.length > 0 && (
+									<ol class="space-y-2 mb-4">
+										{activity.steps.map((step: string, i: number) => (
+											<li class="flex items-start gap-3">
+												<span class="w-6 h-6 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">{i + 1}</span>
+												<span class="text-sm text-ink-secondary">{step}</span>
+											</li>
+										))}
+									</ol>
+								)}
+
+								{activity.url && (
+									<a href={activity.url} target="_blank" rel="noopener" class="btn-primary text-sm">
+										<div class="i-lucide-external-link w-4 h-4" />
+										Open Lab
+									</a>
+								)}
+							</div>
+						</div>
+					))}
+				</div>
+			</section>
+		)}
+
+		<!-- Scenarios -->
+		{dayScenarios.length > 0 && (
+			<section class="mt-10">
+				<h2 class="heading-2 mb-2">
+					<span class="i-lucide-lightbulb w-6 h-6 inline-block mr-2 text-accent-gold" />
+					Scenarios
+				</h2>
+				<p class="body-text mb-6">Think through each scenario before revealing the answer.</p>
+				<div class="space-y-6">
+					{dayScenarios.map((scenario: any) => (
+						<ScenarioCard client:visible scenario={scenario} />
+					))}
+				</div>
+			</section>
+		)}
+
+		<!-- Further Reading -->
+		{day.furtherReading?.length > 0 && (
+			<section class="mt-10">
+				<h2 class="heading-2 mb-2">
+					<span class="i-lucide-book-marked w-6 h-6 inline-block mr-2 text-secondary-500" />
+					Further Reading
+				</h2>
+				<p class="body-text mb-6">Go deeper into today's topics with these curated resources.</p>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					{day.furtherReading.map((item: any) => (
+						<a href={item.url} target="_blank" rel="noopener" class="card p-4 hover:border-secondary-400 transition-colors group flex gap-4">
+							<div class={`${FURTHER_READING_ICONS[item.type] ?? "i-lucide-link"} w-5 h-5 text-secondary-500 flex-shrink-0 mt-1`} />
+							<div class="flex-1 min-w-0">
+								<h4 class="text-sm font-semibold text-ink group-hover:text-secondary-600 transition-colors line-clamp-2">{item.title}</h4>
+								<p class="text-xs text-ink-muted mt-1 line-clamp-2">{item.description}</p>
+								<div class="flex items-center gap-3 mt-2">
+									<span class="badge bg-surface-2 text-ink-muted text-[10px]">{item.type}</span>
+									{item.estimatedMinutes && (
+										<span class="text-[10px] text-ink-muted flex items-center gap-1">
+											<div class="i-lucide-clock w-3 h-3" />
+											{item.estimatedMinutes} min
+										</span>
+									)}
+								</div>
+							</div>
+							<div class="i-lucide-external-link w-4 h-4 text-ink-muted group-hover:text-secondary-500 flex-shrink-0 mt-1" />
+						</a>
+					))}
+				</div>
+			</section>
+		)}
+
+		<!-- Day Navigation (bottom) -->
+		<div class="flex items-center justify-between mt-12 pt-6 border-t border-surface-3">
+			{prevDay ? (
+				<a href={`/day/${prevDay}`} class="btn-ghost">
+					<div class="i-lucide-chevron-left w-4 h-4" /> Day {prevDay}
+				</a>
+			) : <div />}
+			{nextDay ? (
+				<a href={`/day/${nextDay}`} class="btn-primary">
+					Day {nextDay} <div class="i-lucide-chevron-right w-4 h-4" />
+				</a>
+			) : (
+				<a href="/exams" class="btn-primary">
+					<div class="i-lucide-trophy w-4 h-4" /> Take Practice Exam
+				</a>
+			)}
+		</div>
+	</div>
+</Layout>

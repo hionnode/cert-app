@@ -1,0 +1,349 @@
+[
+  {
+    "id": "s1",
+    "number": "1",
+    "domain": 1,
+    "week": 1,
+    "day": 1,
+    "title": "Fintech AI Chatbot PoC Design",
+    "question": "A fintech startup wants to add an AI chatbot for customer support. They have sensitive financial data, need low latency, and want to start with a PoC before going to production. How do you design this?",
+    "thinkPrompts": [
+      "Which managed service eliminates infrastructure management for FM access?",
+      "How do you keep sensitive data traffic private?",
+      "What safety measure protects financial PII?"
+    ],
+    "answer": "Bedrock for managed FM access (no infra). Start with Claude or Nova for PoC. VPC endpoint for Bedrock to keep traffic private. Guardrails with PII ANONYMIZE for financial data. DynamoDB for conversation history. CloudWatch for latency monitoring. Scale to provisioned throughput if PoC succeeds.",
+    "whyExplanation": "Bedrock eliminates infrastructure management while providing enterprise-grade security. VPC endpoints ensure financial data never traverses the public internet. Guardrails PII filters are essential for financial compliance. The PoC-to-production path uses the same service, just scaling the throughput model.",
+    "examSkills": ["1.1.1", "1.1.2", "1.1.3"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "s1b",
+    "number": "1B",
+    "domain": 1,
+    "week": 1,
+    "day": 6,
+    "title": "Multilingual RAG Pipeline",
+    "question": "A multinational company needs their RAG system to handle queries in English, German, and Japanese. Documents are in all three languages. The system must return results in the user's language. Design the retrieval pipeline.",
+    "thinkPrompts": [
+      "Which embedding model supports 100+ languages?",
+      "How do you detect the user's query language?",
+      "Should you use metadata filtering for language?"
+    ],
+    "answer": "Use Cohere Embed Multilingual v3 (supports 100+ languages) for embeddings. Store in OpenSearch with per-language metadata tags. At query time: detect language with Comprehend, embed query with same multilingual model, retrieve with metadata filter for language, pass to multilingual FM (Claude) with system prompt specifying response language. Alternatively, use Kendra GenAI Index which has built-in multilingual support.",
+    "whyExplanation": "Cohere Embed v3 is the only Bedrock embedding model with true 100+ language support. Titan Embeddings v2 has limited multilingual capability. The language detection + metadata filtering pattern ensures the right-language documents are retrieved.",
+    "examSkills": ["1.5.2", "1.5.3"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s2",
+    "number": "2",
+    "domain": 1,
+    "week": 1,
+    "day": 2,
+    "title": "Cross-Region Model Resilience",
+    "question": "Your production GenAI app serves users in US and Europe. The primary model (Claude) occasionally hits rate limits during peak hours. How do you ensure availability?",
+    "thinkPrompts": [
+      "What Bedrock feature handles cross-region failover automatically?",
+      "How can Step Functions implement a circuit breaker pattern?",
+      "What tool enables model switching without code changes?"
+    ],
+    "answer": "Enable Bedrock Cross-Region Inference -- it routes to another region automatically when the primary is unavailable. For rate limit resilience, implement Step Functions circuit breaker pattern: if 3 consecutive failures, route to fallback model (e.g., Nova Pro). Use AppConfig feature flags for dynamic model switching without code changes. API Gateway handles rate limiting on the client side.",
+    "whyExplanation": "Cross-Region Inference is the lowest-effort resilience solution for Bedrock. Step Functions circuit breaker adds a second layer for model-level failures. AppConfig separates configuration from code, enabling operations teams to switch models without developer involvement.",
+    "examSkills": ["1.2.2", "1.2.3"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "s3",
+    "number": "3",
+    "domain": 1,
+    "week": 1,
+    "day": 3,
+    "title": "Healthcare Model Fine-Tuning",
+    "question": "A healthcare company has domain-specific medical terminology that general FMs handle poorly. They need to fine-tune a model on their proprietary medical corpus. Which path?",
+    "thinkPrompts": [
+      "What fine-tuning method minimizes compute cost while adapting to domain language?",
+      "Where do you store and version the fine-tuned model?",
+      "What compliance requirements does healthcare impose on deployment?"
+    ],
+    "answer": "SageMaker for full fine-tuning control. Use LoRA (Low-Rank Adaptation) -- parameter-efficient, lower compute cost. Store the fine-tuned model in SageMaker Model Registry with version tagging. Deploy to a SageMaker endpoint in a VPC for HIPAA compliance. Set up automated deployment pipeline with rollback strategy if the new model version underperforms (canary deployment using SageMaker endpoint variants).",
+    "whyExplanation": "Bedrock custom training is simpler but offers less control over the training process, hyperparameters, and deployment configuration. Healthcare needs VPC isolation and regulatory auditability, which SageMaker provides. LoRA is parameter-efficient (only trains low-rank matrices), reducing compute costs by 50-70% vs full fine-tuning while achieving comparable quality for domain adaptation.",
+    "examSkills": ["1.2.4", "5.1.3"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s4",
+    "number": "4",
+    "domain": 1,
+    "week": 1,
+    "day": 4,
+    "title": "Insurance Document Processing Pipeline",
+    "question": "An insurance company receives claims as scanned PDFs containing handwritten notes, printed text, and attached photos of vehicle damage. They want to extract all information and generate a structured summary. Design the pipeline.",
+    "thinkPrompts": [
+      "Which service handles OCR for both printed and handwritten text?",
+      "Which service assesses damage from photos?",
+      "How do you extract named entities (names, dates, policy numbers)?",
+      "Where does Bedrock fit in this pipeline?"
+    ],
+    "answer": "S3 (store PDFs) -> Lambda trigger -> Textract (OCR for printed + handwritten text) -> Rekognition (damage assessment from photos) -> Comprehend (entity extraction: names, dates, policy numbers) -> Lambda (assemble structured JSON) -> Bedrock (generate summary with extracted context) -> Guardrails (ANONYMIZE PII before storage) -> DynamoDB (store structured claim data).",
+    "whyExplanation": "Each service handles its specialized data type. Textract is purpose-built for document OCR (not Bedrock). Rekognition handles image analysis. Comprehend extracts structured entities from text. Bedrock generates the natural language summary. Guardrails provides the PII safety layer. This is a classic multi-service pipeline pattern tested heavily on the exam.",
+    "examSkills": ["1.3.1", "1.3.2", "1.3.3", "1.3.4"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s5",
+    "number": "5",
+    "domain": 1,
+    "week": 1,
+    "day": 5,
+    "title": "E-Commerce Vector Store Selection",
+    "question": "An e-commerce company wants semantic search across 2 million product descriptions AND exact-match filtering by product SKU, price range, and category. Users also need analytics on what they're searching for. Which vector store?",
+    "thinkPrompts": [
+      "Which vector store supports hybrid search (BM25 + k-NN)?",
+      "Which has built-in analytics capabilities?",
+      "Can the Bedrock managed store handle this level of customization?"
+    ],
+    "answer": "OpenSearch Serverless with the Neural plugin. It supports hybrid search (BM25 for exact SKU matching + k-NN for semantic similarity), has built-in analytics via OpenSearch Dashboards, and scales to millions of documents. NOT Aurora pgvector because the analytics requirement and hybrid search support is weaker. NOT Bedrock managed store because you need the customization of OpenSearch sharding and hybrid search configuration.",
+    "whyExplanation": "The exam frequently tests vector store selection. The key triggers are: 'hybrid search' or 'analytics on retrieval data' = OpenSearch. 'Simplest/least overhead' = Bedrock managed store. 'Existing relational DB' = Aurora pgvector. 'Entity relationships' = Neptune.",
+    "examSkills": ["1.4.1", "1.4.2", "1.4.3"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "s6",
+    "number": "6",
+    "domain": 1,
+    "week": 1,
+    "day": 6,
+    "title": "Legal RAG Chunking Fix",
+    "question": "A legal firm's RAG system retrieves contract clauses, but users complain that retrieved chunks often split mid-clause, producing incoherent context. The chunking uses 512-token fixed-size. How do you fix this?",
+    "thinkPrompts": [
+      "Why is fixed-size chunking bad for legal documents?",
+      "Which chunking strategy respects document structure?",
+      "How do reranker models help after retrieval?"
+    ],
+    "answer": "Switch from fixed-size to semantic chunking based on content structure. For legal documents, use hierarchical chunking that respects section/clause boundaries. Additionally, implement Bedrock reranker models to re-score retrieved chunks by relevance before passing to the FM. Add metadata tags (clause number, section, cross-references) so retrieval can pull related chunks together.",
+    "whyExplanation": "Fixed-size chunking ignores document structure, which is fatal for legal content where a clause must be read as a whole. Hierarchical chunking preserves the logical structure. Reranking improves precision by re-scoring chunks with a dedicated model rather than relying solely on embedding similarity.",
+    "examSkills": ["1.5.1", "1.5.4"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s7",
+    "number": "7",
+    "domain": 1,
+    "week": 1,
+    "day": 7,
+    "title": "Centralized Prompt Management",
+    "question": "A company has 15 different GenAI applications, each with their own prompts stored in application code. Prompt changes require code deployments. The compliance team wants audit trails for all prompt changes. How do you centralize this?",
+    "thinkPrompts": [
+      "Which Bedrock feature centralizes prompt templates?",
+      "How do you version and track changes?",
+      "Which AWS service provides audit trails for API calls?"
+    ],
+    "answer": "Migrate all prompts to Bedrock Prompt Management. Create parameterized templates with version control. Set up approval workflows for prompt changes. Use CloudTrail to track who changed which prompt and when. Store template repos in S3 as backup. Use Bedrock Prompt Flows for sequential chains and conditional branching. This eliminates code deployments for prompt changes and provides the audit trail compliance needs.",
+    "whyExplanation": "Prompt Management decouples prompts from code, enabling operations teams to update prompts without developer involvement. CloudTrail provides the compliance audit trail. Prompt Flows handles complex multi-step prompt orchestration visually.",
+    "examSkills": ["1.6.1", "1.6.2", "1.6.3", "1.6.4", "1.6.5", "1.6.6"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "s8",
+    "number": "8",
+    "domain": 2,
+    "week": 2,
+    "day": 8,
+    "title": "DevOps Monitoring Agent Architecture",
+    "question": "A DevOps team wants to build an agent that monitors their Kubernetes cluster, reads alerts from SigNoz, queries Prometheus, and suggests remediation actions. The agent should use their existing Python monitoring scripts. Which architecture?",
+    "thinkPrompts": [
+      "Does this need a managed agent (Bedrock Agents) or custom framework?",
+      "How do you expose existing Python scripts as agent tools?",
+      "How does the agent learn from past incident remediations?"
+    ],
+    "answer": "Build with Strands Agents SDK (custom framework). Deploy to AgentCore Runtime for serverless scaling and session isolation. Expose existing Python scripts as tools via AgentCore Gateway. Use AgentCore Memory for episodic memory -- the agent learns which remediations worked for similar past incidents. AgentCore Policy to restrict actions (e.g., 'can only suggest, cannot execute kubectl delete'). AgentCore Observability to monitor agent decisions in CloudWatch.",
+    "whyExplanation": "NOT Bedrock Agents because you need a custom framework (Strands) and non-Bedrock tool integrations. AgentCore is the deployment platform for any agent framework. Gateway transforms existing APIs into agent-ready tools. Policy uses Cedar rules for action boundaries.",
+    "examSkills": ["2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s8b",
+    "number": "8B",
+    "domain": 2,
+    "week": 2,
+    "day": 8,
+    "title": "Financial Analysis Agent with Code Interpreter",
+    "question": "A financial analyst needs an agent that can download CSV files from internal APIs, perform statistical analysis, and generate visualizations. The code execution must be sandboxed. Which architecture?",
+    "thinkPrompts": [
+      "Which AgentCore service provides sandboxed code execution?",
+      "How do you securely access internal APIs?",
+      "What libraries are available in the sandbox?"
+    ],
+    "answer": "Strands Agent with AgentCore Code Interpreter. Code Interpreter provides a secure sandbox for Python execution, supports data analysis libraries (pandas, numpy), and can generate visualizations. Deploy to AgentCore Runtime. The agent calls AgentCore Gateway to access internal APIs, then uses Code Interpreter to process the data. Use AgentCore Policy to restrict which APIs the agent can call.",
+    "whyExplanation": "Code Interpreter is the dedicated AgentCore service for sandboxed code execution. It is separate from the agent's own runtime, ensuring untrusted code cannot affect the agent or other systems.",
+    "examSkills": ["2.1.6", "2.1.7"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "s9",
+    "number": "9",
+    "domain": 2,
+    "week": 2,
+    "day": 9,
+    "title": "Model Cascading Cost Optimization",
+    "question": "An enterprise has 10,000 daily FM API calls. 70% are simple FAQ lookups, 20% are moderate analysis, 10% are complex reasoning tasks. Current cost is $X/month using Claude Sonnet for everything. How do you optimize?",
+    "thinkPrompts": [
+      "What is the model cascading pattern?",
+      "Which model handles simple queries cheaply?",
+      "How do you add caching for repeated queries?",
+      "What Bedrock feature automates model routing?"
+    ],
+    "answer": "Implement model cascading with Lambda routing. Route 70% simple queries to Nova Micro (cheapest, fastest). 20% moderate to Nova Pro (balanced). 10% complex to Claude Sonnet (highest quality). Additionally, implement semantic caching using DynamoDB or ElastiCache. Use Bedrock Prompt Routing for dynamic model selection. Monitor cost with CloudWatch + Cost Explorer.",
+    "whyExplanation": "Model cascading is the most impactful cost optimization for mixed-complexity workloads. The Lambda classifier evaluates query complexity before invoking the model, ensuring you only pay for the capability you need.",
+    "examSkills": ["2.2.1", "2.2.2", "2.2.3", "2.4.1", "2.4.4"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s9b",
+    "number": "9B",
+    "domain": 2,
+    "week": 2,
+    "day": 8,
+    "title": "MCP Server for CRM Integration",
+    "question": "A company wants to build an MCP server that exposes their CRM data to multiple AI agents built with different frameworks (Strands, LangGraph). Some tools need persistent database connections. How do you implement this?",
+    "thinkPrompts": [
+      "What is the difference between stateless and stateful MCP servers?",
+      "Which compute service is best for stateless vs stateful?",
+      "How do you make MCP servers available to agents?"
+    ],
+    "answer": "For lightweight stateless tools (read-only queries): Lambda-based MCP server -- scales automatically, no connection management. For complex tools requiring persistent connections (CRM write operations, transactions): ECS-based MCP server with connection pooling. Both expose standard MCP interfaces so any MCP-compatible client can connect. Use API Gateway in front for authentication. Use AgentCore Gateway to make these MCP servers available as agent tools.",
+    "whyExplanation": "The exam explicitly tests MCP implementation. Key distinction: Lambda for stateless/lightweight, ECS for stateful/persistent connections. Both use standard MCP interfaces so framework-agnostic clients work.",
+    "examSkills": ["2.1.3", "2.1.7"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s10",
+    "number": "10",
+    "domain": 2,
+    "week": 2,
+    "day": 10,
+    "title": "CI/CD Pipeline for Prompt Quality",
+    "question": "A development team wants to automatically test prompt quality before deploying prompt changes to production. They use CodePipeline for CI/CD. Design the pipeline.",
+    "thinkPrompts": [
+      "Where are prompt templates stored as code?",
+      "Which service runs automated evaluations against test datasets?",
+      "What happens if evaluation scores are below threshold?"
+    ],
+    "answer": "CodeCommit (prompt template stored as code) -> CodePipeline trigger -> CodeBuild stage 1: run Bedrock Evaluations against test dataset (measure correctness, helpfulness, harmfulness) -> If scores above threshold -> CodeBuild stage 2: deploy prompt version to Bedrock Prompt Management -> If scores below threshold -> fail pipeline, notify via SNS. Use CloudWatch to track prompt performance metrics post-deployment. Implement rollback by reverting to previous prompt version in Prompt Management.",
+    "whyExplanation": "This is the GenAIOps pattern: treat prompts as code, test before deploy, automate with CI/CD. Bedrock Evaluations provides the automated quality gate.",
+    "examSkills": ["2.5.5", "2.5.6"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "s11",
+    "number": "11",
+    "domain": 3,
+    "week": 3,
+    "day": 15,
+    "title": "PII Leak Remediation",
+    "question": "A customer service chatbot accidentally reveals another customer's email address in its response. The compliance team demands immediate remediation. What do you implement?",
+    "thinkPrompts": [
+      "Which Guardrails filter handles PII?",
+      "Should you BLOCK or ANONYMIZE emails?",
+      "What about other PII types?",
+      "Can this filter work with non-Bedrock models?"
+    ],
+    "answer": "Configure Bedrock Guardrails sensitive information filter: set EMAIL to ANONYMIZE (masks the email but keeps the response useful). Also add NAME, PHONE, ADDRESS to ANONYMIZE. Add custom regex for internal customer IDs (e.g., CUST-\\d{8}). Enable for both input AND output filtering. Use ApplyGuardrail API to also filter responses from any non-Bedrock models in the pipeline. Set up CloudWatch alarm on guardrail intervention rate -- if it spikes, investigate the retrieval source.",
+    "whyExplanation": "ANONYMIZE masks the PII but keeps the response useful (replaces with placeholder). BLOCK would reject the entire response, which is too aggressive for customer service. ApplyGuardrail works independently, so it protects the full pipeline regardless of model source.",
+    "examSkills": ["3.1.1", "3.1.2"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "s11b",
+    "number": "11B",
+    "domain": 3,
+    "week": 3,
+    "day": 15,
+    "title": "Insurance Rate Verification with Automated Reasoning",
+    "question": "An insurance company needs to verify that policy quotes generated by their FM are mathematically correct and comply with their rate tables. Contextual grounding alone is insufficient because the FM needs to do calculations. What do you implement?",
+    "thinkPrompts": [
+      "What is the difference between Contextual Grounding and Automated Reasoning?",
+      "Can Contextual Grounding verify mathematical correctness?",
+      "How does Automated Reasoning extract formal logic rules?"
+    ],
+    "answer": "Bedrock Guardrails Automated Reasoning checks. Upload rate tables as policy documents -> Automated Reasoning extracts formal logic rules -> validates FM outputs against these rules -> returns findings showing whether calculations are correct and which rules were applied. Contextual grounding only checks if content is 'in the source' but cannot verify mathematical correctness. Automated Reasoning uses formal verification to prove correctness.",
+    "whyExplanation": "This is a critical exam distinction. Contextual Grounding = 'Is the response faithful to the source material?' (detects hallucinations in RAG). Automated Reasoning = 'Is the response logically/mathematically correct per defined policies?' (uses formal verification, up to 99% accuracy). The exam tests this distinction explicitly.",
+    "examSkills": ["3.1.3", "3.1.4"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s12",
+    "number": "12",
+    "domain": 3,
+    "week": 3,
+    "day": 16,
+    "title": "Financial Institution Security Architecture",
+    "question": "A regulated financial institution wants to use Bedrock but requires: (a) no data traversing public internet, (b) audit trail for every model invocation, (c) encryption at rest with customer-managed keys, (d) only specific teams can use specific models. Design the security architecture.",
+    "thinkPrompts": [
+      "Which networking feature keeps traffic off the public internet?",
+      "Which services provide API-level and prompt-level audit trails?",
+      "How do you use KMS with Bedrock?",
+      "What IAM condition key restricts model access per team?"
+    ],
+    "answer": "(a) VPC endpoint for Bedrock (PrivateLink) -- all traffic stays on AWS backbone. (b) CloudTrail for API-level audit + CloudWatch Logs for prompt/response logging. (c) KMS customer-managed key for encrypting prompts, responses, and fine-tuning data in S3. (d) IAM policies with condition keys: bedrock:ModelId to restrict which models each IAM role can invoke. Add SCP at the org level to prevent any account from invoking unapproved models.",
+    "whyExplanation": "Defense-in-depth: VPC endpoints handle network isolation, CloudTrail/CloudWatch handle audit, KMS handles encryption, IAM+SCP handle access control. Each layer addresses a different security requirement.",
+    "examSkills": ["3.2.1", "3.2.2", "3.2.3", "3.2.4", "3.2.5"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s13",
+    "number": "13",
+    "domain": 3,
+    "week": 3,
+    "day": 17,
+    "title": "HR Resume Screening Bias Mitigation",
+    "question": "An HR department deploys a resume screening agent. The legal team raises concerns about demographic bias. How do you address this?",
+    "thinkPrompts": [
+      "Which service detects bias in model outputs?",
+      "How do you document the model's intended use and limitations?",
+      "How do you prevent the agent from making final hiring decisions?"
+    ],
+    "answer": "Use SageMaker Clarify to run bias analysis on the model's outputs across demographic groups. Create programmatic model cards documenting the model's intended use, limitations, and bias testing results. Configure AgentCore Policy to restrict the agent from making final hiring decisions (human-in-the-loop required via Step Functions approval workflow). Track data lineage with Glue to ensure training data diversity. Implement Bedrock Guardrails to block responses that reference protected characteristics. Log all agent decisions via CloudTrail for auditability.",
+    "whyExplanation": "Responsible AI requires multiple layers: bias detection (Clarify), documentation (model cards), action restrictions (Policy), data governance (Glue lineage), safety filters (Guardrails), and auditability (CloudTrail). No single service solves it.",
+    "examSkills": ["3.3.1", "3.3.2", "3.3.3", "3.3.4", "3.4.1", "3.4.2", "3.4.3"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s14",
+    "number": "14",
+    "domain": 4,
+    "week": 3,
+    "day": 18,
+    "title": "GenAI App Cost Reduction",
+    "question": "A startup's GenAI app costs $12,000/month on Bedrock. Analysis shows 60% of queries are near-duplicates (users asking the same thing in different words). How do you cut costs?",
+    "thinkPrompts": [
+      "Which caching method handles 'similar but not identical' queries?",
+      "How does semantic caching work technically?",
+      "What similarity threshold is appropriate?",
+      "What additional optimization can you add for remaining queries?"
+    ],
+    "answer": "Implement semantic caching: generate embeddings for incoming queries, compare against cached query embeddings using cosine similarity. If similarity > 0.95, return cached response. Store cache in DynamoDB (query embedding -> response). This eliminates ~60% of model invocations. Additionally, implement model cascading: route remaining simple queries to Nova Micro instead of Claude. Use CloudWatch custom metric for 'cache hit rate' and set alarm if it drops below expected threshold.",
+    "whyExplanation": "Semantic caching eliminates FM calls entirely for similar queries, which is more impactful than model cascading (which still makes FM calls, just cheaper ones). The 0.95 threshold balances cache hit rate with response quality.",
+    "examSkills": ["4.1.1", "4.1.2", "4.1.3", "4.1.4"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s15",
+    "number": "15",
+    "domain": 5,
+    "week": 3,
+    "day": 19,
+    "title": "RAG Hallucination Diagnosis",
+    "question": "After a prompt update, users report that the RAG chatbot is 'making things up' -- responses contain information not in the knowledge base. How do you diagnose and fix this?",
+    "thinkPrompts": [
+      "What Guardrails feature detects ungrounded responses?",
+      "How do you trace the full request path to find the failure point?",
+      "What might be wrong with the retrieval vs the prompt?"
+    ],
+    "answer": "Diagnosis: Enable contextual grounding checks in Bedrock Guardrails with a grounding threshold (e.g., 0.7). This scores whether the response is grounded in the retrieved source. Check CloudWatch Logs Insights to query recent prompts/responses and identify which queries produce ungrounded responses. Use X-Ray to trace the full request path: is the retrieval returning relevant chunks? Is the prompt including the retrieved context correctly? Fix: Increase grounding threshold in Guardrails to reject ungrounded responses. Review chunking strategy -- if chunks are too large, irrelevant content dilutes the context. Add Bedrock reranker model to improve retrieval relevance. If the issue is the prompt, update the system prompt to emphasize 'only answer based on provided context, say I don't know otherwise.'",
+    "whyExplanation": "Hallucination in RAG usually has one of three root causes: 1) retrieval returning irrelevant chunks (fix chunking/reranking), 2) prompt not properly constraining the model to use retrieved context (fix system prompt), 3) no grounding check to catch ungrounded responses (add Guardrails contextual grounding).",
+    "examSkills": ["5.2.1", "5.2.3", "5.2.4"],
+    "difficulty": "hard"
+  }
+]

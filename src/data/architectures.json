@@ -1,0 +1,64 @@
+[
+  {
+    "id": "production-rag-pipeline",
+    "title": "Production RAG Pipeline",
+    "description": "End-to-end RAG pipeline with security, caching, and monitoring. Combines Domain 1 (RAG), Domain 3 (Guardrails), and Domain 4 (caching).",
+    "steps": [
+      { "service": "API Gateway", "action": "Rate limit and authenticate incoming user request", "next": "Lambda" },
+      { "service": "Lambda", "action": "Expand query using Bedrock (query reformulation)", "next": "Knowledge Base" },
+      { "service": "Knowledge Base (OpenSearch)", "action": "Hybrid search (BM25 + k-NN) to retrieve relevant chunks", "next": "Bedrock" },
+      { "service": "Bedrock", "action": "Generate response with retrieved context as augmented prompt", "next": "Guardrails" },
+      { "service": "Guardrails", "action": "PII mask, grounding check, content filter on output", "next": "API Gateway" },
+      { "service": "API Gateway", "action": "Return filtered response to user" }
+    ],
+    "monitoring": "CloudWatch (latency, tokens, cost) + X-Ray (trace) + CloudTrail (audit)",
+    "costNote": "Semantic cache in DynamoDB for repeated queries"
+  },
+  {
+    "id": "multi-agent-system",
+    "title": "Multi-Agent System",
+    "description": "Agent deployed on AgentCore with multiple tools, memory, and governance. Combines Domain 2 (agents, deployment) with Domain 3 (policy).",
+    "steps": [
+      { "service": "API Gateway", "action": "Receive user request and authenticate", "next": "Strands Agent" },
+      { "service": "Strands Agent (AgentCore Runtime)", "action": "Plan and reason about how to fulfill the request", "next": "AgentCore Gateway" },
+      { "service": "AgentCore Gateway - Tool 1", "action": "RAG lookup via Knowledge Base", "next": "Strands Agent" },
+      { "service": "AgentCore Gateway - Tool 2", "action": "CRM query via Lambda", "next": "Strands Agent" },
+      { "service": "AgentCore Gateway - Tool 3", "action": "Send email via SES + Lambda", "next": "Strands Agent" },
+      { "service": "AgentCore Memory", "action": "Store session + episodic memory for learning" },
+      { "service": "AgentCore Policy", "action": "Enforce Cedar rules (e.g., 'cannot delete records')" },
+      { "service": "AgentCore Observability", "action": "Monitor in CloudWatch + OpenTelemetry" }
+    ]
+  },
+  {
+    "id": "document-processing-pipeline",
+    "title": "Document Processing Pipeline",
+    "description": "Multi-step document processing using Step Functions orchestration. Classic Domain 1 (data pipelines) pattern.",
+    "steps": [
+      { "service": "S3", "action": "Document uploaded to S3 bucket", "next": "EventBridge" },
+      { "service": "EventBridge", "action": "Trigger Step Functions workflow on S3 event", "next": "Step Functions" },
+      { "service": "Textract (Step 1)", "action": "OCR -- extract text from scanned documents", "next": "Bedrock Data Automation" },
+      { "service": "Bedrock Data Automation (Step 2)", "action": "Structured extraction from multimodal content", "next": "Comprehend" },
+      { "service": "Comprehend (Step 3)", "action": "Entity extraction (names, dates, amounts)", "next": "Bedrock" },
+      { "service": "Bedrock + Guardrails (Step 4)", "action": "Summarize with PII anonymization", "next": "DynamoDB + S3" },
+      { "service": "DynamoDB + S3 (Step 5)", "action": "Store metadata in DynamoDB, processed output in S3" }
+    ],
+    "monitoring": "Step Functions retry + catch + DLQ for error handling"
+  },
+  {
+    "id": "human-in-the-loop-agent",
+    "title": "Human-in-the-Loop Agent Workflow",
+    "description": "Agent with confidence-based routing to human review. Combines Domain 2 (agents) with Domain 3 (governance).",
+    "steps": [
+      { "service": "API Gateway", "action": "Receive user request", "next": "Step Functions" },
+      { "service": "Strands Agent (Step 1)", "action": "Process request via AgentCore Runtime", "next": "Action Plan" },
+      { "service": "Agent Output (Step 2)", "action": "Generate action plan", "next": "Confidence Check" },
+      { "service": "Lambda (Step 3)", "action": "Confidence check on action plan", "next": "Branch" },
+      { "service": "Auto-approve branch", "action": "If confidence > 0.9, execute automatically", "next": "Execute" },
+      { "service": "Wait-for-Callback branch", "action": "If confidence < 0.9, SNS notifies human reviewer", "next": "Amplify Web UI" },
+      { "service": "Amplify Web UI", "action": "Human reviews and approves/rejects via callback token", "next": "Execute" },
+      { "service": "Execute (Step 4)", "action": "Execute approved action" },
+      { "service": "CloudTrail + Observability (Step 5)", "action": "Log decision for audit trail" }
+    ],
+    "monitoring": "DLQ + SNS alert for errors"
+  }
+]

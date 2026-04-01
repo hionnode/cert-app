@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import services from "../data/services-checklist.json";
+---
+
+<Layout title="Services Checklist">
+	<div class="page-container py-8">
+		<h1 class="heading-1 mb-2">In-Scope Services Checklist</h1>
+		<p class="body-text mb-8">{services.length} AWS services in scope for the exam. Check off as you master each.</p>
+
+		{(() => {
+			const categories = [...new Set((services as any[]).map((s: any) => s.category))];
+			return categories.map((cat: string) => {
+				const catServices = (services as any[]).filter((s: any) => s.category === cat);
+				return (
+					<section class="mb-8">
+						<h2 class="heading-3 mb-3">{cat}</h2>
+						<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+							{catServices.map((svc: any) => (
+								<label class="flex items-center gap-3 p-3 rounded-button hover:bg-surface-2 cursor-pointer transition-colors">
+									<input type="checkbox" class="w-4 h-4 rounded accent-primary-500" />
+									<span class="text-sm text-ink">{svc.name}</span>
+								</label>
+							))}
+						</div>
+					</section>
+				);
+			});
+		})()}
+	</div>
+</Layout>
