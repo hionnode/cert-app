@@ -1,0 +1,562 @@
+[
+  {
+    "id": "d1-l1-q1",
+    "domain": 1,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A development team is building a chatbot that must display tokens to the user as they are generated, rather than waiting for the complete response. Which Amazon Bedrock API should they use?",
+    "options": [
+      "A. InvokeModel with the stream parameter set to true",
+      "B. InvokeModelWithResponseStream, which returns a streaming response body",
+      "C. Converse API with async callback mode enabled",
+      "D. InvokeEndpoint with streaming enabled on a SageMaker-hosted model"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because InvokeModelWithResponseStream is the dedicated Bedrock API for real-time token streaming, returning chunks progressively as they are generated. A is wrong because InvokeModel does not have a stream parameter -- it always returns the complete response in a single payload. C is wrong because while the Converse API supports streaming via ConverseStream, there is no 'async callback mode' -- and the question asks about the InvokeModel family. D is wrong because InvokeEndpoint is a SageMaker Runtime API, not a Bedrock API.",
+    "examSkills": ["1.1.1"],
+    "tags": ["bedrock", "streaming", "invoke-model"]
+  },
+  {
+    "id": "d1-l1-q2",
+    "domain": 1,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company is building a multilingual RAG application that must support queries and documents in English, Japanese, German, and Arabic. Which embedding model available on Amazon Bedrock is BEST suited for this use case?",
+    "options": [
+      "A. Amazon Titan Embeddings V2, which supports 25+ languages natively",
+      "B. Amazon Titan Embeddings V1, which uses a universal tokenizer for all languages",
+      "C. Cohere Embed Multilingual v3, which is purpose-built for 100+ languages with superior cross-lingual retrieval",
+      "D. Meta Llama text embeddings, which provide the highest dimensionality for multilingual content"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because Cohere Embed Multilingual v3 is specifically designed for multilingual retrieval across 100+ languages and produces embeddings that align cross-lingual semantics, making it the best choice for multilingual RAG. A is wrong because while Titan Embeddings V2 supports multiple languages, Cohere Embed Multilingual v3 is purpose-built for cross-lingual retrieval and outperforms it on multilingual benchmarks. B is wrong because Titan Embeddings V1 has limited multilingual support and no 'universal tokenizer' -- it is primarily optimized for English. D is wrong because Meta Llama does not offer a dedicated embedding model on Bedrock, and higher dimensionality alone does not guarantee better multilingual performance.",
+    "examSkills": ["1.1.1", "1.1.2"],
+    "tags": ["embeddings", "multilingual", "cohere", "rag"]
+  },
+  {
+    "id": "d1-l1-q3",
+    "domain": 1,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A startup wants to build a RAG application using Amazon Bedrock Knowledge Bases but wants the LEAST operational overhead for the vector store. They have no existing database infrastructure. Which option should they choose?",
+    "options": [
+      "A. Use the Bedrock Knowledge Base managed vector store, which requires no provisioning or management",
+      "B. Deploy an Amazon OpenSearch Serverless collection with vector engine enabled",
+      "C. Create an Amazon Aurora PostgreSQL cluster with the pgvector extension",
+      "D. Set up a self-managed Pinecone cluster and connect it via the Bedrock KB custom connector"
+    ],
+    "correctAnswer": "A",
+    "explanation": "A is correct because the Bedrock Knowledge Base managed vector store (backed by OpenSearch Serverless under the hood) is a zero-configuration option that is fully managed by AWS, requiring no provisioning, scaling, or maintenance -- the least operational overhead. B is wrong because while OpenSearch Serverless is serverless, you still need to create and configure the collection, define index mappings, and manage access policies. C is wrong because Aurora PostgreSQL requires cluster provisioning, pgvector extension setup, index creation, and ongoing database administration. D is wrong because Pinecone is a third-party service that requires separate account management, API key configuration, and there is no native 'custom connector' in Bedrock KB for Pinecone.",
+    "examSkills": ["1.1.2"],
+    "tags": ["bedrock-kb", "vector-store", "managed", "operational-overhead"]
+  },
+  {
+    "id": "d1-l1-q4",
+    "domain": 1,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company is experiencing intermittent throttling errors when calling Amazon Bedrock during peak hours. They learn about Cross-Region Inference. What does this feature provide?",
+    "options": [
+      "A. It replicates the model weights to a secondary region for disaster recovery",
+      "B. It automatically routes requests to another region when the primary region hits capacity limits, providing higher throughput",
+      "C. It enables multi-region active-active model endpoints with load balancing",
+      "D. It caches model responses across regions to reduce duplicate inference calls"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Cross-Region Inference automatically routes Bedrock InvokeModel requests to another AWS region when the primary region is at capacity, providing higher aggregate throughput without requiring application code changes. A is wrong because Cross-Region Inference does not replicate model weights -- the models already exist in multiple regions, and the feature simply routes traffic. C is wrong because it is not active-active load balancing -- it is overflow routing when the primary region hits its limits. D is wrong because Cross-Region Inference does not involve response caching; it routes live inference requests to available capacity in other regions.",
+    "examSkills": ["1.1.1"],
+    "tags": ["bedrock", "cross-region-inference", "throttling", "capacity"]
+  },
+  {
+    "id": "d1-l1-q5",
+    "domain": 1,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A legal firm is building a RAG system to search through long contracts. The documents contain nested clauses, sub-sections, and cross-references. Which chunking strategy is BEST for this use case?",
+    "options": [
+      "A. Fixed-size chunking at 512 tokens with 10% overlap",
+      "B. Sentence-level chunking to preserve grammatical boundaries",
+      "C. Semantic or hierarchical chunking that respects clause boundaries and document structure",
+      "D. Single-document chunking where each contract is one chunk to preserve full context"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because semantic/hierarchical chunking respects the logical structure of legal documents by splitting at clause and section boundaries, preserving the context needed to understand cross-references and nested provisions. A is wrong because fixed-size chunking splits arbitrarily at token boundaries, which will cut through mid-clause and break the legal meaning of provisions. B is wrong because sentence-level chunking is too granular for legal documents where meaning depends on entire clauses and their relationship to parent sections. D is wrong because entire contracts can be hundreds of pages, far exceeding context window limits and embedding model input sizes, and retrieval precision drops dramatically with oversized chunks.",
+    "examSkills": ["1.1.2"],
+    "tags": ["chunking", "rag", "hierarchical", "legal"]
+  },
+  {
+    "id": "d1-l1-q6",
+    "domain": 1,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company needs to ingest thousands of scanned PDF invoices into a RAG knowledge base. The PDFs contain printed text, tables, and handwritten notes. Which AWS service should they use to extract text before ingestion?",
+    "options": [
+      "A. Amazon Textract, which supports OCR on scanned documents including tables and handwriting",
+      "B. Amazon Comprehend, which can parse unstructured documents and extract entities",
+      "C. Amazon Rekognition, which detects text in images and documents",
+      "D. Amazon Bedrock document parser with built-in OCR capabilities"
+    ],
+    "correctAnswer": "A",
+    "explanation": "A is correct because Amazon Textract is purpose-built for OCR on scanned documents, with specific APIs for extracting text, tables, forms, and even handwriting from PDFs and images. B is wrong because Comprehend performs NLP tasks like entity recognition and sentiment analysis on already-extracted text -- it cannot perform OCR on scanned images. C is wrong because Rekognition's text detection is designed for text in photos and scenes (like street signs), not for document OCR with tables and structured content. D is wrong because while Bedrock Knowledge Bases has a document parser, it delegates OCR to Textract under the hood and does not have its own independent OCR engine.",
+    "examSkills": ["1.1.2", "1.1.3"],
+    "tags": ["textract", "ocr", "pdf", "rag"]
+  },
+  {
+    "id": "d1-l2-q1",
+    "domain": 1,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "An e-commerce company wants to implement a product search that combines semantic understanding (e.g., 'comfortable running shoes') with exact-match filtering (e.g., brand='Nike', size=10). They also need search analytics dashboards. Which architecture should they choose?",
+    "options": [
+      "A. Amazon Bedrock Knowledge Base with metadata filters for exact-match fields",
+      "B. Amazon OpenSearch Service with hybrid search combining BM25 keyword scoring and k-NN vector search",
+      "C. Amazon Kendra with custom document attributes for filtering",
+      "D. Amazon Aurora PostgreSQL with pgvector for semantic search and SQL WHERE clauses for exact match"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because OpenSearch supports hybrid search that combines BM25 (keyword/exact-match scoring) with k-NN (vector/semantic scoring), and includes OpenSearch Dashboards for built-in analytics. This gives the best of both retrieval paradigms plus the required analytics. A is wrong because Bedrock KB metadata filters support basic exact-match filtering but do not provide BM25 keyword relevance scoring or built-in analytics dashboards. C is wrong because Kendra is designed for enterprise document search, not e-commerce product search at scale, and lacks the hybrid BM25+vector scoring approach. D is wrong because while Aurora pgvector supports vector search and SQL filtering, it does not provide native BM25 scoring or built-in search analytics dashboards.",
+    "examSkills": ["1.1.2", "1.1.3"],
+    "tags": ["opensearch", "hybrid-search", "bm25", "knn", "e-commerce"]
+  },
+  {
+    "id": "d1-l2-q2",
+    "domain": 1,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A team deploys a Bedrock-powered chatbot and wants the ability to switch between foundation models (e.g., Claude to Nova) dynamically based on cost thresholds, without redeploying application code. Which approach achieves this?",
+    "options": [
+      "A. Use Amazon Bedrock model invocation logging to detect cost spikes and trigger a CodePipeline redeployment",
+      "B. Store the model ID in AWS AppConfig feature flags and have the application read the flag at runtime before each Bedrock call",
+      "C. Create a Bedrock custom model that wraps multiple FMs and routes internally based on cost",
+      "D. Use Amazon Bedrock Guardrails to redirect requests to a cheaper model when costs exceed a threshold"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because AWS AppConfig feature flags allow runtime configuration changes without code deployment. The application reads the current model ID from AppConfig before each Bedrock invocation, enabling instant model switching. A is wrong because CodePipeline requires a full deployment cycle, which contradicts the 'without redeploying' requirement. C is wrong because Bedrock custom models are fine-tuned single models, not multi-model routers -- there is no 'wrapper' capability. D is wrong because Guardrails filter content (PII, toxicity, denied topics) -- they cannot reroute requests to different models based on cost.",
+    "examSkills": ["1.1.1", "1.2.1"],
+    "tags": ["appconfig", "feature-flags", "model-switching", "bedrock"]
+  },
+  {
+    "id": "d1-l2-q3",
+    "domain": 1,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A healthcare company needs to fine-tune a foundation model on patient records to improve medical entity extraction. They must comply with HIPAA, ensure the training data never leaves their VPC, and maintain version control of models. Which approach meets ALL requirements?",
+    "options": [
+      "A. Use Amazon Bedrock custom model fine-tuning with a VPC endpoint and enable model versioning in Bedrock",
+      "B. Use Amazon SageMaker with LoRA fine-tuning in a private VPC, store model artifacts in S3 with SSE-KMS, and register versions in SageMaker Model Registry",
+      "C. Fine-tune the model using Amazon Bedrock and store outputs in a HIPAA-eligible S3 bucket with versioning enabled",
+      "D. Use AWS Lambda with the Hugging Face Transformers library for fine-tuning inside a VPC"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because SageMaker provides LoRA fine-tuning within a VPC (ensuring data never leaves the network), SSE-KMS encryption for HIPAA compliance, and SageMaker Model Registry for version control -- meeting all three requirements. A is wrong because Bedrock custom model fine-tuning does not run inside the customer's VPC (data is processed by the Bedrock service), and Bedrock does not have a built-in model versioning system equivalent to SageMaker Model Registry. C is wrong because Bedrock fine-tuning processes data outside the customer's VPC, violating the requirement that training data never leave the VPC. D is wrong because Lambda has a 15-minute timeout and limited memory/compute, making it entirely unsuitable for fine-tuning foundation models.",
+    "examSkills": ["1.2.1", "1.2.2"],
+    "tags": ["sagemaker", "fine-tuning", "lora", "hipaa", "vpc", "model-registry"]
+  },
+  {
+    "id": "d1-l2-q4",
+    "domain": 1,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A RAG application retrieves relevant chunks, but users report that answers sometimes reference incomplete clauses or sentences that are cut off mid-thought. The chunks use fixed-size splitting at 300 tokens. What TWO changes would MOST improve answer quality?",
+    "options": [
+      "A. Increase the chunk size to 1000 tokens and add a 50-token overlap",
+      "B. Switch to hierarchical chunking that respects document structure, and add a reranker to prioritize the most contextually complete chunks",
+      "C. Enable Cross-Region Inference to reduce latency and improve response completeness",
+      "D. Add a larger context window model so it can process more chunks simultaneously"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because hierarchical chunking splits at logical document boundaries (headings, paragraphs, clauses) instead of arbitrary token counts, preventing mid-clause splits. Adding a reranker (e.g., Cohere Rerank or a cross-encoder) then re-scores retrieved chunks for contextual relevance and completeness, filtering out partial fragments. A is wrong because simply increasing chunk size to 1000 tokens still uses arbitrary boundaries and will still cut mid-clause -- it just delays the problem to longer sections. C is wrong because Cross-Region Inference addresses throughput and throttling, not retrieval quality or chunk boundaries. D is wrong because a larger context window does not fix the root cause of poorly chunked content -- feeding more broken chunks to the model does not produce better answers.",
+    "examSkills": ["1.1.2", "1.1.3"],
+    "tags": ["chunking", "hierarchical", "reranker", "rag-quality"]
+  },
+  {
+    "id": "d1-l2-q5",
+    "domain": 1,
+    "level": 2,
+    "type": "ordering",
+    "integrationDomains": [],
+    "question": "Place the following steps of a RAG pipeline in the correct order, from initial data preparation to final user response.",
+    "items": [
+      "Ingest documents from source",
+      "Chunk documents into segments",
+      "Generate embeddings for each chunk",
+      "Index embeddings in a vector store",
+      "Receive user query and generate query embedding",
+      "Retrieve top-k similar chunks from the vector store",
+      "Augment the prompt with retrieved context",
+      "Generate response using the foundation model",
+      "Apply output guardrails and filtering"
+    ],
+    "correctOrder": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    "explanation": "The RAG pipeline follows this sequence: (1) Ingest documents from source systems such as S3. (2) Chunk the documents into manageable segments. (3) Generate embeddings for each chunk using an embedding model. (4) Index the embeddings in a vector store for similarity search. (5) At query time, receive the user query and generate a query embedding. (6) Retrieve the top-k most similar chunks from the vector store. (7) Augment the LLM prompt with the retrieved chunks as context. (8) Generate the final response using the foundation model. (9) Apply output guardrails and filtering before returning to the user. Steps 1-4 are the offline ingestion pipeline, and steps 5-9 are the online query pipeline.",
+    "examSkills": ["1.1.2", "1.1.3"],
+    "tags": ["rag", "pipeline", "ingestion", "retrieval"]
+  },
+  {
+    "id": "d1-l3-q1",
+    "domain": 1,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company has an existing MongoDB Atlas deployment containing millions of product records. They want to add semantic vector search to their application without migrating data to a different database. Which AWS-aligned approach minimizes data migration while enabling vector search?",
+    "options": [
+      "A. Migrate the data to Amazon OpenSearch Service and use k-NN search for vector queries",
+      "B. Use Amazon DocumentDB (with MongoDB compatibility) which supports vector search natively, allowing migration within the MongoDB ecosystem",
+      "C. Keep MongoDB Atlas and use Amazon Bedrock Knowledge Bases with a custom MongoDB connector",
+      "D. Export data to Amazon S3 and use Amazon Kendra for vector-based document search"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Amazon DocumentDB is MongoDB-compatible and now supports native vector search. Migrating from MongoDB Atlas to DocumentDB is a within-ecosystem migration (same query language, same drivers) that minimizes disruption while gaining vector search on AWS. A is wrong because migrating from MongoDB to OpenSearch requires significant data model changes (document to OpenSearch index mappings) and application code rewrites -- this is a cross-ecosystem migration. C is wrong because Bedrock Knowledge Bases does not have a native MongoDB Atlas connector, and building a custom integration adds complexity rather than minimizing migration. D is wrong because exporting to S3 and using Kendra is a complete platform change requiring data export, re-indexing, and Kendra is designed for enterprise document search, not structured product catalog search.",
+    "examSkills": ["1.1.2", "1.2.1"],
+    "tags": ["documentdb", "mongodb", "vector-search", "migration"]
+  },
+  {
+    "id": "d1-l3-q2",
+    "domain": 1,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A large enterprise needs to build a GenAI-powered search system that connects to 40+ data sources (SharePoint, Confluence, Salesforce, databases, etc.) and must enforce existing access control lists (ACLs) so that users only see results they are authorized to access. Which AWS service is BEST suited?",
+    "options": [
+      "A. Amazon Bedrock Knowledge Bases with 40 separate data source configurations",
+      "B. Amazon OpenSearch Service with custom connectors and IAM-based row-level security",
+      "C. Amazon Kendra GenAI Index, which provides 40+ pre-built connectors with native ACL support",
+      "D. Amazon Q Business configured with custom Lambda data source sync functions"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because Amazon Kendra GenAI Index provides 40+ pre-built connectors for enterprise data sources and natively enforces ACLs from source systems, ensuring users only see search results they are authorized to access. This is the purpose-built solution for enterprise search with ACL enforcement. A is wrong because Bedrock Knowledge Bases supports a limited number of data sources (S3, web crawlers, Confluence, SharePoint, Salesforce, and a few others) and does not natively enforce source-system ACLs at the user level. B is wrong because OpenSearch does not have pre-built connectors for 40+ enterprise data sources, and implementing ACL synchronization from each source to OpenSearch row-level security would require massive custom engineering. D is wrong because while Q Business does support multiple connectors and ACLs, it is designed for organizational Q&A assistants, not for building custom GenAI search applications with programmatic API access.",
+    "examSkills": ["1.1.2", "1.1.3"],
+    "tags": ["kendra", "genai-index", "acl", "enterprise-search", "connectors"]
+  },
+  {
+    "id": "d1-l3-q3",
+    "domain": 1,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A GenAI application processes 10,000 daily requests. Analysis shows 60% of queries are near-duplicates, and every request includes a 2,000-token system prompt that rarely changes. Bedrock costs are high. Which combination of caching strategies would MOST reduce costs?",
+    "options": [
+      "A. Enable Amazon Bedrock prompt caching alone, which caches both the system prompt and similar query results",
+      "B. Implement a semantic cache using Amazon ElastiCache (storing query embeddings and responses) for duplicate queries, AND enable Bedrock prompt caching for the static system prompt",
+      "C. Use Amazon CloudFront caching in front of the Bedrock API to cache identical HTTP requests",
+      "D. Store all previous responses in DynamoDB and do an exact-match lookup before calling Bedrock"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it addresses both cost drivers: (1) A semantic cache in ElastiCache uses embedding similarity to match near-duplicate queries (not just exact matches), returning cached responses without calling Bedrock. (2) Bedrock prompt caching caches the static 2,000-token system prompt prefix across requests, reducing per-request token costs. Together they tackle the 60% duplicate queries and the repeated system prompt. A is wrong because Bedrock prompt caching only caches prompt prefixes (like system prompts) to reduce input token costs -- it does not cache query results or match similar queries. C is wrong because CloudFront caches based on exact HTTP request matching, which would not catch semantically similar but textually different queries (the 60% near-duplicates). D is wrong because DynamoDB exact-match lookup would miss near-duplicate queries that are semantically similar but worded differently, capturing far fewer than 60% of duplicates.",
+    "examSkills": ["1.2.1", "1.2.2"],
+    "tags": ["caching", "semantic-cache", "elasticache", "prompt-caching", "cost-optimization"]
+  },
+  {
+    "id": "d1-l3-q4",
+    "domain": 1,
+    "level": 3,
+    "type": "matching",
+    "integrationDomains": [],
+    "question": "Match each vector store option to the scenario where it is the BEST choice.",
+    "leftItems": [
+      "Amazon Bedrock Knowledge Base managed vector store",
+      "Amazon OpenSearch Service with k-NN plugin",
+      "Amazon Aurora PostgreSQL with pgvector",
+      "Amazon Kendra GenAI Index"
+    ],
+    "rightItems": [
+      "Startup needing least operational overhead for a simple RAG prototype",
+      "E-commerce platform requiring hybrid BM25 keyword + semantic vector search",
+      "Company with existing Aurora PostgreSQL cluster wanting to add vector search",
+      "Enterprise with 40+ data sources and mandatory user-level ACL enforcement"
+    ],
+    "correctPairs": [[0, 0], [1, 1], [2, 2], [3, 3]],
+    "explanation": "Bedrock KB managed vector store matches the startup scenario because it requires zero provisioning -- AWS manages everything, giving the least operational overhead. OpenSearch with k-NN matches the e-commerce scenario because it uniquely supports hybrid search combining BM25 keyword scoring with k-NN vector similarity. Aurora PostgreSQL with pgvector matches the existing Aurora scenario because adding the pgvector extension to an existing cluster avoids data migration and leverages existing infrastructure. Kendra GenAI Index matches the enterprise ACL scenario because it provides 40+ pre-built connectors with native ACL enforcement from source systems.",
+    "examSkills": ["1.1.2", "1.2.1"],
+    "tags": ["vector-store", "opensearch", "aurora", "kendra", "bedrock-kb"]
+  },
+  {
+    "id": "d2-l1-q1",
+    "domain": 2,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A solutions architect is evaluating Amazon Bedrock Agents and Amazon Bedrock AgentCore for building an AI agent. What is a KEY difference between these two services?",
+    "options": [
+      "A. Bedrock Agents support tool use, while AgentCore does not support tool calling",
+      "B. Bedrock Agents is a fully managed, AWS-native agent framework, while AgentCore allows you to deploy agents built with any framework (LangChain, CrewAI, Strands, etc.) and any model",
+      "C. AgentCore is a legacy service that is being replaced by Bedrock Agents",
+      "D. Bedrock Agents run on Lambda, while AgentCore runs exclusively on ECS Fargate"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Bedrock Agents is a fully managed agent service tightly integrated with AWS and Bedrock models, while AgentCore is a runtime platform that lets you deploy agents built with any framework (LangChain, CrewAI, Strands, custom code) using any model (Bedrock, SageMaker, third-party). A is wrong because both Bedrock Agents and AgentCore support tool use and tool calling -- AgentCore agents can invoke tools via MCP servers and action groups. C is wrong because AgentCore is a newer service that complements Bedrock Agents, not a legacy service. D is wrong because neither statement is accurate about the underlying compute -- Bedrock Agents is fully managed (compute is abstracted), and AgentCore Runtime supports multiple deployment options.",
+    "examSkills": ["2.1.1"],
+    "tags": ["bedrock-agents", "agentcore", "agent-frameworks"]
+  },
+  {
+    "id": "d2-l1-q2",
+    "domain": 2,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "An enterprise needs to ensure that its AI agents can only access specific APIs and data sources, and cannot perform unauthorized actions like deleting production data. Which AgentCore capability enforces these restrictions?",
+    "options": [
+      "A. AgentCore Gateway, which routes requests and blocks unauthorized API calls",
+      "B. AgentCore Policy, which uses Cedar-based authorization rules to control what agents can do",
+      "C. Amazon Bedrock Guardrails applied to the agent's model invocations",
+      "D. IAM service control policies (SCPs) applied to the agent's execution role"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because AgentCore Policy uses Cedar, an open-source policy language developed by AWS, to define fine-grained authorization rules that control what actions agents can perform, what resources they can access, and under what conditions. A is wrong because AgentCore Gateway handles API management, rate limiting, and observability for agent-to-model communication -- it does not enforce action-level authorization policies. C is wrong because Bedrock Guardrails filter model input/output content (PII, toxicity, denied topics) but do not control which APIs or data sources an agent can access. D is wrong because IAM SCPs control what AWS API actions a principal can perform, not the business-logic-level actions an AI agent takes within its application context.",
+    "examSkills": ["2.1.1", "2.1.2"],
+    "tags": ["agentcore", "policy", "cedar", "authorization"]
+  },
+  {
+    "id": "d2-l1-q3",
+    "domain": 2,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company wants to deploy an internal AI-powered search assistant that can answer employee questions by searching across company wikis, Slack, and email. The assistant must respect existing user permissions so employees only see content they already have access to. Which AWS service is BEST suited?",
+    "options": [
+      "A. Amazon Bedrock Knowledge Bases with connectors for each data source",
+      "B. Amazon Kendra with enterprise connectors and ACL-based filtering",
+      "C. Amazon Q Business, which provides pre-built enterprise connectors with native permission-aware search",
+      "D. A custom RAG application using Bedrock Agents with Lambda action groups for each data source"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because Amazon Q Business is purpose-built for internal enterprise search assistants, providing pre-built connectors for enterprise data sources (wikis, Slack, email, SharePoint, etc.) with native permission-aware search that respects existing user access controls. A is wrong because Bedrock Knowledge Bases has limited enterprise connectors and does not natively enforce user-level permissions from source systems like Slack or email. B is wrong because while Kendra supports enterprise connectors and ACLs, Q Business is the higher-level service specifically designed for enterprise assistant use cases and includes a complete chat interface and user management. D is wrong because building custom Lambda action groups for each data source requires significant engineering effort and custom ACL implementation, whereas Q Business provides this out of the box.",
+    "examSkills": ["2.1.1"],
+    "tags": ["q-business", "enterprise-search", "permissions", "assistant"]
+  },
+  {
+    "id": "d2-l1-q4",
+    "domain": 2,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A data science team wants their AI agent to be able to run Python code dynamically -- for example, performing calculations, generating charts, or processing CSV data -- in a secure sandbox. Which capability should they use?",
+    "options": [
+      "A. Amazon Bedrock Agent with a Lambda action group that runs Python scripts",
+      "B. AgentCore Code Interpreter, which provides a managed sandboxed environment for executing code",
+      "C. Amazon SageMaker Processing jobs triggered by the agent for each code execution",
+      "D. AWS Step Functions with a Lambda task that executes arbitrary Python"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because AgentCore Code Interpreter provides a managed, sandboxed runtime environment specifically designed for AI agents to execute Python code dynamically. It handles environment isolation, security, and resource management automatically. A is wrong because while Lambda can run Python, action groups require pre-defined Lambda functions -- they are not designed for dynamic, arbitrary code execution generated by the model at runtime. C is wrong because SageMaker Processing jobs are designed for batch data processing and have cold start times of minutes, making them impractical for interactive agent code execution. D is wrong because Step Functions with Lambda requires pre-defined function code and workflow definitions, not dynamic code execution generated by the agent.",
+    "examSkills": ["2.1.1", "2.1.2"],
+    "tags": ["agentcore", "code-interpreter", "sandbox", "python"]
+  },
+  {
+    "id": "d2-l1-q5",
+    "domain": 2,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company uses a Step Functions workflow to orchestrate calls to Amazon Bedrock. Occasionally, the Bedrock API returns throttling errors or transient failures. The team wants the workflow to stop calling Bedrock temporarily after repeated failures and then gradually resume. Which Step Functions pattern should they implement?",
+    "options": [
+      "A. A retry policy with exponential backoff on the Bedrock task state",
+      "B. A circuit breaker pattern that tracks failure counts and opens the circuit to block calls after a threshold, then gradually allows calls again",
+      "C. A dead letter queue that captures failed requests for manual replay",
+      "D. A parallel state that sends the same request to multiple regions simultaneously"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because the circuit breaker pattern is designed to stop calling a failing service after repeated failures (circuit opens), wait for a cooldown period, and then gradually resume calls (half-open state). This prevents cascading failures and allows the service to recover. A is wrong because retry with exponential backoff retries individual failures but does not stop calling the service after repeated failures -- it keeps retrying each request independently. C is wrong because a dead letter queue captures failed messages for later processing but does not implement the 'stop calling and gradually resume' behavior described. D is wrong because parallel calls to multiple regions is a redundancy pattern, not a failure management pattern that stops and resumes calls based on failure thresholds.",
+    "examSkills": ["2.2.1", "2.2.2"],
+    "tags": ["step-functions", "circuit-breaker", "resilience", "bedrock"]
+  },
+  {
+    "id": "d2-l2-q1",
+    "domain": 2,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A team wants to build an AI agent that runs custom Python tool scripts, maintains episodic memory of past interactions across sessions, and deploys on AWS. They prefer to use an open-source agent framework. Which combination of AWS services should they use?",
+    "options": [
+      "A. LangChain on Amazon ECS with Amazon DynamoDB for memory storage",
+      "B. Strands Agents SDK for the agent framework, deployed on AgentCore Runtime, with AgentCore Memory for episodic memory",
+      "C. Amazon Bedrock Agents with session state management and S3 for memory persistence",
+      "D. CrewAI on Amazon EC2 with Amazon ElastiCache Redis for conversation memory"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Strands Agents SDK is an open-source Python agent framework from AWS, AgentCore Runtime provides managed hosting for agents built with any framework, and AgentCore Memory provides built-in episodic memory that persists across sessions. This combination gives an open-source framework with managed deployment and memory. A is wrong because while LangChain on ECS would work, DynamoDB requires custom memory management code, and you lose the managed deployment and native memory capabilities of AgentCore. C is wrong because Bedrock Agents is a managed service, not an open-source framework -- the team specifically wants an open-source framework. D is wrong because EC2 requires infrastructure management, and ElastiCache Redis requires custom memory serialization/retrieval code rather than providing native episodic memory.",
+    "examSkills": ["2.1.1", "2.1.2"],
+    "tags": ["strands", "agentcore", "memory", "episodic", "open-source"]
+  },
+  {
+    "id": "d2-l2-q2",
+    "domain": 2,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A team is deploying an MCP (Model Context Protocol) server that needs to maintain persistent database connections and handle concurrent WebSocket sessions from multiple agents. The server has a startup time of 30 seconds to initialize its connection pool. Which hosting approach is BEST?",
+    "options": [
+      "A. AWS Lambda with provisioned concurrency to keep instances warm",
+      "B. Amazon ECS or ECS Fargate with a long-running service that maintains persistent connections",
+      "C. Amazon API Gateway WebSocket API backed by Lambda functions",
+      "D. AWS App Runner with automatic scaling enabled"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because ECS/Fargate provides long-running containers that maintain persistent database connections and WebSocket sessions without cold starts. The 30-second initialization happens once at container start, and the connection pool persists for the lifetime of the service. A is wrong because Lambda has a maximum execution time of 15 minutes and is designed for stateless, short-lived invocations -- persistent database connections are re-established on each cold start, and provisioned concurrency helps but does not solve WebSocket session persistence. C is wrong because API Gateway WebSocket API with Lambda still uses stateless Lambda for message handling, requiring external state management for database connections and session state. D is wrong because App Runner is designed for HTTP request-response patterns and does not natively support WebSocket connections required by MCP servers.",
+    "examSkills": ["2.1.2", "2.2.1"],
+    "tags": ["mcp", "ecs", "persistent-connections", "websocket"]
+  },
+  {
+    "id": "d2-l2-q3",
+    "domain": 2,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company handles 10,000 daily AI requests. Analysis shows 70% are simple tasks (FAQ answers, classification), 25% are moderate (summarization, extraction), and 5% are complex (multi-step reasoning). How should they optimize costs while maintaining quality?",
+    "options": [
+      "A. Use Claude Sonnet for all requests to ensure consistent quality across all task types",
+      "B. Implement model cascading: route simple tasks to Amazon Nova Micro, moderate tasks to Amazon Nova Pro, and complex tasks to Claude Sonnet",
+      "C. Use Amazon Nova Micro for all requests and add retry logic with a larger model if quality is insufficient",
+      "D. Deploy a single fine-tuned small model on SageMaker that handles all task types"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because model cascading routes requests to the most cost-effective model capable of handling each complexity level. Nova Micro handles the 70% simple tasks at the lowest cost, Nova Pro handles moderate tasks with good quality-to-cost ratio, and Claude Sonnet handles the 5% complex tasks requiring advanced reasoning. This optimizes the overall cost while maintaining quality. A is wrong because using Sonnet for all 10,000 requests is needlessly expensive -- 70% of tasks are simple FAQ/classification that a much cheaper model handles equally well. C is wrong because using the weakest model for everything and retrying with a larger model wastes tokens on failed attempts, increases latency for moderate/complex tasks, and the retry logic adds engineering complexity. D is wrong because a single fine-tuned small model is unlikely to handle the full range from simple classification to complex multi-step reasoning, and fine-tuning requires ongoing maintenance as tasks evolve.",
+    "examSkills": ["2.2.1", "2.2.2"],
+    "tags": ["model-cascading", "cost-optimization", "nova", "routing"]
+  },
+  {
+    "id": "d2-l2-q4",
+    "domain": 2,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A team wants to automatically test prompt templates for quality regressions before deploying them to production. They need to run evaluation datasets against updated prompts and block deployment if quality scores drop. Which approach should they use?",
+    "options": [
+      "A. Use Amazon CloudWatch alarms to monitor production response quality and roll back if metrics drop",
+      "B. Integrate AWS CodePipeline with Amazon Bedrock Evaluations to run automated prompt evaluations as a pipeline gate before deployment",
+      "C. Have human reviewers manually test each prompt change in a staging environment",
+      "D. Use Amazon Bedrock Guardrails to score prompt quality and block low-quality prompts"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because CodePipeline can include a stage that invokes Bedrock Evaluations with a test dataset, scores the prompt against quality metrics (accuracy, relevance, groundedness), and blocks the deployment if scores drop below a threshold. This creates an automated CI/CD gate for prompt quality. A is wrong because CloudWatch monitoring detects issues in production after deployment, not before -- this means bad prompts have already impacted users. C is wrong because manual review does not scale, introduces delays, and is inconsistent -- the question specifically asks for automated testing. D is wrong because Guardrails filters content for safety (PII, toxicity, denied topics) -- it does not evaluate prompt quality metrics like accuracy or relevance.",
+    "examSkills": ["2.2.1", "2.2.2"],
+    "tags": ["codepipeline", "bedrock-evaluations", "ci-cd", "prompt-testing"]
+  },
+  {
+    "id": "d2-l2-q5",
+    "domain": 2,
+    "level": 2,
+    "type": "ordering",
+    "integrationDomains": [],
+    "question": "Place the following steps of an AI agent's ReAct (Reasoning + Acting) loop in the correct order, from receiving a user request to returning the final response.",
+    "items": [
+      "Receive user request and conversation context",
+      "Plan the approach by reasoning about the task",
+      "Select the appropriate tool or action to execute",
+      "Execute the tool and collect the result",
+      "Observe and interpret the tool output",
+      "Decide whether the task is complete or another action is needed",
+      "Return the final synthesized response to the user"
+    ],
+    "correctOrder": [1, 2, 3, 4, 5, 6, 7],
+    "explanation": "The ReAct agent loop follows this sequence: (1) Receive the user request and any conversation context. (2) Plan by reasoning about what needs to be done to fulfill the request. (3) Select the appropriate tool or action from available options. (4) Execute the chosen tool and collect the result. (5) Observe and interpret the tool output to understand what was returned. (6) Decide whether the task is complete or if another tool call is needed (if not complete, loop back to step 2). (7) Once the task is complete, return the final synthesized response to the user. Steps 2-6 may repeat multiple times as the agent iteratively works toward completing complex tasks.",
+    "examSkills": ["2.1.1", "2.1.2"],
+    "tags": ["agent-loop", "react", "reasoning", "tool-use"]
+  },
+  {
+    "id": "d2-l3-q1",
+    "domain": 2,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A large enterprise needs to build an AI assistant that searches across SharePoint and Confluence. Documents in both systems have complex permission structures -- some pages are restricted to specific AD groups, and permissions change frequently. Which approach BEST handles this with the least custom engineering?",
+    "options": [
+      "A. Build a custom RAG pipeline with Bedrock Knowledge Bases, syncing SharePoint and Confluence via Lambda, and implement a custom permission filter at query time",
+      "B. Use Amazon Q Business with its pre-built SharePoint and Confluence connectors, which automatically sync and enforce document-level ACLs",
+      "C. Use Amazon Kendra to index both sources, then build a custom identity mapping layer that translates AD groups to Kendra ACL tokens",
+      "D. Export all documents to S3 and use Bedrock Knowledge Bases with metadata filters to simulate permissions"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Amazon Q Business provides pre-built connectors for SharePoint and Confluence that automatically crawl content, sync permissions from source systems (including AD group mappings), and enforce document-level ACLs at query time -- all with no custom engineering. A is wrong because building custom Lambda sync jobs for two data sources and implementing a custom permission filter requires significant engineering effort, ongoing maintenance, and careful security validation. C is wrong because while Kendra does support SharePoint and Confluence connectors with ACL, building a custom identity mapping layer adds engineering complexity that Q Business handles natively. D is wrong because exporting documents to S3 loses all permission metadata, and simulating permissions through metadata filters is fragile, error-prone, and does not automatically update when source permissions change.",
+    "examSkills": ["2.1.1", "2.2.1"],
+    "tags": ["q-business", "sharepoint", "confluence", "acl", "enterprise"]
+  },
+  {
+    "id": "d2-l3-q2",
+    "domain": 2,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A financial services company has strict data residency requirements: all AI inference must run within their on-premises data center due to regulatory mandates. No data can traverse the public internet to reach AWS regions. Which AWS solution allows them to run Bedrock-compatible AI workloads on premises?",
+    "options": [
+      "A. AWS Wavelength zones deployed at the edge of their telecom network",
+      "B. AWS Lambda@Edge functions deployed to CloudFront edge locations",
+      "C. AWS Outposts, which extends AWS infrastructure and services to the customer's on-premises data center",
+      "D. Amazon Bedrock with a VPC endpoint and AWS Direct Connect to keep traffic off the public internet"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because AWS Outposts physically deploys AWS-managed infrastructure in the customer's data center, allowing AI inference workloads to run entirely on premises. This meets strict data residency requirements where data cannot leave the physical premises. A is wrong because Wavelength zones are deployed at telecom provider edge locations (5G networks), not in the customer's own data center -- data still leaves the customer's premises. B is wrong because Lambda@Edge runs at CloudFront edge locations (AWS-managed CDN points of presence), which are not in the customer's data center. D is wrong because Direct Connect provides a private network connection to AWS regions, but inference still runs in the AWS region -- the data leaves the customer's premises and is processed in an AWS data center, violating the data residency requirement.",
+    "examSkills": ["2.2.1", "2.2.2"],
+    "tags": ["outposts", "data-residency", "on-premises", "compliance"]
+  },
+  {
+    "id": "d1d2-l2-q1",
+    "domain": 1,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [1, 2],
+    "question": "A company is building a customer service application that needs to answer questions using internal documentation (RAG) AND take actions like creating support tickets via an external API. Which architecture combines both retrieval and action capabilities?",
+    "options": [
+      "A. Amazon Bedrock Knowledge Base connected directly to the external ticketing API via a custom connector",
+      "B. Amazon Bedrock Agent configured with a Knowledge Base for RAG retrieval AND Lambda action groups for the external ticketing API",
+      "C. Two separate applications -- one Bedrock KB for search and one Lambda function for ticketing -- orchestrated by the frontend",
+      "D. Amazon Q Business configured with both a document connector and an API plugin"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Bedrock Agents natively integrates with Knowledge Bases for RAG retrieval and supports Lambda action groups for executing external API calls. The agent autonomously decides when to search the KB versus when to call the ticketing API based on the user's intent. A is wrong because Bedrock Knowledge Bases is a retrieval system only -- it cannot make external API calls or take actions. There is no 'custom connector' for executing actions. C is wrong because orchestrating two separate systems from the frontend pushes agent logic to the client, loses the ability for the AI to autonomously decide between search and action, and creates a brittle architecture. D is wrong because Q Business is designed for enterprise internal search and Q&A, not for building custom customer-facing applications that take actions via external APIs.",
+    "examSkills": ["1.1.2", "2.1.1"],
+    "tags": ["bedrock-agents", "knowledge-base", "action-groups", "lambda", "rag"]
+  },
+  {
+    "id": "d1d2-l3-q1",
+    "domain": 2,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [1, 2],
+    "question": "A large organization has multiple teams building AI agents using different frameworks (LangChain, CrewAI, and custom Python). They need a unified platform that provides: (1) managed deployment for all agent types, (2) centralized API management and observability, and (3) consistent authorization policies. Which architecture achieves this?",
+    "options": [
+      "A. Deploy all agents on Amazon ECS with API Gateway for routing and IAM for authorization",
+      "B. Use AgentCore Runtime for managed deployment, AgentCore Gateway for centralized API management and observability, and AgentCore Policy for Cedar-based authorization",
+      "C. Migrate all agents to Amazon Bedrock Agents so they share a common framework and management plane",
+      "D. Use AWS App Runner for deployment, Amazon CloudWatch for observability, and AWS WAF for API protection"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because AgentCore provides a complete platform: Runtime hosts agents built with any framework, Gateway provides centralized API management with rate limiting and observability, and Policy enforces consistent Cedar-based authorization rules across all agents. This is the purpose-built solution for multi-framework agent management. A is wrong because ECS with API Gateway and IAM requires significant custom engineering for agent-specific observability (tracing tool calls, token usage, agent reasoning), and IAM cannot express fine-grained agent action policies the way Cedar can. C is wrong because migrating all agents to Bedrock Agents requires rewriting agents from LangChain, CrewAI, and custom frameworks into the Bedrock Agent format, which is impractical for a multi-team organization. D is wrong because App Runner is an HTTP service host without agent-specific features, CloudWatch lacks native agent observability (tool call tracing, agent loop visualization), and WAF protects against web attacks, not agent authorization.",
+    "examSkills": ["1.2.1", "2.1.1", "2.1.2"],
+    "tags": ["agentcore", "runtime", "gateway", "policy", "multi-framework"]
+  },
+  {
+    "id": "d1d2-l3-q2",
+    "domain": 2,
+    "level": 3,
+    "type": "matching",
+    "integrationDomains": [1, 2],
+    "question": "Match each architecture pattern to the AWS service or approach that BEST implements it.",
+    "leftItems": [
+      "Circuit breaker for FM API resilience",
+      "Model cascading for cost optimization",
+      "Semantic caching for repeated queries",
+      "Human-in-the-loop approval for agent actions"
+    ],
+    "rightItems": [
+      "AWS Step Functions with failure tracking and circuit state management",
+      "AWS Lambda routing function that directs requests to Nova Micro, Nova Pro, or Sonnet based on complexity",
+      "Amazon ElastiCache storing query embeddings and cached responses for similarity matching",
+      "AWS Step Functions with a callback task that pauses execution until a human approves"
+    ],
+    "correctPairs": [[0, 0], [1, 1], [2, 2], [3, 3]],
+    "explanation": "Circuit breaker maps to Step Functions because Step Functions can track failure counts in state, open the circuit after a threshold, and use Wait states for cooldown before gradually resuming calls. Model cascading maps to Lambda routing because a Lambda function can classify request complexity and route to the appropriate model (Nova Micro for simple, Nova Pro for moderate, Sonnet for complex). Semantic caching maps to ElastiCache because ElastiCache can store vector embeddings as keys and cached responses as values, enabling fast similarity-based lookup for near-duplicate queries. Human-in-the-loop maps to Step Functions callback tasks because the callback pattern pauses workflow execution, sends a token to a human reviewer, and only resumes when the human approves or rejects the action.",
+    "examSkills": ["1.2.1", "2.2.1", "2.2.2"],
+    "tags": ["circuit-breaker", "model-cascading", "semantic-cache", "human-in-loop", "step-functions", "lambda", "elasticache"]
+  }
+]

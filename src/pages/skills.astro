@@ -1,0 +1,30 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SkillsBrowser from "../components/skills/SkillsBrowser";
+import examSkills from "../data/exam-skills.json";
+import { DOMAINS } from "../lib/constants";
+
+const totalSkills = (examSkills as any[]).length;
+const byDomain: Record<number, number> = {};
+for (const s of examSkills as any[]) {
+	byDomain[s.domain] = (byDomain[s.domain] ?? 0) + 1;
+}
+---
+
+<Layout title="Exam Skills">
+	<div class="page-container py-8">
+		<h1 class="heading-1 mb-2">Exam Skills Review</h1>
+		<p class="body-text mb-8">
+			{totalSkills} skills across 5 domains. For each skill, write your understanding, then reveal the reference answer.
+		</p>
+
+		{totalSkills > 0 ? (
+			<SkillsBrowser client:load skills={examSkills as any} />
+		) : (
+			<div class="card-padded text-center py-12">
+				<div class="i-lucide-loader w-8 h-8 text-ink-muted mx-auto mb-4 animate-spin" />
+				<p class="body-text">Skills data is being generated...</p>
+			</div>
+		)}
+	</div>
+</Layout>

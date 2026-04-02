@@ -1,0 +1,61 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PracticeHub from "../components/practice/PracticeHub";
+import { DOMAINS } from "../lib/constants";
+
+// Import both question banks
+let allQuestions: any[] = [];
+try {
+	const d1d2 = await import("../data/practice-d1d2.json");
+	allQuestions = allQuestions.concat(d1d2.default ?? d1d2);
+} catch {}
+try {
+	const d3d4d5 = await import("../data/practice-d3d4d5.json");
+	allQuestions = allQuestions.concat(d3d4d5.default ?? d3d4d5);
+} catch {}
+
+// Stats
+const totalQuestions = allQuestions.length;
+const byLevel = { 1: 0, 2: 0, 3: 0 };
+const byDomain: Record<number, number> = {};
+const integrationCount = allQuestions.filter((q: any) => q.integrationDomains?.length > 0).length;
+
+for (const q of allQuestions) {
+	byLevel[q.level as 1 | 2 | 3] = (byLevel[q.level as 1 | 2 | 3] ?? 0) + 1;
+	byDomain[q.domain] = (byDomain[q.domain] ?? 0) + 1;
+}
+---
+
+<Layout title="Practice Exams">
+	<div class="page-container py-8">
+		<div class="flex items-center justify-between mb-2">
+			<h1 class="heading-1">Practice Exams</h1>
+		</div>
+		<p class="body-text mb-8">
+			{totalQuestions} practice questions across 5 domains and 3 difficulty levels.
+			Includes {integrationCount} cross-domain integration questions.
+		</p>
+
+		<!-- Quick stats -->
+		<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+			<div class="card-padded text-center">
+				<div class="text-3xl font-bold text-primary-500 font-display">{totalQuestions}</div>
+				<div class="caption">Total Questions</div>
+			</div>
+			<div class="card-padded text-center">
+				<div class="text-3xl font-bold text-primary-600 font-display">{byLevel[1]}</div>
+				<div class="caption">L1: Foundation</div>
+			</div>
+			<div class="card-padded text-center">
+				<div class="text-3xl font-bold text-accent-gold font-display">{byLevel[2]}</div>
+				<div class="caption">L2: Applied</div>
+			</div>
+			<div class="card-padded text-center">
+				<div class="text-3xl font-bold text-accent-coral font-display">{byLevel[3]}</div>
+				<div class="caption">L3: Expert</div>
+			</div>
+		</div>
+
+		<PracticeHub client:load questions={allQuestions as any} />
+	</div>
+</Layout>

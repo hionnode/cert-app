@@ -9,7 +9,18 @@ interface TodayPlanProps {
 export default function TodayPlan({ days }: TodayPlanProps) {
 	const { tasksCompleted, lastVisitedDay } = useProgress();
 	const day = days.find((d) => d.number === lastVisitedDay) ?? days[0];
-	if (!day) return null;
+	if (!day || !days.length) {
+		return (
+			<div className="card-padded animate-pulse">
+				<div className="h-4 bg-surface-2 rounded w-1/3 mb-3" />
+				<div className="h-6 bg-surface-2 rounded w-2/3 mb-4" />
+				<div className="space-y-2">
+					<div className="h-4 bg-surface-2 rounded w-full" />
+					<div className="h-4 bg-surface-2 rounded w-5/6" />
+				</div>
+			</div>
+		);
+	}
 
 	const doneTasks = day.tasks.filter((t) => tasksCompleted[t.id]).length;
 	const allDone = doneTasks === day.tasks.length && day.tasks.length > 0;

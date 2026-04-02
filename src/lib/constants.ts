@@ -97,8 +97,10 @@ export const EXAM_INFO = {
 
 export const NAV_ITEMS = [
 	{ label: "Dashboard", href: "/", icon: "i-lucide-layout-dashboard" },
+	{ label: "Overview", href: "/overview", icon: "i-lucide-info" },
 	{ label: "Study Plan", href: "/plan", icon: "i-lucide-calendar" },
 	{ label: "Scenarios", href: "/scenarios", icon: "i-lucide-lightbulb" },
+	{ label: "Skills", href: "/skills", icon: "i-lucide-shield-check" },
 	{ label: "Tables", href: "/comparisons", icon: "i-lucide-table-2" },
 	{ label: "Resources", href: "/resources", icon: "i-lucide-library" },
 ] as const;
@@ -107,6 +109,7 @@ export const SECONDARY_NAV = [
 	{ label: "Rules", href: "/rules", icon: "i-lucide-list-checks" },
 	{ label: "Architectures", href: "/architectures", icon: "i-lucide-git-branch" },
 	{ label: "Drills", href: "/drills", icon: "i-lucide-dumbbell" },
+	{ label: "Practice", href: "/practice", icon: "i-lucide-brain" },
 	{ label: "Exams", href: "/exams", icon: "i-lucide-trophy" },
 	{ label: "Services", href: "/services", icon: "i-lucide-server" },
 ] as const;

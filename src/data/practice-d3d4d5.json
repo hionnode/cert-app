@@ -1,0 +1,1171 @@
+[
+  {
+    "id": "d3-l1-q1",
+    "domain": 3,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company uses Amazon Bedrock Guardrails to filter responses from a customer-facing chatbot. They want the chatbot to still provide helpful responses even when PII is detected, rather than refusing to respond entirely. Which Guardrails PII action should they configure?",
+    "options": [
+      "A. Set all PII entity types to BLOCK, which replaces PII with placeholder text while preserving the rest of the response",
+      "B. Set all PII entity types to ANONYMIZE, which masks detected PII with placeholder text while allowing the response through",
+      "C. Set all PII entity types to REDACT, which removes PII tokens and returns a shortened response",
+      "D. Set all PII entity types to FILTER, which sends the response through Amazon Comprehend for PII removal before returning"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because ANONYMIZE masks PII (e.g., replaces an email with [EMAIL]) while still allowing the response to reach the user, keeping the chatbot helpful. A is wrong because BLOCK rejects the entire response when PII is detected -- it does not replace PII with placeholders. C is wrong because REDACT is not a valid Guardrails PII action; the two options are BLOCK and ANONYMIZE. D is wrong because FILTER is not a valid Guardrails PII action, and Guardrails handles PII natively without routing through Comprehend.",
+    "examSkills": ["3.1.1"],
+    "tags": ["guardrails", "pii", "anonymize"]
+  },
+  {
+    "id": "d3-l1-q2",
+    "domain": 3,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A security team is concerned that adversarial users might craft inputs designed to override the system prompt and make the foundation model ignore its safety instructions. Which Amazon Bedrock Guardrails feature specifically addresses this threat?",
+    "options": [
+      "A. Content filters with HIGH strength on all six categories",
+      "B. Denied topics configured with example jailbreak phrases",
+      "C. Prompt Attack filter, which is configured separately from content filters",
+      "D. Word filters with a custom blocklist of known injection phrases"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because the Prompt Attack filter is a dedicated Guardrails component specifically designed to detect prompt injection and jailbreak attempts. It is configured separately from content filters. A is wrong because content filters detect harmful content categories (violence, hate, etc.) but are not designed to detect prompt injection techniques. B is wrong because denied topics block specific subjects but do not detect the manipulation technique of prompt injection. D is wrong because word filters do exact-match blocking on specific words and cannot detect the sophisticated phrasing patterns used in prompt injection attacks.",
+    "examSkills": ["3.1.1", "3.1.2"],
+    "tags": ["guardrails", "prompt-injection", "prompt-attack"]
+  },
+  {
+    "id": "d3-l1-q3",
+    "domain": 3,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company wants to ensure that only the data science team can invoke Claude models on Amazon Bedrock, while the marketing team can only use Amazon Nova models. How should they enforce this restriction?",
+    "options": [
+      "A. Create separate Bedrock Guardrails for each team that block requests to unauthorized models",
+      "B. Configure IAM policies for each team's role using the bedrock:ModelId condition key to restrict which models can be invoked",
+      "C. Set up Amazon Bedrock model access management to assign models to specific IAM users",
+      "D. Create separate VPC endpoints for each team, each configured to only route to specific models"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because IAM policies with the bedrock:ModelId condition key allow granular control over which foundation models each IAM role can invoke. This is the AWS-recommended approach for model-level access control. A is wrong because Guardrails filter content, not access control -- they cannot restrict which models a user calls. C is wrong because Bedrock model access management controls which models are enabled in an account, not per-team restrictions. D is wrong because VPC endpoints control network routing, not model-level authorization.",
+    "examSkills": ["3.2.1", "3.2.4"],
+    "tags": ["iam", "model-access", "condition-key"]
+  },
+  {
+    "id": "d3-l1-q4",
+    "domain": 3,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company stores sensitive documents in Amazon S3 that will be ingested into a Bedrock Knowledge Base. Before ingestion, they need to identify which documents contain personally identifiable information (PII) so they can remediate the data. Which AWS service should they use?",
+    "options": [
+      "A. Amazon Bedrock Guardrails PII filter configured on the Knowledge Base",
+      "B. Amazon Comprehend PII detection job on the S3 bucket",
+      "C. Amazon Macie to scan the S3 bucket for PII",
+      "D. AWS Glue sensitive data detection transforms"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because Amazon Macie is specifically designed to discover and classify sensitive data, including PII, in S3 buckets. It runs before ingestion to identify documents that need remediation. A is wrong because Guardrails PII filters operate at inference time on model inputs/outputs, not on stored documents before ingestion. B is wrong because while Comprehend can detect PII in text, Macie is the purpose-built service for discovering PII across S3 data at scale before pipeline ingestion. D is wrong because Glue sensitive data detection is designed for ETL pipeline data quality, not for pre-ingestion PII discovery in document stores.",
+    "examSkills": ["3.1.2", "3.2.3"],
+    "tags": ["macie", "pii", "s3", "pre-ingestion"]
+  },
+  {
+    "id": "d3-l1-q5",
+    "domain": 3,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A data engineering team is building a GenAI pipeline that requires different teams to access only specific columns, rows, or cells of a shared data lake. Which AWS service provides this level of granular data access control?",
+    "options": [
+      "A. Amazon S3 bucket policies with prefix-based access control",
+      "B. AWS Lake Formation with column-level, row-level, and cell-level security",
+      "C. AWS IAM policies with S3 object-level permissions",
+      "D. Amazon Bedrock Knowledge Base metadata filtering"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because AWS Lake Formation provides granular data access control at the column, row, and cell level for data lake resources. This is the AWS-recommended service for fine-grained data governance in analytics and GenAI pipelines. A is wrong because S3 bucket policies only support prefix-based (folder-level) access, not column/row/cell-level permissions on structured data. C is wrong because IAM policies on S3 control object-level access, not column/row/cell-level access within datasets. D is wrong because KB metadata filtering controls which chunks are returned during retrieval, not the underlying data access permissions.",
+    "examSkills": ["3.2.3"],
+    "tags": ["lake-formation", "data-governance", "access-control"]
+  },
+  {
+    "id": "d3-l1-q6",
+    "domain": 3,
+    "level": 1,
+    "type": "matching",
+    "integrationDomains": [],
+    "question": "Match each Amazon Bedrock Guardrails component to the type of content it is designed to detect or verify.",
+    "leftItems": [
+      "Content filter",
+      "Contextual grounding",
+      "Automated Reasoning",
+      "PII filter",
+      "Prompt Attack"
+    ],
+    "rightItems": [
+      "Harmful categories (violence, hate, sexual, etc.)",
+      "Hallucinations / ungrounded responses",
+      "Logical and mathematical correctness",
+      "Personal data (email, phone, SSN, etc.)",
+      "Jailbreak and prompt injection attempts"
+    ],
+    "correctMatches": {
+      "Content filter": "Harmful categories (violence, hate, sexual, etc.)",
+      "Contextual grounding": "Hallucinations / ungrounded responses",
+      "Automated Reasoning": "Logical and mathematical correctness",
+      "PII filter": "Personal data (email, phone, SSN, etc.)",
+      "Prompt Attack": "Jailbreak and prompt injection attempts"
+    },
+    "explanation": "Content filters detect harmful content across six categories (violence, hate, sexual, misconduct, insults, prompt attack) at configurable strength levels. Contextual grounding checks whether the FM response is faithful to retrieved source material, detecting hallucinations. Automated Reasoning uses formal logic verification to check mathematical and logical correctness against defined policy rules. PII filter detects personal data entities like email, phone, SSN, and name. Prompt Attack filter specifically detects jailbreak and prompt injection attempts and is configured separately from content filters.",
+    "examSkills": ["3.1.1", "3.1.3"],
+    "tags": ["guardrails", "filter-types", "matching"]
+  },
+  {
+    "id": "d3-l2-q1",
+    "domain": 3,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "An insurance company uses Amazon Bedrock to generate policy quotes that include premium calculations based on rate tables. The compliance team reports that some quotes contain mathematically incorrect premiums. Contextual grounding checks are already enabled but are not catching these errors. What should they implement?",
+    "options": [
+      "A. Increase the contextual grounding threshold from 0.7 to 0.95 to catch more inaccuracies",
+      "B. Enable Automated Reasoning checks in Guardrails with the rate tables uploaded as policy documents",
+      "C. Add a Lambda post-processing function that recalculates all premiums using the rate tables",
+      "D. Switch to a more capable foundation model that is better at mathematical reasoning"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Automated Reasoning checks use formal logic verification to validate that FM outputs are mathematically correct against defined policy rules. When rate tables are uploaded as policy documents, Automated Reasoning extracts formal rules and verifies calculations. A is wrong because contextual grounding checks whether content is present in the source material, not whether mathematical calculations are correct -- increasing the threshold will not help with computational errors. C is wrong because while a Lambda function could work, it requires custom code maintenance and does not leverage the built-in Guardrails capability designed for this purpose. D is wrong because even more capable models can make mathematical errors, and this approach does not provide verification guarantees.",
+    "examSkills": ["3.1.3", "3.1.4"],
+    "tags": ["automated-reasoning", "contextual-grounding", "verification"]
+  },
+  {
+    "id": "d3-l2-q2",
+    "domain": 3,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A customer service chatbot powered by Amazon Bedrock accidentally reveals a customer's email address and internal customer ID (format: CUST-12345678) in its response. The compliance team demands immediate remediation. What is the MOST comprehensive fix?",
+    "options": [
+      "A. Configure Guardrails PII filter with BLOCK action for email, phone, name, and address entities",
+      "B. Configure Guardrails PII filter with ANONYMIZE action for email, phone, name, and address entities, plus a custom regex pattern for the CUST-\\d{8} format",
+      "C. Add a Lambda function between the FM and the user that uses Amazon Comprehend to detect and remove PII from responses",
+      "D. Update the system prompt to instruct the model to never include personal information in responses"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because ANONYMIZE masks PII while keeping responses useful (critical for customer service), and custom regex handles the organization-specific customer ID format that built-in PII types would not catch. A is wrong because BLOCK rejects the entire response when PII is detected, which disrupts the customer service experience -- ANONYMIZE is appropriate here. C is wrong because it requires custom code, adds latency, and Comprehend does not natively detect custom ID formats like CUST-\\d{8} without additional configuration. D is wrong because system prompt instructions are unreliable for PII prevention -- the model may still include PII, especially if it appears in retrieved context.",
+    "examSkills": ["3.1.1", "3.1.2"],
+    "tags": ["guardrails", "pii", "anonymize", "custom-regex"]
+  },
+  {
+    "id": "d3-l2-q3",
+    "domain": 3,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A regulated financial institution wants to deploy Amazon Bedrock with the following requirements: (1) no data traversing the public internet, (2) complete audit trail for every model invocation, (3) encryption at rest with customer-managed keys, and (4) only approved models accessible per team. Which combination of services addresses ALL requirements?",
+    "options": [
+      "A. VPC endpoint for Bedrock + CloudTrail + AWS managed encryption + IAM policies with bedrock:ModelId condition key",
+      "B. VPC endpoint for Bedrock + CloudTrail + KMS customer-managed keys + IAM policies with bedrock:ModelId condition key + SCPs",
+      "C. AWS PrivateLink + CloudWatch Logs + KMS customer-managed keys + Bedrock model access management",
+      "D. VPN connection to Bedrock + CloudTrail + KMS customer-managed keys + Guardrails denied topics per team"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it addresses all four requirements: VPC endpoint (PrivateLink) keeps traffic off the public internet, CloudTrail provides API-level audit trail, KMS CMK provides customer-managed encryption at rest, IAM with bedrock:ModelId restricts model access per team, and SCPs enforce model restrictions at the organization level. A is wrong because AWS managed encryption does not satisfy the requirement for customer-managed keys. C is wrong because CloudWatch Logs alone is not a complete audit trail (CloudTrail is needed for API-level auditing), and Bedrock model access management controls account-level model availability, not per-team restrictions. D is wrong because VPN does not provide the same level of private connectivity as VPC endpoints for AWS services, and Guardrails denied topics filter content, not model access.",
+    "examSkills": ["3.2.1", "3.2.2", "3.2.3", "3.2.4", "3.2.5"],
+    "tags": ["vpc-endpoint", "cloudtrail", "kms", "iam", "scp"]
+  },
+  {
+    "id": "d3-l2-q4",
+    "domain": 3,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "An HR department deploys a resume screening agent on Amazon Bedrock. The legal team raises concerns about demographic bias in the agent's recommendations. Which combination of services provides the MOST comprehensive bias mitigation strategy?",
+    "options": [
+      "A. Configure Guardrails content filters at HIGH strength for all categories and add denied topics for demographic terms",
+      "B. Use SageMaker Clarify for bias analysis, create model cards, configure AgentCore Policy for human-in-the-loop on hiring decisions, and add Guardrails to block references to protected characteristics",
+      "C. Fine-tune the foundation model on a balanced dataset and add a disclaimer to all outputs stating the agent may have biases",
+      "D. Use Amazon Comprehend sentiment analysis to detect biased language and route flagged responses to human reviewers via A2I"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it provides defense-in-depth: SageMaker Clarify detects bias in model outputs across demographic groups, model cards document intended use and limitations, AgentCore Policy restricts the agent from making final decisions (enforcing human-in-the-loop), and Guardrails blocks references to protected characteristics. A is wrong because content filters detect harmful content categories but are not designed for bias detection or mitigation in hiring decisions. C is wrong because fine-tuning alone cannot guarantee bias elimination, and a disclaimer does not constitute a mitigation strategy. D is wrong because Comprehend sentiment analysis detects positive/negative sentiment, not demographic bias, and this approach lacks the governance layer (Policy) to prevent automated hiring decisions.",
+    "examSkills": ["3.3.1", "3.3.2", "3.3.3", "3.3.4", "3.4.1"],
+    "tags": ["clarify", "model-cards", "agentcore-policy", "bias", "responsible-ai"]
+  },
+  {
+    "id": "d3-l2-q5",
+    "domain": 3,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company wants to implement defense-in-depth for their GenAI application. User input flows through multiple layers before reaching the foundation model, and the response passes through multiple validation layers before reaching the user. Which architecture represents the correct layered security approach?",
+    "options": [
+      "A. API Gateway rate limiting -> Guardrails input filter -> FM -> Guardrails output filter -> Lambda response validation -> User",
+      "B. Comprehend pre-filter -> Guardrails input filter -> FM -> Guardrails output filter -> Lambda post-validation -> API Gateway response filter -> User",
+      "C. Guardrails input filter -> FM -> Content filter -> PII filter -> User",
+      "D. WAF -> API Gateway -> FM -> Guardrails output filter -> User"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it implements true defense-in-depth with multiple independent security layers: Comprehend pre-filters input for entity extraction and intent classification, Guardrails input filters check for prompt injection and harmful content, the FM generates the response, Guardrails output filters check for PII and grounding, Lambda post-validation applies custom business logic checks, and API Gateway applies final response filtering. A is wrong because while it has layers, it misses the Comprehend pre-filtering layer and the API Gateway response filter, making it less comprehensive. C is wrong because content filter and PII filter are both part of Guardrails (not separate layers), so this is effectively only two layers. D is wrong because it has no input filtering before the FM, which is a critical gap in defense-in-depth.",
+    "examSkills": ["3.1.1", "3.1.2", "3.2.1"],
+    "tags": ["defense-in-depth", "security-layers", "comprehend", "guardrails"]
+  },
+  {
+    "id": "d3-l2-q6",
+    "domain": 3,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A large enterprise with multiple AWS accounts wants to govern which foundation models each business unit can use. The security team needs to enforce this centrally, even if individual account administrators try to grant broader access. What is the MOST effective approach?",
+    "options": [
+      "A. Configure Amazon Bedrock model access management in each account to only enable approved models",
+      "B. Deploy Service Control Policies (SCPs) at the organization level restricting bedrock:InvokeModel to approved model IDs per organizational unit, combined with IAM policies per team",
+      "C. Create a shared Guardrails configuration that blocks responses from unapproved models",
+      "D. Use AWS Config rules to detect and auto-remediate unauthorized model invocations after they occur"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because SCPs provide organization-level guardrails that cannot be overridden by account administrators, and they can use the bedrock:ModelId condition key to restrict which models each OU can invoke. Combined with IAM policies for per-team restrictions within accounts, this provides centralized enforcement. A is wrong because model access management can be changed by account administrators, so it does not satisfy the requirement for central enforcement that overrides local admins. C is wrong because Guardrails filter content quality, not model access control -- they cannot prevent a user from calling a specific model. D is wrong because reactive detection and remediation allows unauthorized invocations to occur before remediation, which does not meet the preventive control requirement.",
+    "examSkills": ["3.2.4", "3.2.5"],
+    "tags": ["scp", "multi-account", "governance", "iam"]
+  },
+  {
+    "id": "d3-l3-q1",
+    "domain": 3,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company deploys a Bedrock Agent that can access internal HR systems, send emails, and update employee records. They need to define boundaries such as: 'the agent can read employee records but cannot modify salary fields' and 'the agent can only send emails to internal addresses.' These rules should be expressible in natural language. Which service should they use?",
+    "options": [
+      "A. IAM policies with fine-grained action-level permissions on the underlying AWS resources",
+      "B. Amazon Bedrock Guardrails with denied topics configured for salary modifications and external email addresses",
+      "C. AgentCore Policy with Cedar-based rules that define action boundaries using natural language authoring",
+      "D. AWS Step Functions with conditional branching that validates each agent action before execution"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because AgentCore Policy uses Cedar-based authorization to define what actions agents can and cannot perform, with natural language authoring support. It is purpose-built for agent governance -- controlling agent behavior at the action level with human-readable policies. A is wrong because IAM policies control which AWS APIs a principal can call, not the semantic boundaries of agent actions (e.g., IAM cannot express 'only send emails to internal addresses'). B is wrong because Guardrails filter content quality (harmful content, PII, etc.), not agent action boundaries -- denied topics would not reliably prevent specific agent tool invocations. D is wrong because Step Functions could implement approval workflows but require custom code for each rule and do not support natural language policy authoring.",
+    "examSkills": ["3.2.4", "3.4.1"],
+    "tags": ["agentcore-policy", "cedar", "agent-governance", "action-boundaries"]
+  },
+  {
+    "id": "d3-l3-q2",
+    "domain": 3,
+    "level": 3,
+    "type": "multiple-response",
+    "integrationDomains": [],
+    "question": "A company uses Bedrock Agents with action groups that retrieve data from external APIs. The security team discovers that an attacker embedded malicious instructions within an external API response, causing the agent to perform unintended actions (indirect prompt injection). Which TWO measures protect against this specific attack vector? (Select TWO.)",
+    "options": [
+      "A. Enable the Prompt Attack filter on the Guardrails configuration applied to the agent's input processing",
+      "B. Tag all external data returned from action groups as 'user input' so the agent treats it with lower trust",
+      "C. Increase the content filter strength to HIGH on all six categories",
+      "D. Configure denied topics for phrases commonly used in prompt injection attacks",
+      "E. Enable contextual grounding checks with a high grounding threshold"
+    ],
+    "correctAnswers": ["A", "B"],
+    "explanation": "A is correct because the Prompt Attack filter specifically detects prompt injection patterns, including those embedded in external data. B is correct because tagging external API responses as 'user input' tells the agent to treat this data with lower trust, preventing embedded instructions from being treated as system-level directives. C is wrong because content filters detect harmful content categories (violence, hate, etc.), not prompt injection techniques embedded in API responses. D is wrong because denied topics use keyword/phrase matching for specific subjects and cannot reliably detect the diverse phrasing of prompt injection attacks. E is wrong because contextual grounding checks whether responses are faithful to source material, not whether input data contains injection attacks.",
+    "examSkills": ["3.1.1", "3.1.2", "3.2.1"],
+    "tags": ["prompt-injection", "indirect-injection", "agent-security", "prompt-attack"]
+  },
+  {
+    "id": "d3-l3-q3",
+    "domain": 3,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A regulated company needs to track data lineage for all GenAI outputs -- specifically, they must be able to trace any generated response back to the exact source documents that informed it, when those documents were ingested, and who had access to them. Which combination provides the MOST complete data lineage?",
+    "options": [
+      "A. Enable Model Invocation Logging in Bedrock to capture all prompts and responses, then use CloudWatch Logs Insights to trace sources",
+      "B. Register source documents in AWS Glue Data Catalog with metadata tagging, use CloudTrail for access auditing, and enable Bedrock agent tracing for response attribution",
+      "C. Use Amazon Bedrock Knowledge Base citation metadata in responses, combined with S3 access logs for document tracking",
+      "D. Deploy Amazon DataZone to catalog all data assets and configure Bedrock to reference DataZone metadata in outputs"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Glue Data Catalog provides a centralized metadata registry for source documents (what data exists and when it was ingested), CloudTrail logs who accessed what and when, and Bedrock agent tracing provides end-to-end attribution from output back to source. Together they provide complete data lineage. A is wrong because Model Invocation Logging captures prompts and responses but does not track the lineage of source documents (when ingested, who accessed them). C is wrong because while KB citations identify which chunks informed a response, S3 access logs lack the structured metadata cataloging needed for comprehensive data lineage tracking. D is wrong because DataZone is a data governance service for data sharing across organizations, not specifically designed for GenAI output lineage tracking.",
+    "examSkills": ["3.2.3", "3.3.3", "3.4.2"],
+    "tags": ["data-lineage", "glue-catalog", "cloudtrail", "compliance"]
+  },
+  {
+    "id": "d3-l3-q4",
+    "domain": 3,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company has deployed a GenAI application in production. Over time, they observe that the model's outputs are gradually drifting: the tone is becoming less professional, certain types of harmful content are increasing, and the application is being used for purposes outside its intended scope. Which approach provides continuous monitoring with automated remediation?",
+    "options": [
+      "A. Schedule weekly Bedrock Evaluations jobs to assess output quality and manually review the results",
+      "B. Configure CloudWatch anomaly detection on Guardrails intervention metrics, set up EventBridge rules to trigger automated remediation Lambda functions when anomalies are detected",
+      "C. Add more comprehensive Guardrails content filters with higher thresholds to catch all potential drift",
+      "D. Implement A/B testing between the current model and a baseline model to detect drift"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because CloudWatch anomaly detection automatically learns normal patterns for Guardrails intervention rates and detects when they deviate (indicating drift). EventBridge rules can trigger automated remediation such as adjusting Guardrails thresholds, sending alerts, or even switching to a fallback model. This is continuous and automated. A is wrong because weekly scheduled evaluations are periodic, not continuous, and manual review does not constitute automated remediation. C is wrong because raising filter thresholds is a one-time adjustment, not a continuous monitoring and remediation solution -- it may also over-filter legitimate responses. D is wrong because A/B testing compares two models at a point in time and does not provide continuous drift detection or automated remediation.",
+    "examSkills": ["3.4.1", "3.4.2", "3.4.3"],
+    "tags": ["drift-monitoring", "cloudwatch", "eventbridge", "automated-remediation"]
+  },
+  {
+    "id": "d3-l3-q5",
+    "domain": 3,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A healthcare company requires transparent AI: every response from their GenAI system must include source attribution showing which documents informed the answer, along with confidence metrics. Users should be able to verify claims independently. Which implementation provides the MOST effective source attribution?",
+    "options": [
+      "A. Enable Bedrock agent tracing to capture the reasoning chain, retrieve source document citations from the Knowledge Base response, and present confidence scores alongside evidence excerpts to the user",
+      "B. Use Model Invocation Logging to capture all prompts and responses, then build a separate search interface for users to find source documents",
+      "C. Configure contextual grounding in Guardrails with a high threshold and display the grounding score as the confidence metric",
+      "D. Add a system prompt instruction telling the model to always cite its sources and provide confidence ratings"
+    ],
+    "correctAnswer": "A",
+    "explanation": "A is correct because Bedrock agent tracing provides end-to-end visibility into the reasoning chain, Knowledge Base responses include citation metadata pointing to specific source chunks, and presenting these with confidence scores gives users verifiable evidence. This is the purpose-built approach for transparent AI. B is wrong because Model Invocation Logging is a debugging tool, not a user-facing transparency feature -- requiring users to search a separate system is poor UX and does not provide real-time attribution. C is wrong because contextual grounding scores indicate whether the response is grounded but do not provide source document citations or evidence excerpts for user verification. D is wrong because system prompt instructions do not guarantee accurate citations -- the model may hallucinate sources or confidence numbers.",
+    "examSkills": ["3.3.2", "3.4.2"],
+    "tags": ["transparency", "source-attribution", "agent-tracing", "citations"]
+  },
+  {
+    "id": "d4-l1-q1",
+    "domain": 4,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company's application sends the same long system prompt (3,000 tokens) with every Amazon Bedrock API call. They want to reduce the token processing cost for this repeated prompt. Which Bedrock feature should they use?",
+    "options": [
+      "A. Semantic caching with ElastiCache to cache responses for similar system prompts",
+      "B. Bedrock Prompt Caching, which caches the system prompt at the API level with configurable TTL",
+      "C. Bedrock Prompt Management to store and version the system prompt",
+      "D. Intelligent Prompt Routing to send the system prompt to a cheaper model"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Bedrock Prompt Caching caches the processed system prompt at the Bedrock API level, offering 5-minute TTL (1.25x write, 0.1x read cost) or 1-hour TTL (2.0x write, 0.1x read cost). This reduces costs by up to 90% on cached tokens for repeated system prompts. Minimum 1024 tokens required. A is wrong because semantic caching operates at the application level and caches complete responses to similar user queries -- it does not cache system prompts at the API level. C is wrong because Prompt Management stores and versions prompt templates but does not reduce token processing costs. D is wrong because Intelligent Prompt Routing selects models based on query complexity, not system prompt optimization.",
+    "examSkills": ["4.1.1", "4.1.2"],
+    "tags": ["prompt-caching", "cost-optimization", "system-prompt"]
+  },
+  {
+    "id": "d4-l1-q2",
+    "domain": 4,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company's GenAI application handles queries of varying complexity -- from simple FAQ lookups to complex multi-step reasoning tasks. They want to automatically route each query to the most cost-effective model that can handle it, without building custom routing logic. Which feature should they use?",
+    "options": [
+      "A. Amazon Bedrock Intelligent Prompt Routing, which auto-routes to the cheapest capable model based on query complexity",
+      "B. A Lambda function that classifies query complexity and routes to different Bedrock model endpoints",
+      "C. Amazon Bedrock model cascading with fallback configurations",
+      "D. Amazon Bedrock Guardrails with different configurations per model"
+    ],
+    "correctAnswer": "A",
+    "explanation": "A is correct because Intelligent Prompt Routing automatically analyzes each prompt's complexity and routes it to the most appropriate (cheapest capable) foundation model without requiring custom routing logic. This is a managed Bedrock feature. B is wrong because while a Lambda function could implement routing, the question specifically asks for a solution without building custom routing logic. C is wrong because model cascading is a pattern (not a managed feature) where you try cheaper models first and fall back to more expensive ones on failure, which requires custom implementation. D is wrong because Guardrails filter content quality, not routing decisions.",
+    "examSkills": ["4.1.3"],
+    "tags": ["intelligent-prompt-routing", "model-routing", "cost-optimization"]
+  },
+  {
+    "id": "d4-l1-q3",
+    "domain": 4,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company needs to process 500 documents through a foundation model for summarization. The results are not time-sensitive and can be delivered within 24 hours. Which Amazon Bedrock feature provides the MOST cost-effective approach?",
+    "options": [
+      "A. Bedrock Provisioned Throughput for guaranteed capacity at a committed rate",
+      "B. Bedrock batch inference using the StartAsyncInvoke API, which offers up to 50% discount for non-real-time processing",
+      "C. A Step Functions workflow that invokes Bedrock synchronously for each document with retry logic",
+      "D. Bedrock on-demand invocation with concurrent Lambda functions for parallelization"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because StartAsyncInvoke (batch inference) is designed for non-real-time bulk processing and offers up to 50% discount compared to on-demand pricing. It processes jobs asynchronously and stores results in S3. A is wrong because Provisioned Throughput provides guaranteed capacity at a committed rate but is optimized for consistent real-time workloads, not batch processing -- it does not offer the same per-invocation discount. C is wrong because synchronous invocation with Step Functions uses on-demand pricing without the batch discount. D is wrong because parallel on-demand invocations still use full on-demand pricing and may hit rate limits.",
+    "examSkills": ["4.1.1", "4.1.2"],
+    "tags": ["batch-inference", "async-invoke", "cost-optimization"]
+  },
+  {
+    "id": "d4-l1-q4",
+    "domain": 4,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A development team is troubleshooting issues with their Bedrock application. They need to see the exact prompts being sent to the foundation model and the complete responses returned. Which feature should they enable?",
+    "options": [
+      "A. AWS CloudTrail logging for Bedrock API calls",
+      "B. Amazon Bedrock Model Invocation Logging, which logs all prompts and responses",
+      "C. Amazon CloudWatch Metrics for Bedrock invocation counts and latency",
+      "D. AWS X-Ray tracing for Bedrock API call traces"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Model Invocation Logging captures the complete prompt input and model response output for every invocation, which is exactly what the team needs for debugging. Logs go to CloudWatch Logs and/or S3. A is wrong because CloudTrail logs API metadata (who called what API, when, from where) but does not capture the actual prompt content or model responses. C is wrong because CloudWatch Metrics provides aggregate metrics (invocation count, latency, error rate) but not the actual prompt/response content. D is wrong because X-Ray traces the request path across service boundaries and measures latency but does not capture prompt/response content.",
+    "examSkills": ["4.2.1"],
+    "tags": ["model-invocation-logging", "debugging", "observability"]
+  },
+  {
+    "id": "d4-l1-q5",
+    "domain": 4,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A team is evaluating caching strategies for their GenAI application. They want to understand the difference between semantic caching and exact-match caching. Which statement correctly describes the distinction?",
+    "options": [
+      "A. Semantic caching hashes the query string for fast lookup, while exact-match caching uses embeddings for similarity comparison",
+      "B. Semantic caching uses embeddings to find similar queries via cosine similarity, while exact-match caching uses string hashing to find identical queries",
+      "C. Semantic caching is a Bedrock-native feature, while exact-match caching requires ElastiCache",
+      "D. Semantic caching works only for system prompts, while exact-match caching works for user queries"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because semantic caching generates embeddings for incoming queries and compares them against cached query embeddings using cosine similarity to find semantically similar (but not identical) queries. Exact-match caching hashes the query string and returns a cached response only when the hash matches exactly. A is wrong because it reverses the definitions -- hashing is exact-match, embeddings are semantic. C is wrong because neither is a Bedrock-native feature; both are implemented at the application level using services like ElastiCache or DynamoDB. D is wrong because both types work for user queries at the application level -- Bedrock Prompt Caching (a different feature) is what works for system prompts.",
+    "examSkills": ["4.1.2", "4.1.3"],
+    "tags": ["semantic-caching", "exact-match-caching", "embeddings"]
+  },
+  {
+    "id": "d4-l2-q1",
+    "domain": 4,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A startup's GenAI application costs $12,000/month on Amazon Bedrock. Analysis shows that 60% of user queries are near-duplicates (same question phrased differently). Which optimization would provide the GREATEST cost reduction?",
+    "options": [
+      "A. Enable Bedrock Prompt Caching to cache the system prompt across all requests",
+      "B. Implement semantic caching with ElastiCache, using embedding similarity to serve cached responses for near-duplicate queries",
+      "C. Switch to Bedrock Provisioned Throughput for predictable pricing at committed rates",
+      "D. Enable Intelligent Prompt Routing to send simple queries to cheaper models"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because semantic caching eliminates FM invocations entirely for similar queries. With 60% near-duplicate queries, semantic caching could save approximately $7,200/month (60% of $12K) by returning cached responses without calling the FM. ElastiCache is commonly used for the similarity lookup. A is wrong because Prompt Caching reduces the cost of processing the system prompt (up to 90% on cached tokens) but still incurs costs for every invocation -- it does not eliminate calls for duplicate queries. C is wrong because Provisioned Throughput provides predictable pricing for consistent workloads but does not reduce cost for duplicate queries. D is wrong because Intelligent Prompt Routing reduces per-call cost by using cheaper models but still makes an FM call for every query, unlike semantic caching which eliminates the call entirely.",
+    "examSkills": ["4.1.1", "4.1.2", "4.1.3"],
+    "tags": ["semantic-caching", "cost-reduction", "elasticache"]
+  },
+  {
+    "id": "d4-l2-q2",
+    "domain": 4,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company sends the same 4,000-token system prompt with every Bedrock API request but the user queries are always unique. They want to reduce the cost of repeatedly processing this system prompt. Which caching approach is MOST appropriate?",
+    "options": [
+      "A. Semantic caching with DynamoDB to cache responses for similar system prompt + query combinations",
+      "B. Bedrock Prompt Caching, which caches the processed system prompt at the API level for subsequent requests",
+      "C. ElastiCache exact-match caching on the system prompt hash to avoid re-sending it",
+      "D. Store the system prompt in Bedrock Prompt Management and reference it by ID to reduce payload size"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Bedrock Prompt Caching caches the processed system prompt at the Bedrock API level. Subsequent requests that use the same system prompt pay only 10% of the normal token cost for the cached portion. Since user queries are unique, semantic caching would not help. A is wrong because semantic caching works by matching similar user queries to cached responses -- since user queries are always unique, semantic caching would have a near-zero hit rate. C is wrong because exact-match caching on the system prompt does not reduce Bedrock API token costs -- the FM still needs to process the system prompt context even if the hash matches in your application cache. D is wrong because Prompt Management stores and versions prompts but does not reduce the token processing cost at the API level.",
+    "examSkills": ["4.1.1", "4.1.2"],
+    "tags": ["prompt-caching", "semantic-caching", "distinction"]
+  },
+  {
+    "id": "d4-l2-q3",
+    "domain": 4,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company's GenAI application handles a mix of simple FAQ queries (70% of traffic), moderate analysis requests (20%), and complex multi-step reasoning tasks (10%). They want to automatically optimize cost without manually classifying each query. Which approach is MOST operationally efficient?",
+    "options": [
+      "A. Build a Lambda classifier that analyzes query complexity and routes to Nova Micro, Nova Pro, or Claude Sonnet respectively",
+      "B. Use Amazon Bedrock Intelligent Prompt Routing to automatically select the most cost-effective model for each query",
+      "C. Deploy all three models and use A/B testing to determine which model handles which query type best",
+      "D. Use Nova Micro for all queries with a fallback to Claude Sonnet when the response quality score is below threshold"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Intelligent Prompt Routing is a managed Bedrock feature that automatically analyzes query complexity and routes to the cheapest capable model, requiring no custom logic. This is the most operationally efficient approach. A is wrong because while a Lambda classifier would work, it requires building and maintaining custom classification logic, which is not operationally efficient when a managed alternative exists. C is wrong because A/B testing compares models but does not provide automatic per-query routing based on complexity. D is wrong because this requires building custom quality scoring and fallback logic, and it only uses two models rather than optimally selecting from multiple tiers.",
+    "examSkills": ["4.1.3"],
+    "tags": ["intelligent-prompt-routing", "model-cascading", "operational-efficiency"]
+  },
+  {
+    "id": "d4-l2-q4",
+    "domain": 4,
+    "level": 2,
+    "type": "ordering",
+    "integrationDomains": [],
+    "question": "A company wants to systematically optimize the cost of their Amazon Bedrock application. Arrange the following cost optimization steps in the recommended implementation order, from first to last.",
+    "options": [
+      "Analyze current token usage and cost distribution with CloudWatch",
+      "Implement Bedrock Prompt Caching for repeated system prompts",
+      "Add semantic caching for near-duplicate user queries",
+      "Enable model cascading or Intelligent Prompt Routing",
+      "Set up Provisioned Throughput for predictable baseline load",
+      "Monitor optimization impact with CloudWatch dashboards"
+    ],
+    "correctOrder": [1, 2, 3, 4, 5, 6],
+    "explanation": "Step 1: Analyze current usage first to understand where costs are concentrated (you cannot optimize what you do not measure). Step 2: Implement Prompt Caching as a quick win for repeated system prompts (API-level change, no application architecture modification). Step 3: Add semantic caching to eliminate FM calls for duplicate queries (requires application-level changes with ElastiCache). Step 4: Enable model cascading/routing to use cheaper models for simple queries (requires model selection logic). Step 5: Set up Provisioned Throughput for predictable baseline capacity once traffic patterns are understood. Step 6: Monitor the impact of all optimizations with dashboards to validate cost reduction and identify further opportunities.",
+    "examSkills": ["4.1.1", "4.1.2", "4.1.3", "4.1.4"],
+    "tags": ["cost-optimization", "ordering", "optimization-steps"]
+  },
+  {
+    "id": "d4-l2-q5",
+    "domain": 4,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A legal firm needs to analyze over 500 contract documents using a foundation model to extract key clauses and obligations. The analysis results are needed by end of week, not in real time. Which architecture is MOST cost-effective?",
+    "options": [
+      "A. A Lambda function that iterates through each document and calls Bedrock InvokeModel synchronously with retry logic",
+      "B. AWS Step Functions orchestrating parallel Bedrock batch inference jobs using StartAsyncInvoke, with documents stored in S3 and results written back to S3",
+      "C. Amazon Bedrock with Provisioned Throughput to handle the burst of 500+ documents efficiently",
+      "D. Amazon SageMaker batch transform job with a custom document analysis model"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because StartAsyncInvoke (batch inference) offers up to 50% discount for non-real-time processing, and Step Functions provides reliable orchestration with error handling and parallel execution. Documents and results are stored in S3. A is wrong because synchronous invocations use on-demand pricing without the batch discount and may hit rate limits at scale. C is wrong because Provisioned Throughput is designed for consistent real-time workloads with committed capacity, not one-time batch processing -- it would be more expensive for this use case. D is wrong because the question specifies using a foundation model on Bedrock, and SageMaker batch transform with a custom model is a different approach entirely.",
+    "examSkills": ["4.1.1", "4.1.2"],
+    "tags": ["batch-inference", "step-functions", "async-invoke", "cost-effective"]
+  },
+  {
+    "id": "d4-l3-q1",
+    "domain": 4,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company's production GenAI application has three requirements: (1) reduce per-invocation cost, (2) maintain p99 latency under 2 seconds, and (3) handle unpredictable traffic bursts up to 5x baseline. Which combination of optimizations addresses ALL three requirements simultaneously?",
+    "options": [
+      "A. Semantic caching + Intelligent Prompt Routing + on-demand Bedrock for all traffic",
+      "B. Provisioned Throughput for baseline capacity + on-demand burst + semantic caching + model cascading",
+      "C. Bedrock Prompt Caching + Provisioned Throughput + CloudWatch auto-scaling alarms",
+      "D. Semantic caching + batch inference for non-urgent requests + Provisioned Throughput for real-time"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it addresses all three requirements: semantic caching and model cascading reduce per-invocation cost (requirement 1), Provisioned Throughput guarantees consistent low latency for baseline traffic (requirement 2), and on-demand burst handles traffic spikes beyond provisioned capacity (requirement 3). A is wrong because on-demand Bedrock alone cannot guarantee p99 latency under 2 seconds during traffic bursts -- without Provisioned Throughput, burst traffic may experience throttling and higher latency. C is wrong because Prompt Caching and Provisioned Throughput help with cost and latency but do not provide a burst handling mechanism -- CloudWatch alarms cannot instantly provision additional Bedrock capacity. D is wrong because batch inference is asynchronous and cannot serve real-time requests, so it does not help with the latency requirement for the burst traffic that needs real-time responses.",
+    "examSkills": ["4.1.1", "4.1.2", "4.1.3", "4.1.4"],
+    "tags": ["provisioned-throughput", "semantic-caching", "model-cascading", "burst-handling"]
+  },
+  {
+    "id": "d4-l3-q2",
+    "domain": 4,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A large enterprise with multiple development teams uses Amazon Bedrock extensively. Management wants proactive cost governance: per-team cost tracking, budget alerts when spending approaches limits, and automatic enforcement to prevent overspending. Which architecture provides this?",
+    "options": [
+      "A. Create separate AWS accounts per team with AWS Budgets alerts, and use SCPs to block Bedrock API calls when the budget threshold is reached",
+      "B. Use CloudWatch custom metrics with cost allocation tags per team, AWS Budgets with SNS alerts, and Lambda functions that adjust IAM permissions or throttle API calls when thresholds are breached",
+      "C. Enable AWS Cost Explorer with Bedrock cost breakdown and send weekly cost reports to team leads via email",
+      "D. Use Bedrock Provisioned Throughput per team with fixed capacity, so costs are inherently bounded"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it provides all three requirements: cost allocation tags on CloudWatch metrics enable per-team tracking, AWS Budgets with SNS alerts provide proactive notifications, and Lambda functions can automatically enforce spending limits by adjusting permissions or throttling. This works within a single or multi-account structure. A is wrong because SCPs cannot dynamically respond to budget thresholds -- they are static policies, and this approach requires separate accounts per team which adds management overhead. C is wrong because weekly email reports are reactive, not proactive, and provide no automated enforcement mechanism. D is wrong because Provisioned Throughput bounds capacity but teams can still use on-demand in addition, and it does not provide cost tracking or alerting per team.",
+    "examSkills": ["4.1.4", "4.2.1"],
+    "tags": ["cost-governance", "budget-alerts", "cost-allocation-tags", "enforcement"]
+  },
+  {
+    "id": "d4-l3-q3",
+    "domain": 4,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company's RAG application retrieves from an OpenSearch Serverless vector store containing 10 million documents. Users complain about slow retrieval times and occasionally irrelevant results. Which optimization strategy addresses BOTH retrieval performance and relevance?",
+    "options": [
+      "A. Increase the OpenSearch Serverless OCU count and retrieve more chunks per query to improve coverage",
+      "B. Tune OpenSearch HNSW index parameters (ef_search, m values), implement query preprocessing to clean user queries, and enable hybrid search combining BM25 keyword matching with k-NN vector search",
+      "C. Switch from OpenSearch Serverless to Aurora PostgreSQL with pgvector for faster SQL-based retrieval",
+      "D. Add a Bedrock reranker model after retrieval to improve relevance, without modifying the vector store configuration"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it addresses both issues: HNSW parameter tuning (ef_search controls search accuracy vs speed, m controls graph connectivity) improves retrieval performance, query preprocessing improves query quality, and hybrid search (BM25 + k-NN) significantly improves relevance by combining keyword matching with semantic similarity. A is wrong because increasing OCUs helps throughput but not per-query latency, and retrieving more chunks increases latency and may add noise without improving relevance. C is wrong because Aurora pgvector is generally slower than OpenSearch for vector search at 10M documents scale, and switching databases is high effort without addressing the root cause. D is wrong because a reranker improves relevance ranking of retrieved results but does not address retrieval performance (latency) -- the query still takes the same time to execute.",
+    "examSkills": ["4.1.3", "4.2.1"],
+    "tags": ["opensearch", "hnsw", "hybrid-search", "retrieval-optimization"]
+  },
+  {
+    "id": "d4-l3-q4",
+    "domain": 4,
+    "level": 3,
+    "type": "multiple-response",
+    "integrationDomains": [],
+    "question": "A company wants to reduce the cost per foundation model invocation in their Amazon Bedrock application. Which THREE strategies directly reduce the cost of each individual FM call? (Select THREE.)",
+    "options": [
+      "A. Bedrock Prompt Caching for repeated system prompts",
+      "B. Semantic caching for similar user queries",
+      "C. Model cascading to route simple queries to cheaper models",
+      "D. Provisioned Throughput for guaranteed capacity",
+      "E. Bedrock batch inference (StartAsyncInvoke) for non-real-time workloads"
+    ],
+    "correctAnswers": ["A", "B", "C"],
+    "explanation": "A is correct because Prompt Caching reduces the token cost for cached system prompt portions to 10% of the normal rate, directly reducing per-call cost. B is correct because semantic caching eliminates the FM call entirely for similar queries, reducing the effective per-invocation cost to near zero for cache hits. C is correct because model cascading routes simple queries to cheaper models (e.g., Nova Micro instead of Claude), directly reducing the cost of those invocations. D is wrong because Provisioned Throughput provides guaranteed capacity and predictable pricing for consistent workloads, but its primary purpose is latency and availability -- the per-invocation cost is not necessarily lower than on-demand. E is wrong because while batch inference offers a 50% discount, the question asks about individual FM calls, and batch inference is a separate processing mode for non-real-time bulk workloads, not an optimization applied to individual real-time invocations.",
+    "examSkills": ["4.1.1", "4.1.2", "4.1.3"],
+    "tags": ["cost-per-invocation", "prompt-caching", "semantic-caching", "model-cascading"]
+  },
+  {
+    "id": "d5-l1-q1",
+    "domain": 5,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company needs to evaluate the quality of their foundation model's outputs at scale but cannot afford to have human reviewers assess every response. Which evaluation approach uses another foundation model to judge output quality, providing up to 98% cost savings compared to human evaluation?",
+    "options": [
+      "A. Automated Reasoning checks that mathematically verify output correctness",
+      "B. LLM-as-a-judge, where a foundation model evaluates another model's outputs against defined quality criteria",
+      "C. Contextual grounding checks that score how well responses match source material",
+      "D. SageMaker Clarify bias detection that evaluates outputs for fairness"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because LLM-as-a-judge is the pattern where a (typically more capable) foundation model evaluates another model's outputs across dimensions like correctness, helpfulness, and harmfulness. Amazon Bedrock Evaluations supports this approach with up to 98% cost savings versus human evaluation. A is wrong because Automated Reasoning uses formal logic to verify mathematical correctness, not general output quality assessment. C is wrong because contextual grounding checks whether responses are faithful to retrieved sources, which is one specific dimension, not a general quality evaluation approach. D is wrong because SageMaker Clarify detects bias, not overall output quality.",
+    "examSkills": ["5.1.1"],
+    "tags": ["llm-as-a-judge", "evaluation", "bedrock-evaluations"]
+  },
+  {
+    "id": "d5-l1-q2",
+    "domain": 5,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A RAG application sometimes generates responses that contain information not found in the retrieved source documents. Which Amazon Bedrock Guardrails feature specifically checks whether the foundation model's response is grounded in the provided source material?",
+    "options": [
+      "A. Content filters that detect harmful or inaccurate content",
+      "B. Automated Reasoning that formally verifies logical correctness",
+      "C. Contextual grounding check that scores whether the response is faithful to retrieved source material",
+      "D. Prompt Attack filter that detects manipulation of the model's behavior"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because contextual grounding checks specifically evaluate whether the FM response is grounded in (faithful to) the retrieved source material, using grounding threshold and relevance threshold scores. This is the purpose-built feature for detecting hallucinations in RAG. A is wrong because content filters detect harmful content categories (violence, hate, etc.), not factual grounding against source documents. B is wrong because Automated Reasoning verifies mathematical and logical correctness against formal rules, not general faithfulness to source material. D is wrong because Prompt Attack filter detects prompt injection and jailbreak attempts, not content grounding.",
+    "examSkills": ["5.2.1"],
+    "tags": ["contextual-grounding", "hallucination", "rag-evaluation"]
+  },
+  {
+    "id": "d5-l1-q3",
+    "domain": 5,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A development team needs to trace the full request path of their GenAI application across multiple AWS services (API Gateway, Lambda, Bedrock, DynamoDB) to identify latency bottlenecks. Which AWS service provides distributed tracing across service boundaries?",
+    "options": [
+      "A. Amazon CloudWatch Logs Insights for querying log data across services",
+      "B. AWS X-Ray for distributed tracing and service map visualization",
+      "C. Amazon Bedrock Model Invocation Logging for capturing prompt/response data",
+      "D. AWS CloudTrail for auditing API calls across services"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because AWS X-Ray provides distributed tracing that follows a request across multiple AWS services, generating service maps and identifying latency bottlenecks at each hop. It instruments API Gateway, Lambda, Bedrock, and DynamoDB. A is wrong because CloudWatch Logs Insights queries log data but does not provide end-to-end request tracing or service maps. C is wrong because Model Invocation Logging captures prompt and response content for debugging but does not trace requests across service boundaries. D is wrong because CloudTrail audits API calls for security and compliance but is not designed for latency analysis or distributed tracing.",
+    "examSkills": ["5.2.2"],
+    "tags": ["x-ray", "distributed-tracing", "latency"]
+  },
+  {
+    "id": "d5-l1-q4",
+    "domain": 5,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company wants to set up automated synthetic tests that periodically call their GenAI API endpoint to verify it is responsive and returns expected outputs. Which AWS service creates synthetic canary scripts for endpoint monitoring?",
+    "options": [
+      "A. Amazon CloudWatch Synthetics, which creates canaries that run on a schedule to test endpoints",
+      "B. AWS Step Functions with scheduled state machine executions",
+      "C. Amazon EventBridge Scheduler triggering Lambda test functions",
+      "D. AWS CodePipeline with automated test stages"
+    ],
+    "correctAnswer": "A",
+    "explanation": "A is correct because CloudWatch Synthetics creates canaries -- configurable scripts that run on a schedule to monitor endpoints. They can verify response status, latency, content, and alert when issues are detected. This is the purpose-built service for synthetic endpoint monitoring. B is wrong because Step Functions can orchestrate workflows but is not designed for synthetic monitoring with built-in canary scripts. C is wrong because while EventBridge + Lambda could implement testing, it requires custom code and lacks the built-in canary features (screenshots, HAR files, automatic alerting) of CloudWatch Synthetics. D is wrong because CodePipeline is for CI/CD deployments, not ongoing production endpoint monitoring.",
+    "examSkills": ["5.2.2"],
+    "tags": ["cloudwatch-synthetics", "canary", "endpoint-monitoring"]
+  },
+  {
+    "id": "d5-l1-q5",
+    "domain": 5,
+    "level": 1,
+    "type": "matching",
+    "integrationDomains": [],
+    "question": "Match each evaluation target to the AWS service or feature that should be used to evaluate it.",
+    "leftItems": [
+      "FM output quality (correctness, helpfulness, harmfulness)",
+      "RAG retrieval relevance and answer faithfulness",
+      "Agent task completion and tool usage correctness",
+      "Production API latency across service boundaries"
+    ],
+    "rightItems": [
+      "Bedrock Evaluations (LLM-as-a-judge)",
+      "Guardrails contextual grounding check",
+      "AgentCore Evaluations",
+      "X-Ray + CloudWatch"
+    ],
+    "correctMatches": {
+      "FM output quality (correctness, helpfulness, harmfulness)": "Bedrock Evaluations (LLM-as-a-judge)",
+      "RAG retrieval relevance and answer faithfulness": "Guardrails contextual grounding check",
+      "Agent task completion and tool usage correctness": "AgentCore Evaluations",
+      "Production API latency across service boundaries": "X-Ray + CloudWatch"
+    },
+    "explanation": "Bedrock Evaluations uses LLM-as-a-judge to assess FM output quality across dimensions like correctness, helpfulness, and harmfulness. Guardrails contextual grounding check evaluates whether RAG responses are faithful to retrieved source material and whether the retrieval was relevant. AgentCore Evaluations provides automated evaluation of agent correctness, task completion, tool usage, and safety. X-Ray combined with CloudWatch provides distributed tracing and metrics for production latency analysis across service boundaries.",
+    "examSkills": ["5.1.1", "5.2.1", "5.2.2"],
+    "tags": ["evaluation", "matching", "service-selection"]
+  },
+  {
+    "id": "d5-l2-q1",
+    "domain": 5,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "After updating the system prompt of their RAG chatbot, users report that the chatbot frequently 'makes things up' -- responses contain information not present in the knowledge base. The development team needs to diagnose and fix this issue. Which combination of actions is MOST effective?",
+    "options": [
+      "A. Revert the system prompt change and fine-tune the model to be more accurate",
+      "B. Enable contextual grounding in Guardrails with a grounding threshold, review the chunking strategy for the knowledge base, add a Bedrock reranker model, and update the system prompt to emphasize answering only from provided context",
+      "C. Increase the number of retrieved chunks from 3 to 20 to give the model more context to work with",
+      "D. Switch to a different foundation model that is known for fewer hallucinations"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it addresses all three root causes of RAG hallucination: contextual grounding catches ungrounded responses at the output filter level, reviewing chunking ensures chunks are appropriately sized (too large = noise, too small = lost context), a reranker improves retrieval relevance, and a system prompt update that emphasizes 'only answer from provided context' constrains the model. A is wrong because reverting the prompt is a short-term fix that does not address the underlying issue, and fine-tuning a Bedrock model for factual grounding is not the standard approach. C is wrong because retrieving too many chunks often worsens hallucination by including irrelevant content that dilutes the context. D is wrong because hallucination in RAG is typically caused by retrieval and prompt issues, not the model itself -- switching models does not address the root cause.",
+    "examSkills": ["5.2.1", "5.2.3", "5.2.4"],
+    "tags": ["hallucination", "contextual-grounding", "reranker", "chunking"]
+  },
+  {
+    "id": "d5-l2-q2",
+    "domain": 5,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company needs to systematically evaluate two candidate foundation models across multiple quality dimensions before selecting one for production. They want to measure correctness, helpfulness, and harmfulness using automated evaluation. Which approach is MOST appropriate?",
+    "options": [
+      "A. Deploy both models to production with an A/B test and measure user satisfaction metrics over 30 days",
+      "B. Use Amazon Bedrock Evaluations to run automated evaluation jobs on both models with test datasets, measuring correctness, helpfulness, and harmfulness metrics",
+      "C. Use Guardrails contextual grounding on both models and select the one with higher grounding scores",
+      "D. Send the same 100 prompts to both models and have a team of 5 reviewers manually compare the outputs"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Bedrock Evaluations provides systematic automated evaluation using LLM-as-a-judge across the exact dimensions specified (correctness, helpfulness, harmfulness). It generates comparable scores for both models against the same test datasets. A is wrong because deploying untested models to production is risky, takes 30 days, and does not provide granular dimension-level metrics. C is wrong because contextual grounding only measures one dimension (faithfulness to source material), not the comprehensive evaluation across correctness, helpfulness, and harmfulness. D is wrong because manual evaluation of 100 prompts by 5 reviewers is expensive, slow, potentially inconsistent, and does not scale -- Bedrock Evaluations provides this more efficiently.",
+    "examSkills": ["5.1.1", "5.1.2"],
+    "tags": ["bedrock-evaluations", "model-selection", "llm-as-a-judge"]
+  },
+  {
+    "id": "d5-l2-q3",
+    "domain": 5,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company wants to evaluate the retrieval quality of their RAG application. They need to measure whether the retrieved document chunks are relevant to the user's query and whether the correct documents are ranked highly. Which metrics should they track?",
+    "options": [
+      "A. Model invocation latency, token throughput, and error rate from CloudWatch Bedrock metrics",
+      "B. Relevance scoring from contextual grounding, context matching precision, retrieval latency, and ranking metrics like MRR (Mean Reciprocal Rank) and NDCG (Normalized Discounted Cumulative Gain)",
+      "C. Guardrails intervention rate, content filter trigger count, and PII detection count",
+      "D. Embedding model inference latency, vector store query time, and storage utilization"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it covers all aspects of retrieval quality: relevance scoring (via contextual grounding) measures whether chunks are relevant, context matching precision measures whether the right content is retrieved, retrieval latency measures performance, and MRR/NDCG measure whether correct documents are ranked highly. A is wrong because these are model inference performance metrics, not retrieval quality metrics. C is wrong because these are safety filter metrics, not retrieval quality metrics. D is wrong because these are infrastructure performance metrics for the embedding and vector store systems, not retrieval quality metrics.",
+    "examSkills": ["5.1.2", "5.2.1"],
+    "tags": ["retrieval-quality", "mrr", "ndcg", "relevance-scoring"]
+  },
+  {
+    "id": "d5-l2-q4",
+    "domain": 5,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company has deployed a Bedrock Agent that uses multiple tool action groups. They need to evaluate whether the agent correctly selects the right tool for each task, completes tasks successfully, and reasons properly through multi-step problems. Which evaluation approach is MOST comprehensive?",
+    "options": [
+      "A. Monitor the agent's CloudWatch metrics for invocation count, error rate, and average latency",
+      "B. Use AgentCore Evaluations to measure task completion rate, tool usage effectiveness, and reasoning quality, combined with test case automation",
+      "C. Run Bedrock Evaluations on the agent's final text outputs for correctness and helpfulness",
+      "D. Enable Guardrails on the agent and monitor the intervention rate as a proxy for quality"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because AgentCore Evaluations is purpose-built for evaluating agent behavior across multiple dimensions: task completion (did it achieve the goal?), tool usage (did it pick the right tools?), and reasoning quality (was the reasoning chain sound?). Test case automation enables systematic evaluation. A is wrong because CloudWatch metrics measure operational performance (count, errors, latency) but not behavioral quality (correct tool selection, reasoning quality). C is wrong because Bedrock Evaluations assesses text output quality but does not evaluate the agent's tool selection decisions or multi-step reasoning process. D is wrong because Guardrails intervention rate measures safety violations, not task correctness or reasoning quality.",
+    "examSkills": ["5.1.1", "5.1.2"],
+    "tags": ["agentcore-evaluations", "agent-evaluation", "tool-usage"]
+  },
+  {
+    "id": "d5-l2-q5",
+    "domain": 5,
+    "level": 2,
+    "type": "ordering",
+    "integrationDomains": [],
+    "question": "A team is setting up an evaluation pipeline to compare multiple foundation models for their GenAI application. Arrange the evaluation pipeline steps in the correct order.",
+    "options": [
+      "Define evaluation metrics and quality criteria",
+      "Create a representative test dataset with ground truth",
+      "Select an evaluator model for LLM-as-a-judge",
+      "Run evaluation jobs on each candidate model",
+      "Analyze results and compare scores across models",
+      "Select the winning model based on evaluation data",
+      "Deploy the selected model to production",
+      "Set up ongoing monitoring with CloudWatch"
+    ],
+    "correctOrder": [1, 2, 3, 4, 5, 6, 7, 8],
+    "explanation": "Step 1: Define metrics first so you know what you are measuring (correctness, helpfulness, harmfulness, etc.). Step 2: Create a representative test dataset with ground truth answers to evaluate against. Step 3: Select the evaluator model (a capable FM that will judge the candidate models' outputs). Step 4: Run evaluation jobs using Bedrock Evaluations on each candidate model against the test dataset. Step 5: Analyze the results and compare scores across all models and dimensions. Step 6: Select the winning model based on the evaluation data. Step 7: Deploy the selected model to production. Step 8: Set up ongoing monitoring with CloudWatch to track quality in production and detect regression.",
+    "examSkills": ["5.1.1", "5.1.2", "5.2.2"],
+    "tags": ["evaluation-pipeline", "ordering", "model-selection"]
+  },
+  {
+    "id": "d5-l3-q1",
+    "domain": 5,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A production GenAI application occasionally generates plausible-sounding but factually incorrect responses. The team needs a multi-layered approach to detect hallucinations before they reach users. Which combination provides the MOST comprehensive hallucination detection?",
+    "options": [
+      "A. Contextual grounding checks with a high threshold, combined with content filters set to HIGH for all categories",
+      "B. Golden dataset testing for known Q&A pairs, output diffing against expected responses, contextual grounding checks for RAG faithfulness, and Automated Reasoning for claims involving calculations or logical rules",
+      "C. LLM-as-a-judge evaluation that scores every production response for accuracy before returning to the user",
+      "D. Guardrails Prompt Attack filter to prevent users from tricking the model into generating false information"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it provides multiple complementary detection layers: golden dataset testing catches regressions on known questions, output diffing detects unexpected deviations, contextual grounding catches responses not grounded in retrieved sources, and Automated Reasoning catches mathematical and logical errors. Each layer catches different types of hallucination. A is wrong because content filters detect harmful content (violence, hate, etc.), not factual inaccuracies -- only contextual grounding helps with hallucination, making this a single-layer approach. C is wrong because running LLM-as-a-judge on every production response adds significant latency and cost, and it is better suited for offline evaluation than real-time detection. D is wrong because Prompt Attack filter detects input manipulation, not output hallucination.",
+    "examSkills": ["5.2.1", "5.2.3", "5.2.4"],
+    "tags": ["hallucination-detection", "golden-dataset", "automated-reasoning", "contextual-grounding"]
+  },
+  {
+    "id": "d5-l3-q2",
+    "domain": 5,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A team maintains a prompt template that works well with Claude 3 Sonnet but produces poor results after the model provider releases Claude 3.5 Sonnet. The same template causes the new model to misinterpret instructions and generate off-topic responses. How should they systematically diagnose and prevent this issue?",
+    "options": [
+      "A. Revert to the previous model version and wait for the provider to fix the compatibility issue",
+      "B. Implement a prompt testing framework: maintain versioned templates in Bedrock Prompt Management, run Bedrock Evaluations against test datasets for each model version, use CloudWatch Logs to identify specific prompt patterns causing confusion, and validate prompt schema compatibility across model versions",
+      "C. Add more explicit instructions to the prompt template to compensate for the new model's behavior",
+      "D. Use Intelligent Prompt Routing to automatically select the model version that best handles each prompt"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it provides a systematic approach: versioned prompt templates enable rollback and comparison, Bedrock Evaluations quantifies quality differences between model versions, CloudWatch Logs analysis identifies which specific prompt patterns cause issues with the new model, and schema validation catches structural incompatibilities. This prevents the issue from recurring with future model updates. A is wrong because reverting is a temporary fix that does not build a testing process, and model providers regularly release new versions. C is wrong because adding instructions without diagnostic data is guessing -- you need to identify what specifically changed before knowing how to adapt the prompt. D is wrong because Intelligent Prompt Routing selects models based on query complexity, not prompt template compatibility.",
+    "examSkills": ["5.2.3", "5.2.4"],
+    "tags": ["prompt-regression", "prompt-management", "model-versioning", "testing"]
+  },
+  {
+    "id": "d5-l3-q3",
+    "domain": 5,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company's RAG application experiences intermittent failures where the FM generates incoherent or truncated responses. Investigation reveals the issue only occurs with long documents that generate many retrieved chunks. The team suspects the context window is being exceeded. How should they diagnose and resolve this?",
+    "options": [
+      "A. Switch to a foundation model with a larger context window to accommodate more chunks",
+      "B. Reduce the number of retrieved chunks from 10 to 3 to stay within the context window",
+      "C. Implement dynamic chunking diagnostics: log token counts for system prompt + retrieved context + user query, set CloudWatch alarms for context utilization approaching the model's limit, optimize prompt design to reduce overhead tokens, and implement truncation-aware chunking that prioritizes the most relevant chunks within the token budget",
+      "D. Enable Bedrock Prompt Caching to reduce the token count of the system prompt"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because it systematically addresses the problem: logging token counts identifies exactly when overflow occurs, CloudWatch alarms provide proactive detection, prompt optimization reduces wasted tokens, and truncation-aware chunking ensures the most relevant content fits within the budget. This is a comprehensive diagnostic and resolution approach. A is wrong because larger context windows are more expensive and the problem would recur with even longer documents -- it does not solve the underlying issue of unmanaged context utilization. B is wrong because blindly reducing chunks may exclude critical context needed for accurate responses -- the fix should be intelligent about which chunks to include, not just fewer. D is wrong because Prompt Caching reduces the cost of processing the system prompt but does not reduce the token count in the context window.",
+    "examSkills": ["5.2.3", "5.2.4"],
+    "tags": ["context-window", "token-management", "dynamic-chunking", "diagnostics"]
+  },
+  {
+    "id": "d5-l3-q4",
+    "domain": 5,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company's RAG application has been in production for 6 months. Users report that retrieval quality has gradually degraded -- queries that used to return highly relevant results now return marginally related documents. The knowledge base content has not changed. What is the MOST likely root cause and remediation?",
+    "options": [
+      "A. The vector store index has become fragmented over time and needs to be rebuilt from scratch",
+      "B. Embedding drift: the embedding model's behavior has changed (due to model updates), causing existing embeddings to become misaligned with new query embeddings. Remediate by re-embedding all documents with the current model version and implementing drift monitoring to detect future misalignment",
+      "C. The foundation model used for generation has degraded, causing it to misinterpret retrieved chunks",
+      "D. User query patterns have changed, requiring retraining of the embedding model on new query types"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because embedding drift is a well-known issue in production RAG systems. When the embedding model is updated (even minor version changes), new query embeddings may not align well with document embeddings generated by the previous version. Remediation requires re-embedding all documents with the current model and implementing drift monitoring to detect this proactively. A is wrong because vector store index fragmentation does not cause semantic relevance degradation -- it may affect query performance (speed) but not the quality of similarity matching. C is wrong because the generation model does not affect retrieval relevance -- retrieval happens before the generation step. D is wrong because the question states knowledge base content has not changed, and embedding models are not retrained on query patterns -- they are pre-trained models.",
+    "examSkills": ["5.2.3", "5.2.4"],
+    "tags": ["embedding-drift", "retrieval-degradation", "drift-monitoring", "re-embedding"]
+  },
+  {
+    "id": "d3d1-l2-q1",
+    "domain": 3,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [1, 3],
+    "question": "A healthcare company needs to build a HIPAA-compliant RAG application on AWS. Patient records in S3 must be searchable by authorized clinicians, but no PHI (Protected Health Information) should ever appear in model responses. All data must stay within the company's VPC and be encrypted with customer-managed keys. Which architecture meets ALL requirements?",
+    "options": [
+      "A. Bedrock Knowledge Base with OpenSearch Serverless in VPC, Guardrails PII filter with BLOCK action, KMS CMK encryption, and a VPC endpoint for Bedrock",
+      "B. Bedrock Knowledge Base with the managed vector store, Guardrails PII filter with ANONYMIZE action, AWS managed encryption, and API Gateway with WAF",
+      "C. Amazon Q Business with S3 connector, built-in ACL, and VPC endpoint for Bedrock",
+      "D. Custom RAG with OpenSearch in VPC, Lambda-based PII detection using Comprehend, and KMS CMK encryption"
+    ],
+    "correctAnswer": "A",
+    "explanation": "A is correct because it addresses all HIPAA requirements: OpenSearch Serverless deployed in VPC keeps data within the private network, Guardrails PII BLOCK ensures no PHI ever appears in responses (appropriate for healthcare where any PHI leak is a violation), KMS CMK provides customer-managed encryption, and VPC endpoint keeps all Bedrock traffic off the public internet. B is wrong because the managed vector store does not run in the customer's VPC, AWS managed encryption does not satisfy the CMK requirement, and ANONYMIZE (which masks but allows responses) is less appropriate than BLOCK for HIPAA where any PHI exposure is a violation. C is wrong because Q Business is for enterprise internal search with existing connectors and does not provide the same level of infrastructure control needed for HIPAA compliance. D is wrong because while technically possible, it requires significant custom development for PII detection and lacks the managed Guardrails capability, adding operational overhead.",
+    "examSkills": ["3.1.1", "3.2.1", "3.2.2", "3.2.3"],
+    "tags": ["hipaa", "healthcare", "vpc", "guardrails", "kms", "rag"]
+  },
+  {
+    "id": "d3d1-l2-q2",
+    "domain": 3,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [1, 3],
+    "question": "A company's S3 data lake contains customer documents with embedded PII. They want to build a RAG application using Bedrock Knowledge Base. The security team requires that PII be identified and handled BEFORE documents are ingested into the Knowledge Base, and that any PII that makes it through must be masked in responses. Which pipeline addresses both requirements?",
+    "options": [
+      "A. Ingest documents directly into the Knowledge Base, then configure Guardrails PII ANONYMIZE on the output to handle any PII in responses",
+      "B. Run Amazon Macie on the S3 bucket to discover PII, remediate flagged documents, then ingest into the Knowledge Base, and configure Guardrails PII ANONYMIZE on the output as a second layer",
+      "C. Use AWS Glue DataBrew to transform documents and remove PII before ingestion, with no additional filtering needed",
+      "D. Configure Amazon Comprehend PII detection as a pre-processor in the Knowledge Base ingestion pipeline"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it provides defense-in-depth: Macie discovers PII in S3 before ingestion (allowing remediation of source documents), and Guardrails PII ANONYMIZE on output catches any PII that remains after remediation. This addresses both requirements: pre-ingestion PII handling and response-level masking. A is wrong because it skips the pre-ingestion PII identification requirement -- PII would be stored in the vector index, increasing exposure risk even if masked at output. C is wrong because Glue DataBrew is for data transformation/cleaning, not PII discovery, and removing all PII from documents before ingestion may destroy important content. D is wrong because Comprehend PII detection is not a native pre-processor in the Knowledge Base ingestion pipeline -- Macie is the service designed for S3 data discovery.",
+    "examSkills": ["3.1.1", "3.1.2", "3.2.3"],
+    "tags": ["macie", "guardrails", "pii", "pre-ingestion", "defense-in-depth"]
+  },
+  {
+    "id": "d3d1-l2-q3",
+    "domain": 3,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [1, 3],
+    "question": "An enterprise has a shared Knowledge Base containing documents from multiple departments (HR, Finance, Legal). Each department should only be able to retrieve documents from their own department through the RAG application. Which approach provides the MOST secure data isolation?",
+    "options": [
+      "A. Create separate Knowledge Bases for each department, each with its own S3 bucket and vector store",
+      "B. Use AWS Lake Formation row-level security on the source data combined with Knowledge Base metadata filtering to restrict retrieval by department",
+      "C. Configure Guardrails denied topics to prevent users from asking about other departments' data",
+      "D. Implement a Lambda authorizer in front of the Bedrock API that filters responses based on the caller's department"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Lake Formation provides granular row-level security on the source data (ensuring only authorized users can access their department's data), and Knowledge Base metadata filtering restricts retrieval at query time based on department metadata tags. This provides data-level access control without duplicating infrastructure. A is wrong because while it provides isolation, creating separate Knowledge Bases per department significantly increases operational overhead and infrastructure costs, especially at scale. C is wrong because denied topics filter content subjects, not data access permissions -- users could still phrase queries to access other departments' data. D is wrong because filtering responses after retrieval means unauthorized documents are still being retrieved and sent to the FM, creating a data exposure risk.",
+    "examSkills": ["3.2.3", "3.2.4"],
+    "tags": ["lake-formation", "metadata-filtering", "data-isolation", "multi-department"]
+  },
+  {
+    "id": "d3d1-l2-q4",
+    "domain": 3,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [1, 3],
+    "question": "A company runs a RAG pipeline where some responses are generated by a non-Bedrock foundation model hosted on SageMaker. They want to apply the same Guardrails protections (PII filtering, content filtering, contextual grounding) to these SageMaker-generated responses. How can they achieve this?",
+    "options": [
+      "A. Migrate the SageMaker model to Bedrock to use native Guardrails integration",
+      "B. Use the ApplyGuardrail API, which works independently of the model source and can evaluate any text against Guardrails policies",
+      "C. Deploy a separate Amazon Comprehend pipeline to replicate Guardrails functionality for SageMaker outputs",
+      "D. Configure Guardrails on a Bedrock model and pass the SageMaker output through the Bedrock model for filtering"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because the ApplyGuardrail API is a standalone API that evaluates any text against a Guardrails configuration, regardless of which model generated it. This allows the same PII, content, and grounding checks to apply to SageMaker, self-hosted, or third-party model outputs. A is wrong because migrating models is unnecessary when ApplyGuardrail can filter any model's output, and some models may not be available on Bedrock. C is wrong because Comprehend provides entity detection and sentiment analysis but does not replicate the full Guardrails feature set (content filters, contextual grounding, Automated Reasoning, etc.). D is wrong because routing SageMaker output through a Bedrock model adds unnecessary latency and cost -- the Guardrails evaluation does not need model invocation.",
+    "examSkills": ["3.1.1", "3.1.2"],
+    "tags": ["apply-guardrail-api", "non-bedrock", "sagemaker", "guardrails"]
+  },
+  {
+    "id": "d4d2-l2-q1",
+    "domain": 4,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [2, 4],
+    "question": "A company's Bedrock Agent repeatedly calls the same external weather API during a conversation because multiple tool actions need current weather data. Each API call takes 2 seconds and adds latency. How should they optimize this?",
+    "options": [
+      "A. Increase the agent's session timeout and rely on the FM's context window to remember previous API responses",
+      "B. Cache tool responses in the agent's session using AgentCore Memory, and use AgentCore Gateway to manage the API integration with built-in response caching",
+      "C. Pre-fetch weather data for all possible locations before the conversation starts and store it in DynamoDB",
+      "D. Replace the external API with a Lambda function that has its own ElastiCache layer"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because AgentCore Memory provides session-level caching so the agent remembers API responses within a conversation, and AgentCore Gateway manages API integrations with built-in caching capabilities, preventing redundant external calls. A is wrong because the FM's context window contains the text of the conversation but the agent still makes new API calls when a tool action is triggered -- the context window does not prevent repeated tool invocations. C is wrong because pre-fetching all possible weather data is impractical and wasteful. D is wrong because while a Lambda+ElastiCache layer could work, it requires custom infrastructure when AgentCore provides these capabilities natively.",
+    "examSkills": ["4.1.3", "4.2.1"],
+    "tags": ["agentcore-memory", "agentcore-gateway", "tool-caching", "agent-optimization"]
+  },
+  {
+    "id": "d4d2-l2-q2",
+    "domain": 4,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [2, 4],
+    "question": "An enterprise runs a multi-agent system with five different agents, each using different foundation models. Management needs per-agent cost tracking and visibility into which agents are consuming the most resources. Which approach provides the MOST comprehensive cost observability?",
+    "options": [
+      "A. Enable AWS Cost Explorer with Bedrock service breakdown and manually attribute costs to each agent",
+      "B. Use AgentCore Observability for per-agent dashboards and metrics, combined with CloudWatch custom metrics using cost allocation tags per agent",
+      "C. Create separate AWS accounts for each agent and use consolidated billing to track per-account costs",
+      "D. Enable Model Invocation Logging and build a custom cost calculation pipeline based on token counts"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because AgentCore Observability provides purpose-built dashboards with per-agent quality and performance metrics, and CloudWatch custom metrics with cost allocation tags enable granular cost tracking per agent. This combination provides both operational and cost visibility. A is wrong because Cost Explorer provides service-level breakdown but cannot attribute costs to individual agents without tagging -- manual attribution is error-prone and not scalable. C is wrong because separate AWS accounts per agent is excessive overhead for cost tracking and complicates the deployment architecture. D is wrong because building a custom cost pipeline from invocation logs requires significant development effort and maintenance when purpose-built solutions exist.",
+    "examSkills": ["4.1.4", "4.2.1"],
+    "tags": ["agentcore-observability", "cost-tracking", "multi-agent", "allocation-tags"]
+  },
+  {
+    "id": "d4d2-l2-q3",
+    "domain": 4,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [2, 4],
+    "question": "A company wants to stream foundation model responses to users in real time through API Gateway, so users see text appearing word by word rather than waiting for the complete response. Which architecture supports this?",
+    "options": [
+      "A. REST API Gateway with synchronous Lambda integration calling Bedrock InvokeModel, returning the complete response",
+      "B. WebSocket API Gateway with Lambda handling connections, calling Bedrock InvokeModelWithResponseStream, and pushing chunks to the client via the WebSocket connection",
+      "C. REST API Gateway with HTTP/2 push notifications enabled for server-to-client streaming",
+      "D. REST API Gateway with chunked transfer encoding that returns partial Bedrock responses as they arrive"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because WebSocket API Gateway provides bidirectional communication, allowing the server to push response chunks to the client as they arrive from Bedrock's InvokeModelWithResponseStream API. This enables real-time token-by-token display. A is wrong because synchronous REST requests must wait for the complete response before returning to the client -- there is no streaming capability. C is wrong because API Gateway does not support HTTP/2 server push for streaming model responses. D is wrong because REST API Gateway does not support streaming partial responses through chunked transfer encoding in this architecture -- the Lambda proxy integration requires a complete response.",
+    "examSkills": ["4.1.3", "4.2.1"],
+    "tags": ["websocket", "streaming", "api-gateway", "response-stream"]
+  },
+  {
+    "id": "d4d2-l2-q4",
+    "domain": 4,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [2, 4],
+    "question": "A development team uses CodePipeline for CI/CD. They want to add a cost gate that prevents deployment of prompt changes that would increase FM invocation costs by more than 20%. Which pipeline architecture implements this?",
+    "options": [
+      "A. CodePipeline -> CodeBuild (deploy prompt) -> CloudWatch Alarm (if cost increases > 20%, rollback)",
+      "B. CodePipeline -> CodeBuild (run Bedrock Evaluations on test dataset) -> CodeBuild (compare token usage and estimated cost against baseline) -> Manual approval if cost threshold exceeded -> Deploy",
+      "C. CodePipeline -> CodeBuild (deploy prompt) -> AWS Budgets alert (if monthly spend increases) -> SNS notification",
+      "D. CodePipeline -> Lambda (analyze prompt length) -> Reject if token count increases by more than 20%"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it implements a pre-deployment cost gate: Bedrock Evaluations runs the new prompt against a test dataset to measure quality and token usage, a comparison stage calculates cost impact against the baseline, and the pipeline blocks deployment if the cost threshold is exceeded (with manual approval as an override). This catches cost increases before they hit production. A is wrong because it deploys first and rolls back after -- the cost increase has already occurred in production, which is reactive, not preventive. C is wrong because AWS Budgets tracks actual spending after deployment, making it a reactive approach that does not prevent the deployment. D is wrong because prompt token length alone does not determine cost -- the actual cost depends on the model's response tokens and how many invocations the prompt triggers, which requires running evaluations.",
+    "examSkills": ["4.1.4", "4.2.1"],
+    "tags": ["cicd", "cost-gate", "codepipeline", "bedrock-evaluations"]
+  },
+  {
+    "id": "d3d4d5-l3-q1",
+    "domain": 3,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [3, 4, 5],
+    "question": "A company needs a production RAG application that is simultaneously secure, cost-effective, and continuously monitored for quality. Which architecture addresses all three pillars?",
+    "options": [
+      "A. Bedrock KB in VPC + Guardrails (PII + content + grounding) + semantic caching with ElastiCache + Model Invocation Logging to S3 + Bedrock Evaluations on a weekly schedule",
+      "B. Bedrock KB with managed store + Guardrails PII ANONYMIZE + Bedrock Prompt Caching + CloudWatch basic metrics",
+      "C. Custom RAG with OpenSearch in VPC + Lambda PII filtering + on-demand Bedrock pricing + X-Ray tracing",
+      "D. Bedrock KB in VPC + Guardrails + Provisioned Throughput + CloudTrail logging"
+    ],
+    "correctAnswer": "A",
+    "explanation": "A is correct because it addresses all three pillars: Security (VPC isolation + Guardrails with PII, content, and grounding checks), Cost optimization (semantic caching eliminates duplicate FM calls), and Quality monitoring (Model Invocation Logging captures all prompts/responses, Bedrock Evaluations provides systematic quality assessment). B is wrong because the managed store does not run in VPC (security gap), Prompt Caching helps with cost but not as much as semantic caching for duplicate queries, and basic CloudWatch metrics do not provide quality evaluation. C is wrong because Lambda PII filtering requires custom code maintenance, on-demand pricing without caching is not cost-optimized, and X-Ray traces latency but does not evaluate output quality. D is wrong because Provisioned Throughput addresses latency, not cost optimization for duplicate queries, and CloudTrail logs API metadata but does not provide quality evaluation.",
+    "examSkills": ["3.1.1", "3.2.1", "4.1.2", "5.1.1", "5.2.2"],
+    "tags": ["secure-rag", "cost-optimized", "monitored", "multi-pillar"]
+  },
+  {
+    "id": "d3d4d5-l3-q2",
+    "domain": 3,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [3, 4, 5],
+    "question": "A company deploys multiple Bedrock Agents using AgentCore. They need to (1) govern what actions each agent can perform, (2) optimize agent performance and cost, and (3) continuously evaluate agent quality. Which combination of AgentCore services and AWS tools addresses all three requirements?",
+    "options": [
+      "A. AgentCore Policy for action governance + AgentCore Observability for performance monitoring + AgentCore Evaluations for quality scoring + CloudWatch dashboards for cost metrics",
+      "B. IAM policies for action restrictions + CloudWatch Logs for performance + Bedrock Evaluations for quality",
+      "C. Guardrails for action governance + Provisioned Throughput for performance + LLM-as-a-judge for quality",
+      "D. AgentCore Policy for governance + AgentCore Memory for session caching + manual quality reviews"
+    ],
+    "correctAnswer": "A",
+    "explanation": "A is correct because it leverages the full AgentCore stack: Policy (Cedar-based action governance for what agents can do), Observability (performance monitoring with OpenTelemetry and per-agent dashboards), Evaluations (automated quality scoring for correctness, helpfulness, safety), and CloudWatch dashboards for cost tracking. B is wrong because IAM policies control AWS API access, not semantic agent action boundaries (e.g., 'only email internal addresses'). CloudWatch Logs captures raw logs but does not provide agent-specific performance dashboards. Bedrock Evaluations assesses FM outputs, not agent-level behavior. C is wrong because Guardrails filter content quality, not agent action boundaries. Provisioned Throughput addresses latency, not comprehensive performance monitoring. LLM-as-a-judge without AgentCore Evaluations requires custom implementation. D is wrong because AgentCore Memory is for session context, not cost optimization, and manual quality reviews do not scale.",
+    "examSkills": ["3.2.4", "4.1.4", "5.1.1"],
+    "tags": ["agentcore", "policy", "observability", "evaluations", "governance"]
+  },
+  {
+    "id": "d3d4d5-l3-q3",
+    "domain": 3,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [3, 4, 5],
+    "question": "An auditor is reviewing a production GenAI application and requires: (1) a security audit trail showing who accessed what models and when, (2) a cost review showing spending patterns and optimization opportunities, (3) a quality audit showing output reliability, and (4) performance tracing across the application. Which combination of services addresses ALL audit requirements?",
+    "options": [
+      "A. CloudTrail for security audit + Cost Explorer for spending patterns + LLM-as-a-judge via Bedrock Evaluations for quality + X-Ray for performance tracing",
+      "B. CloudWatch Logs for all four requirements with different log groups for each audit domain",
+      "C. Model Invocation Logging for security + AWS Budgets for cost + Guardrails intervention reports for quality + CloudWatch Metrics for performance",
+      "D. AWS Config for security + Cost Explorer for cost + Human evaluation team for quality + CloudWatch Logs for performance"
+    ],
+    "correctAnswer": "A",
+    "explanation": "A is correct because each service is purpose-built for its audit domain: CloudTrail provides a tamper-proof record of who called which APIs and when (security), Cost Explorer shows spending patterns with service/model breakdown and identifies optimization opportunities (cost), Bedrock Evaluations with LLM-as-a-judge provides systematic quality assessment (quality), and X-Ray traces requests across service boundaries with latency breakdowns (performance). B is wrong because CloudWatch Logs captures raw log data but does not provide security audit trails (CloudTrail), cost analysis (Cost Explorer), quality evaluation (Bedrock Evaluations), or distributed tracing (X-Ray). C is wrong because Model Invocation Logging captures prompts/responses for debugging but is not a security audit trail for access control, Budgets tracks spending limits but not optimization opportunities, and Guardrails interventions measure safety, not output quality. D is wrong because AWS Config tracks resource configuration compliance, not API access auditing, and human evaluation does not scale for production audits.",
+    "examSkills": ["3.2.2", "4.1.4", "5.1.1", "5.2.2"],
+    "tags": ["audit", "cloudtrail", "cost-explorer", "x-ray", "bedrock-evaluations"]
+  },
+  {
+    "id": "d3d4d5-l3-q4",
+    "domain": 3,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [3, 4, 5],
+    "question": "A company needs continuous compliance monitoring for their GenAI application. They must automatically detect three types of drift: (1) misuse drift -- the application being used for unintended purposes, (2) bias drift -- outputs becoming increasingly biased over time, and (3) policy violations -- responses that violate company policies. When drift is detected, remediation must be automatic. Which architecture provides this?",
+    "options": [
+      "A. Scheduled Bedrock Evaluations jobs running weekly to assess all three types of drift, with SNS notifications to the compliance team",
+      "B. CloudWatch anomaly detection on Guardrails metrics (denied topic triggers for misuse, content filter triggers for bias, custom metric for policy violations), EventBridge rules triggering Lambda remediation functions (adjust thresholds, block users, alert compliance), with SageMaker Clarify running periodic bias analysis on output samples",
+      "C. AWS Config rules to check Bedrock resource configuration compliance, with automatic remediation via Systems Manager",
+      "D. Model Invocation Logging analyzed by a custom ML model that classifies drift types and sends alerts"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it provides continuous automated monitoring for all three drift types: CloudWatch anomaly detection catches deviations in Guardrails metrics (misuse via denied topic spikes, content filter pattern changes), SageMaker Clarify provides structured bias analysis on output samples, custom CloudWatch metrics track policy violations, and EventBridge + Lambda provides automated remediation (threshold adjustment, user blocking, compliance alerts). A is wrong because weekly evaluations are periodic, not continuous, and SNS notifications require human action rather than automated remediation. C is wrong because AWS Config monitors resource configuration compliance (e.g., is encryption enabled?), not application output drift like misuse, bias, or policy violations. D is wrong because building a custom ML model for drift classification requires significant development and maintenance, and it lacks the automated remediation pipeline.",
+    "examSkills": ["3.4.1", "3.4.2", "3.4.3", "5.2.2"],
+    "tags": ["compliance-monitoring", "drift-detection", "automated-remediation", "clarify"]
+  },
+  {
+    "id": "cross-l3-q1",
+    "domain": 3,
+    "level": 3,
+    "type": "multiple-response",
+    "integrationDomains": [1, 2, 3, 4, 5],
+    "question": "A company is designing a full production RAG pipeline: User -> API Gateway -> Lambda -> Bedrock Knowledge Base -> Foundation Model -> Response. They need to add security, cost optimization, and monitoring. Which FIVE components should be added to this pipeline to create a production-ready architecture? (Select FIVE.)",
+    "options": [
+      "A. Guardrails on both input and output for content filtering, PII protection, and grounding checks",
+      "B. Semantic caching layer before the Knowledge Base to serve cached responses for similar queries",
+      "C. Model Invocation Logging for prompt/response capture and debugging",
+      "D. VPC endpoint for Bedrock to keep traffic off the public internet",
+      "E. CloudWatch Synthetics canaries for endpoint health monitoring",
+      "F. SageMaker model registry for foundation model version tracking",
+      "G. Amazon Comprehend for sentiment analysis of all user queries"
+    ],
+    "correctAnswers": ["A", "B", "C", "D", "E"],
+    "explanation": "A is correct because Guardrails provides essential security (PII protection, content filtering) and quality (contextual grounding) checks on both input and output. B is correct because semantic caching eliminates redundant FM calls, providing significant cost optimization. C is correct because Model Invocation Logging captures all prompts and responses, enabling debugging and audit capabilities. D is correct because a VPC endpoint keeps Bedrock traffic private, essential for production security. E is correct because CloudWatch Synthetics canaries provide automated endpoint health monitoring to detect outages. F is wrong because SageMaker model registry is for custom model deployment, not for tracking Bedrock foundation model versions. G is wrong because Comprehend sentiment analysis is not a standard component of a production RAG pipeline -- Guardrails handles content filtering.",
+    "examSkills": ["3.1.1", "3.2.1", "4.1.2", "5.2.2"],
+    "tags": ["production-rag", "end-to-end", "architecture", "all-domains"]
+  },
+  {
+    "id": "cross-l3-q2",
+    "domain": 2,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [1, 2, 3, 4, 5],
+    "question": "An enterprise wants to deploy a multi-agent system where agents are built with different frameworks (Strands, LangGraph, CrewAI), share common tools, require governance, need cost optimization, and must be continuously evaluated. Which architecture provides the MOST comprehensive solution?",
+    "options": [
+      "A. Deploy each agent as a separate Bedrock Agent with shared action groups, use Guardrails for governance, Provisioned Throughput for cost, and Bedrock Evaluations for quality",
+      "B. Deploy all agents on AgentCore Runtime, use AgentCore Gateway for shared tool access, AgentCore Policy for governance, AgentCore Observability with cost allocation tags for cost tracking, and AgentCore Evaluations for quality scoring",
+      "C. Deploy agents on ECS containers, use API Gateway for shared tools, IAM for governance, CloudWatch for cost monitoring, and manual testing for quality",
+      "D. Use Bedrock Agents for all agents (migrating from other frameworks), with Guardrails for governance, semantic caching for cost, and X-Ray for monitoring"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because AgentCore is designed exactly for this scenario: Runtime supports any framework (Strands, LangGraph, CrewAI), Gateway provides shared tool access across agents, Policy provides Cedar-based governance for action boundaries, Observability tracks performance and costs per agent, and Evaluations provides automated quality scoring. This is the full AgentCore stack. A is wrong because Bedrock Agents only supports the AWS-native framework, so agents built with LangGraph or CrewAI cannot be deployed as Bedrock Agents. C is wrong because this custom approach requires building and maintaining every capability that AgentCore provides natively, and IAM cannot express semantic action boundaries. D is wrong because migrating agents from other frameworks to Bedrock Agents is unnecessary with AgentCore, Guardrails filter content not action boundaries, and X-Ray traces latency but does not provide agent-specific evaluation.",
+    "examSkills": ["2.1.3", "3.2.4", "4.1.4", "5.1.1"],
+    "tags": ["agentcore", "multi-agent", "multi-framework", "full-stack"]
+  },
+  {
+    "id": "cross-l3-q3",
+    "domain": 4,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [1, 2, 3, 4, 5],
+    "question": "A company is migrating their GenAI application from POC to production. The POC has no security controls, no cost optimization, no monitoring, and no CI/CD. Given limited time and budget, which is the MOST critical path to production readiness?",
+    "options": [
+      "A. First add CI/CD pipeline, then add monitoring, then add security, then optimize cost",
+      "B. First add security (Guardrails + VPC endpoint + IAM), then add monitoring (Model Invocation Logging + CloudWatch), then add CI/CD (CodePipeline + Bedrock Evaluations), then optimize cost (semantic caching + prompt caching)",
+      "C. First optimize cost to reduce spending, then add monitoring to track issues, then add security, then add CI/CD",
+      "D. First add monitoring to understand current behavior, then add security, then optimize cost, then add CI/CD"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because the critical path for production readiness prioritizes: Security first (you cannot go to production without Guardrails, VPC isolation, and proper IAM -- this is non-negotiable for production), Monitoring second (you need visibility before you can optimize -- Model Invocation Logging and CloudWatch provide the data), CI/CD third (automated testing and deployment prevents regressions as you iterate), and Cost optimization last (it requires traffic data from monitoring to be effective). A is wrong because CI/CD without security means deploying an insecure application faster. C is wrong because optimizing cost before adding security leaves the application vulnerable in production, and you need monitoring data to know where to optimize. D is wrong because deploying monitoring without security means the application is exposed in production while you collect data.",
+    "examSkills": ["3.2.1", "4.1.1", "5.2.2"],
+    "tags": ["poc-to-production", "critical-path", "migration", "prioritization"]
+  },
+  {
+    "id": "cross-l3-q4",
+    "domain": 5,
+    "level": 3,
+    "type": "matching",
+    "integrationDomains": [1, 2, 3, 4, 5],
+    "question": "Match each production GenAI problem to the MOST appropriate AWS solution.",
+    "leftItems": [
+      "FM generates information not in the source documents",
+      "Customer email addresses appear in chatbot responses",
+      "Monthly Bedrock costs are 3x higher than expected",
+      "Agent performs unauthorized actions on internal systems",
+      "RAG retrieval returns increasingly irrelevant results over months",
+      "Prompt template quality degrades after model version update"
+    ],
+    "rightItems": [
+      "Guardrails contextual grounding check",
+      "Guardrails PII filter with ANONYMIZE action",
+      "Semantic caching with ElastiCache",
+      "AgentCore Policy with Cedar rules",
+      "Embedding drift monitoring and re-embedding",
+      "Bedrock Evaluations with versioned test datasets"
+    ],
+    "correctMatches": {
+      "FM generates information not in the source documents": "Guardrails contextual grounding check",
+      "Customer email addresses appear in chatbot responses": "Guardrails PII filter with ANONYMIZE action",
+      "Monthly Bedrock costs are 3x higher than expected": "Semantic caching with ElastiCache",
+      "Agent performs unauthorized actions on internal systems": "AgentCore Policy with Cedar rules",
+      "RAG retrieval returns increasingly irrelevant results over months": "Embedding drift monitoring and re-embedding",
+      "Prompt template quality degrades after model version update": "Bedrock Evaluations with versioned test datasets"
+    },
+    "explanation": "Hallucination (FM generating ungrounded information) is detected by contextual grounding, which checks faithfulness to source material. PII leaks (email addresses in responses) are handled by Guardrails PII ANONYMIZE, which masks PII while keeping responses useful. High costs are reduced by semantic caching, which eliminates FM calls for similar queries. Unauthorized agent actions are governed by AgentCore Policy with Cedar-based rules that define action boundaries. Retrieval degradation over time is caused by embedding drift (model version changes causing misalignment) and requires re-embedding with the current model. Prompt regression after model updates is caught by running Bedrock Evaluations against versioned test datasets to compare quality before and after.",
+    "examSkills": ["3.1.1", "3.2.4", "4.1.2", "5.1.1", "5.2.3", "5.2.4"],
+    "tags": ["problem-solution-matching", "all-domains", "comprehensive"]
+  },
+  {
+    "id": "cross-l3-q5",
+    "domain": 4,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [1, 2, 3, 4, 5],
+    "question": "A global enterprise is building a GenAI platform that must serve users across multiple AWS regions, isolate data between tenants, keep all traffic private, handle variable traffic patterns cost-effectively, and continuously evaluate output quality. Which architecture addresses ALL requirements?",
+    "options": [
+      "A. Deploy the application in each region independently, use S3 Cross-Region Replication for data, Guardrails per region, on-demand Bedrock, and weekly Bedrock Evaluations",
+      "B. Use Bedrock Cross-Region Inference for multi-region availability, per-tenant VPC or account isolation with IAM boundaries, VPC endpoints for private connectivity, Provisioned Throughput for baseline capacity with on-demand burst, and scheduled LLM-as-a-judge evaluation via Bedrock Evaluations",
+      "C. Deploy behind CloudFront for global distribution, use single-region Bedrock with a VPN for tenants, Provisioned Throughput for all traffic, and manual quality reviews",
+      "D. Use Amazon Q Business for the platform (built-in multi-tenancy), with Cross-Region Inference, on-demand pricing, and CloudWatch monitoring"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because it addresses all five requirements: Cross-Region Inference routes requests to the nearest available region for multi-region serving, per-tenant VPC/account isolation with IAM provides data isolation, VPC endpoints keep traffic private, Provisioned Throughput with on-demand burst handles variable traffic cost-effectively, and LLM-as-a-judge via Bedrock Evaluations provides continuous quality evaluation. A is wrong because independent regional deployments are operationally complex, S3 replication alone does not handle model routing, and on-demand pricing without caching or provisioned throughput is not cost-effective for variable traffic. C is wrong because CloudFront does not help with Bedrock API distribution, VPN is less secure than VPC endpoints, Provisioned Throughput for all traffic is over-provisioned, and manual reviews do not scale. D is wrong because Q Business is for enterprise internal search, not building custom multi-tenant GenAI platforms.",
+    "examSkills": ["3.2.1", "3.2.4", "4.1.1", "4.1.3", "5.1.1"],
+    "tags": ["global-platform", "multi-region", "multi-tenant", "cross-region-inference"]
+  }
+]

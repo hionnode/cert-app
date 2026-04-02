@@ -2,9 +2,17 @@
 import Layout from "../../layouts/Layout.astro";
 import TaskChecklist from "../../components/study/TaskChecklist";
 import ScenarioCard from "../../components/scenarios/ScenarioCard";
+import SkillReviewList from "../../components/skills/SkillReviewList";
+import DayPractice from "../../components/practice/DayPractice";
 import days from "../../data/days.json";
 import scenarios from "../../data/scenarios.json";
+import examSkills from "../../data/exam-skills.json";
 import { DOMAINS } from "../../lib/constants";
+
+// Import practice questions
+let allPractice: any[] = [];
+try { const d1d2 = await import("../../data/practice-d1d2.json"); allPractice = allPractice.concat(d1d2.default ?? d1d2); } catch {}
+try { const d3d4d5 = await import("../../data/practice-d3d4d5.json"); allPractice = allPractice.concat(d3d4d5.default ?? d3d4d5); } catch {}
 
 export function getStaticPaths() {
 	return (days as any[]).map((day: any) => ({
@@ -20,6 +28,39 @@ const dayScenarios = (scenarios as any[]).filter((s: any) => day.scenarioIds.inc
 const domain = DOMAINS.find((d) => d.id === day.domain);
 const prevDay = day.number > 1 ? day.number - 1 : null;
 const nextDay = day.number < 28 ? day.number + 1 : null;
+const daySkills = (examSkills as any[]).filter((s: any) => day.examSkills.includes(s.id));
+
+// Map practice questions to days:
+// Week 1 (D1-7): Domain 1 standalone, progressive levels
+// Week 2 (D8-14): Domain 2 standalone + D1+D2 integration
+// Week 3 (D15-21): Domain 3/4/5 standalone + cross-domain integration
+// Week 4 (D22-28): All domains, all levels, full integration
+function getDayPractice(dayNum: number, domain: number, week: number): any[] {
+	if (allPractice.length === 0) return [];
+
+	if (week === 1) {
+		// D1 standalone, level matches day progression
+		const level = dayNum <= 2 ? 1 : dayNum <= 5 ? 2 : 3;
+		return allPractice.filter((q: any) => q.domain === 1 && !q.integrationDomains?.length && q.level <= level);
+	}
+	if (week === 2) {
+		const level = dayNum <= 9 ? 1 : dayNum <= 12 ? 2 : 3;
+		const d2standalone = allPractice.filter((q: any) => q.domain === 2 && !q.integrationDomains?.length && q.level <= level);
+		const integration = dayNum >= 11 ? allPractice.filter((q: any) => q.integrationDomains?.includes(1) && q.integrationDomains?.includes(2)) : [];
+		return [...d2standalone, ...integration];
+	}
+	if (week === 3) {
+		return allPractice.filter((q: any) => {
+			if (q.domain === domain && !q.integrationDomains?.length) return true;
+			if (dayNum >= 20 && q.integrationDomains?.length > 0) return true;
+			return false;
+		});
+	}
+	// Week 4: everything
+	return allPractice;
+}
+
+const dayPractice = getDayPractice(day.number, day.domain, day.week);
 
 const HANDS_ON_DIFFICULTY_STYLES: Record<string, string> = {
 	beginner: "bg-primary-100 text-primary-700",
@@ -92,20 +133,8 @@ const FURTHER_READING_ICONS: Record<string, string> = {
 				<TaskChecklist client:load tasks={day.tasks} dayNumber={day.number} />
 			</div>
 
-			<!-- Sidebar: Exam Skills + Spaced Repetition -->
-			<div class="space-y-6">
-				<div class="card-padded">
-					<h3 class="heading-3 mb-3">
-						<span class="i-lucide-shield-check w-5 h-5 inline-block mr-2 text-secondary-500" />
-						Exam Skills
-					</h3>
-					<div class="flex flex-wrap gap-2">
-						{day.examSkills.map((skill: string) => (
-							<span class="badge bg-secondary-100 text-secondary-700">{skill}</span>
-						))}
-					</div>
-				</div>
-
+			<!-- Sidebar: Spaced Repetition -->
+			<div>
 				{day.spacedRepetitionReview?.length > 0 && (
 					<div class="card-padded bg-accent-gold/5 border-accent-gold/30">
 						<h3 class="heading-3 mb-3">
@@ -125,6 +154,18 @@ const FURTHER_READING_ICONS: Record<string, string> = {
 				)}
 			</div>
 		</div>
+
+		<!-- Exam Skills Review (full width) -->
+		{daySkills.length > 0 && (
+			<section class="mt-10">
+				<h2 class="heading-2 mb-2">
+					<span class="i-lucide-shield-check w-6 h-6 inline-block mr-2 text-secondary-500" />
+					Exam Skills
+				</h2>
+				<p class="body-text mb-6">Write your understanding of each skill, then reveal the reference answer.</p>
+				<SkillReviewList client:visible skills={daySkills} compact={true} maxVisible={5} />
+			</section>
+		)}
 
 		<!-- Hands-On Activities -->
 		{day.handsOn?.length > 0 && (
@@ -190,6 +231,18 @@ const FURTHER_READING_ICONS: Record<string, string> = {
 						<ScenarioCard client:visible scenario={scenario} />
 					))}
 				</div>
+			</section>
+		)}
+
+		<!-- Practice Questions -->
+		{dayPractice.length > 0 && (
+			<section class="mt-10">
+				<h2 class="heading-2 mb-2">
+					<span class="i-lucide-brain w-6 h-6 inline-block mr-2 text-secondary-500" />
+					Practice Questions
+				</h2>
+				<p class="body-text mb-6">Test your understanding with {dayPractice.length} questions across 3 difficulty levels.</p>
+				<DayPractice client:visible questions={dayPractice} dayNumber={day.number} />
 			</section>
 		)}
 

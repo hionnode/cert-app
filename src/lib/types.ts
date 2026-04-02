@@ -121,6 +121,60 @@ export interface MatchingExercise {
 	pairs: { left: string; right: string }[];
 }
 
+// Exam Skills Types
+export interface ExamSkillResource {
+	title: string;
+	url: string;
+	type: "docs" | "blog" | "video" | "github" | "workshop";
+}
+
+export interface SkillScenario {
+	question: string;
+	thinkPrompts: string[];
+	answer: string;
+	difficulty: "beginner" | "intermediate" | "advanced";
+}
+
+export interface ExamSkill {
+	id: string;
+	taskId: string;
+	taskTitle: string;
+	domain: number;
+	description: string;
+	scenarios: SkillScenario[];
+	resources: ExamSkillResource[];
+}
+
+// Practice Exam Types
+export type QuestionType = "multiple-choice" | "multiple-response" | "ordering" | "matching";
+
+export interface PracticeQuestion {
+	id: string;
+	domain: number;
+	level: 1 | 2 | 3;
+	type: QuestionType;
+	integrationDomains: number[];
+	question: string;
+	options?: string[];
+	correctAnswer?: string;
+	correctAnswers?: string[];
+	correctOrder?: number[];
+	leftItems?: string[];
+	rightItems?: string[];
+	correctMatches?: Record<string, string>;
+	explanation: string;
+	examSkills: string[];
+	tags: string[];
+}
+
+export interface QuizState {
+	questionIndex: number;
+	answers: Record<string, string | string[] | number[] | Record<string, string>>;
+	showResult: boolean;
+	score: number;
+	total: number;
+}
+
 export interface ServiceItem {
 	name: string;
 	category: string;
@@ -146,6 +200,7 @@ export interface UserProgress {
 	servicesChecked: string[];
 	examAttempts: ExamAttempt[];
 	drillScores: Record<string, number>;
+	skillScenariosViewed: Record<string, number[]>;
 	streak: { current: number; lastDate: string };
 	lastVisitedDay: number;
 }

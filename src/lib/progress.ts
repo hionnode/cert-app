@@ -12,6 +12,7 @@ function defaultProgress(): UserProgress {
 		servicesChecked: [],
 		examAttempts: [],
 		drillScores: {},
+		skillScenariosViewed: {},
 		streak: { current: 0, lastDate: "" },
 		lastVisitedDay: 1,
 	};
@@ -115,6 +116,16 @@ export function getCompletionByDomain(
 		}
 	}
 	return result;
+}
+
+export function markSkillScenarioViewed(skillId: string, scenarioIndex: number) {
+	const p = loadProgress();
+	if (!p.skillScenariosViewed) p.skillScenariosViewed = {};
+	const viewed = p.skillScenariosViewed[skillId] ?? [];
+	if (!viewed.includes(scenarioIndex)) {
+		p.skillScenariosViewed[skillId] = [...viewed, scenarioIndex];
+	}
+	save(p);
 }
 
 export function exportProgress(): string {
