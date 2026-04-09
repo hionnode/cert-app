@@ -5,120 +5,149 @@ import {
 	transformerVariantGroup,
 } from "unocss";
 
-// Khan Academy green + Coursera blue inspired palette
 export default defineConfig({
-	presets: [presetUno(), presetIcons({ scale: 1.2, cdn: "https://esm.sh/" })],
+	presets: [
+		presetUno({ dark: "class" }),
+		presetIcons({ scale: 1.2, cdn: "https://esm.sh/" }),
+	],
 	transformers: [transformerVariantGroup()],
+	preflights: [
+		{
+			getCSS: () => `
+				:root {
+					--grv-bg0: #fbf1c7;
+					--grv-bg0-s: #f2e5bc;
+					--grv-bg1: #ebdbb2;
+					--grv-bg2: #d5c4a1;
+					--grv-bg3: #bdae93;
+					--grv-bg4: #a89984;
+					--grv-fg: #3c3836;
+					--grv-fg2: #504945;
+					--grv-fg3: #665c54;
+					--grv-fg4: #7c6f64;
+					--grv-red: #cc241d;
+					--grv-green: #98971a;
+					--grv-yellow: #d79921;
+					--grv-blue: #458588;
+					--grv-purple: #b16286;
+					--grv-aqua: #689d6a;
+					--grv-orange: #d65d0e;
+					--grv-domain-1: #79740e;
+					--grv-domain-2: #076678;
+					--grv-domain-3: #af3a03;
+					--grv-domain-4: #8f3f71;
+					--grv-domain-5: #9d0006;
+				}
+				.dark {
+					--grv-bg0: #282828;
+					--grv-bg0-s: #32302f;
+					--grv-bg1: #3c3836;
+					--grv-bg2: #504945;
+					--grv-bg3: #665c54;
+					--grv-bg4: #7c6f64;
+					--grv-fg: #ebdbb2;
+					--grv-fg2: #d5c4a1;
+					--grv-fg3: #bdae93;
+					--grv-fg4: #a89984;
+					--grv-red: #fb4934;
+					--grv-green: #b8bb26;
+					--grv-yellow: #fabd2f;
+					--grv-blue: #83a598;
+					--grv-purple: #d3869b;
+					--grv-aqua: #8ec07c;
+					--grv-orange: #fe8019;
+					--grv-domain-1: #b8bb26;
+					--grv-domain-2: #83a598;
+					--grv-domain-3: #fe8019;
+					--grv-domain-4: #d3869b;
+					--grv-domain-5: #fb4934;
+				}
+				body {
+					font-family: '0xProto Nerd Font Mono', '0xProto', 'JetBrains Mono', monospace;
+					font-size: 16px;
+				}
+			`,
+		},
+	],
 	theme: {
 		colors: {
-			// Primary - Khan Academy inspired greens
-			primary: {
-				50: "#f0fdf4",
-				100: "#dcfce7",
-				200: "#bbf7d0",
-				300: "#86efac",
-				400: "#4ade80",
-				500: "#1b7e4e", // Khan Academy green
-				600: "#14652e",
-				700: "#166534",
-				800: "#14532d",
-				900: "#052e16",
-			},
-			// Secondary - Coursera blue
-			secondary: {
-				50: "#eff6ff",
-				100: "#dbeafe",
-				200: "#bfdbfe",
-				300: "#93c5fd",
-				400: "#60a5fa",
-				500: "#0056d2", // Coursera blue
-				600: "#1d4ed8",
-				700: "#1e40af",
-				800: "#1e3a8a",
-				900: "#172554",
-			},
-			// Domain colors (for progress rings & badges)
-			domain: {
-				1: "#1b7e4e", // green - FM Integration (31%)
-				2: "#0056d2", // blue - Implementation (26%)
-				3: "#e16e2e", // orange - Safety/Security (20%)
-				4: "#8b5cf6", // purple - Optimization (12%)
-				5: "#e74c3c", // red - Testing (11%)
-			},
-			// Surfaces
 			surface: {
-				0: "#ffffff",
-				1: "#f8faf9",
-				2: "#f0f3f1",
-				3: "#e8ece9",
+				0: "var(--grv-bg0)",
+				1: "var(--grv-bg0-s)",
+				2: "var(--grv-bg1)",
+				3: "var(--grv-bg2)",
+				4: "var(--grv-bg3)",
 			},
-			// Text
 			ink: {
-				DEFAULT: "#1a2e1f",
-				secondary: "#4a5c50",
-				muted: "#7a8c80",
+				DEFAULT: "var(--grv-fg)",
+				secondary: "var(--grv-fg2)",
+				muted: "var(--grv-fg4)",
 			},
-			// Accents
 			accent: {
-				gold: "#f5a623",
-				coral: "#ff6b6b",
-				teal: "#2ec4b6",
+				red: "var(--grv-red)",
+				green: "var(--grv-green)",
+				yellow: "var(--grv-yellow)",
+				blue: "var(--grv-blue)",
+				purple: "var(--grv-purple)",
+				aqua: "var(--grv-aqua)",
+				orange: "var(--grv-orange)",
+			},
+			domain: {
+				1: "var(--grv-domain-1)",
+				2: "var(--grv-domain-2)",
+				3: "var(--grv-domain-3)",
+				4: "var(--grv-domain-4)",
+				5: "var(--grv-domain-5)",
 			},
 		},
 		fontFamily: {
-			sans: ["Lato", "system-ui", "-apple-system", "sans-serif"],
-			display: [
-				"Noto Sans",
-				"Lato",
-				"system-ui",
-				"-apple-system",
-				"sans-serif",
-			],
-			mono: ["JetBrains Mono", "Fira Code", "monospace"],
+			mono: ["0xProto Nerd Font Mono", "0xProto", "JetBrains Mono", "monospace"],
 		},
 		borderRadius: {
-			card: "12px",
-			button: "8px",
-			badge: "6px",
+			sm: "2px",
+			card: "4px",
+			button: "4px",
+			badge: "3px",
 			full: "9999px",
 		},
 	},
 	shortcuts: {
 		// Layout
-		"page-container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
-		"card":
-			"bg-surface-0 rounded-card border border-surface-3 shadow-sm hover:shadow-md transition-shadow",
-		"card-padded":
-			"bg-surface-0 rounded-card border border-surface-3 shadow-sm p-5",
+		"page-container": "max-w-5xl mx-auto px-4 sm:px-6 lg:px-8",
+		card: "bg-surface-1 border border-surface-3 rounded-card",
+		"card-padded": "bg-surface-1 border border-surface-3 rounded-card p-5",
 
 		// Typography
-		"heading-1": "text-3xl font-bold font-display text-ink",
-		"heading-2": "text-2xl font-bold font-display text-ink",
-		"heading-3": "text-lg font-semibold text-ink",
-		"body-text": "text-base text-ink-secondary leading-relaxed",
-		"caption": "text-sm text-ink-muted",
+		"heading-1": "text-3xl font-bold font-mono text-ink tracking-tight leading-tight",
+		"heading-2": "text-2xl font-bold font-mono text-ink tracking-tight leading-snug",
+		"heading-3": "text-lg font-semibold font-mono text-ink leading-snug",
+		"body-text": "text-base font-mono text-ink-secondary leading-relaxed",
+		"body-sm": "text-[15px] font-mono text-ink-secondary leading-relaxed",
+		caption: "text-sm font-mono text-ink-muted tracking-wide",
+		"caption-sm": "text-[13px] font-mono text-ink-muted tracking-wide",
 
 		// Buttons
 		"btn-primary":
-			"inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-button font-semibold hover:bg-primary-600 transition-colors",
+			"inline-flex items-center gap-2.5 px-5 py-2.5 bg-accent-aqua text-surface-0 rounded-button font-semibold font-mono text-base hover:brightness-110 transition-colors",
 		"btn-secondary":
-			"inline-flex items-center gap-2 px-4 py-2 bg-secondary-500 text-white rounded-button font-semibold hover:bg-secondary-600 transition-colors",
+			"inline-flex items-center gap-2.5 px-5 py-2.5 border border-accent-aqua text-accent-aqua rounded-button font-mono text-base hover:bg-accent-aqua/10 transition-colors",
 		"btn-ghost":
-			"inline-flex items-center gap-2 px-4 py-2 text-ink-secondary rounded-button hover:bg-surface-2 transition-colors",
+			"inline-flex items-center gap-2.5 px-5 py-2.5 text-ink-muted rounded-button font-mono text-base hover:text-ink hover:bg-surface-2 transition-colors",
 
 		// Badges
-		"badge":
-			"inline-flex items-center px-2.5 py-0.5 rounded-badge text-xs font-semibold",
-		"badge-domain-1": "badge bg-primary-100 text-primary-700",
-		"badge-domain-2": "badge bg-secondary-100 text-secondary-700",
-		"badge-domain-3": "badge bg-orange-100 text-orange-700",
-		"badge-domain-4": "badge bg-violet-100 text-violet-700",
-		"badge-domain-5": "badge bg-red-100 text-red-700",
+		badge:
+			"inline-flex items-center px-2 py-1 rounded-badge text-[13px] font-mono",
+		"badge-muted": "inline-flex items-center px-2 py-1 rounded-badge text-[13px] font-mono bg-surface-2 text-ink-muted",
+		"badge-domain-1": "badge border border-domain-1 text-domain-1",
+		"badge-domain-2": "badge border border-domain-2 text-domain-2",
+		"badge-domain-3": "badge border border-domain-3 text-domain-3",
+		"badge-domain-4": "badge border border-domain-4 text-domain-4",
+		"badge-domain-5": "badge border border-domain-5 text-domain-5",
 
 		// Nav
 		"nav-link":
-			"flex items-center gap-3 px-3 py-2.5 rounded-button text-ink-secondary hover:bg-surface-2 hover:text-ink transition-colors",
+			"flex items-center gap-2.5 px-5 py-2.5 text-base font-mono text-ink-muted hover:text-ink hover:bg-surface-2 transition-colors",
 		"nav-link-active":
-			"flex items-center gap-3 px-3 py-2.5 rounded-button bg-primary-50 text-primary-600 font-semibold",
+			"flex items-center gap-2.5 px-5 py-2.5 text-base font-mono text-accent-aqua font-semibold border-l-3 border-accent-aqua",
 	},
 });
