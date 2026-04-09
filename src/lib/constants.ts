@@ -7,7 +7,7 @@ export const DOMAINS: Domain[] = [
 		shortName: "FM Integration",
 		weight: 31,
 		approxQuestions: 20,
-		color: "#1b7e4e",
+		color: "var(--grv-domain-1)",
 	},
 	{
 		id: 2,
@@ -15,7 +15,7 @@ export const DOMAINS: Domain[] = [
 		shortName: "Implementation",
 		weight: 26,
 		approxQuestions: 17,
-		color: "#0056d2",
+		color: "var(--grv-domain-2)",
 	},
 	{
 		id: 3,
@@ -23,7 +23,7 @@ export const DOMAINS: Domain[] = [
 		shortName: "Safety & Security",
 		weight: 20,
 		approxQuestions: 13,
-		color: "#e16e2e",
+		color: "var(--grv-domain-3)",
 	},
 	{
 		id: 4,
@@ -31,7 +31,7 @@ export const DOMAINS: Domain[] = [
 		shortName: "Optimization",
 		weight: 12,
 		approxQuestions: 8,
-		color: "#8b5cf6",
+		color: "var(--grv-domain-4)",
 	},
 	{
 		id: 5,
@@ -39,7 +39,7 @@ export const DOMAINS: Domain[] = [
 		shortName: "Testing",
 		weight: 11,
 		approxQuestions: 7,
-		color: "#e74c3c",
+		color: "var(--grv-domain-5)",
 	},
 ];
 
@@ -97,19 +97,13 @@ export const EXAM_INFO = {
 
 export const NAV_ITEMS = [
 	{ label: "Dashboard", href: "/", icon: "i-lucide-layout-dashboard" },
-	{ label: "Overview", href: "/overview", icon: "i-lucide-info" },
-	{ label: "Study Plan", href: "/plan", icon: "i-lucide-calendar" },
+	{ label: "Plan", href: "/plan", icon: "i-lucide-calendar" },
 	{ label: "Scenarios", href: "/scenarios", icon: "i-lucide-lightbulb" },
 	{ label: "Skills", href: "/skills", icon: "i-lucide-shield-check" },
-	{ label: "Tables", href: "/comparisons", icon: "i-lucide-table-2" },
-	{ label: "Resources", href: "/resources", icon: "i-lucide-library" },
 ] as const;
 
 export const SECONDARY_NAV = [
-	{ label: "Rules", href: "/rules", icon: "i-lucide-list-checks" },
-	{ label: "Architectures", href: "/architectures", icon: "i-lucide-git-branch" },
-	{ label: "Drills", href: "/drills", icon: "i-lucide-dumbbell" },
 	{ label: "Practice", href: "/practice", icon: "i-lucide-brain" },
-	{ label: "Exams", href: "/exams", icon: "i-lucide-trophy" },
-	{ label: "Services", href: "/services", icon: "i-lucide-server" },
+	{ label: "Reference", href: "/reference", icon: "i-lucide-table-2" },
+	{ label: "Resources", href: "/resources", icon: "i-lucide-library" },
 ] as const;

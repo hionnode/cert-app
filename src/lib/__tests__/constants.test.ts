@@ -34,7 +34,7 @@ describe("constants", () => {
 			for (const d of DOMAINS) {
 				expect(d.name).toBeTruthy();
 				expect(d.shortName).toBeTruthy();
-				expect(d.color).toMatch(/^#[0-9a-f]{6}$/i);
+				expect(d.color).toMatch(/^var\(--grv-domain-\d+\)$/);
 				expect(d.weight).toBeGreaterThan(0);
 				expect(d.approxQuestions).toBeGreaterThan(0);
 			}

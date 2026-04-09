@@ -1,0 +1,135 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ComparisonTable from "../components/comparisons/ComparisonTable";
+import RulesSearch from "../components/rules/RulesSearch";
+import tables from "../data/comparisons.json";
+import rules from "../data/wrong-answer-rules.json";
+import architectures from "../data/architectures.json";
+import services from "../data/services-checklist.json";
+import { DOMAINS } from "../lib/constants";
+---
+
+<Layout title="Reference">
+	<div class="page-container py-6">
+		<h1 class="heading-1 mb-1">Reference</h1>
+		<p class="body-text mb-6">Tables, rules, architectures, and services — all in one place.</p>
+
+		<!-- Tab nav -->
+		<div class="flex gap-1 border-b border-surface-3 mb-6 overflow-x-auto" id="ref-tabs">
+			<button class="ref-tab active px-4 py-3 text-base font-mono text-ink-muted hover:text-ink border-b-2 border-transparent transition-colors" data-tab="tables">Tables</button>
+			<button class="ref-tab px-4 py-3 text-base font-mono text-ink-muted hover:text-ink border-b-2 border-transparent transition-colors" data-tab="rules">Rules</button>
+			<button class="ref-tab px-4 py-3 text-base font-mono text-ink-muted hover:text-ink border-b-2 border-transparent transition-colors" data-tab="architectures">Architectures</button>
+			<button class="ref-tab px-4 py-3 text-base font-mono text-ink-muted hover:text-ink border-b-2 border-transparent transition-colors" data-tab="services">Services</button>
+		</div>
+
+		<!-- Tables tab -->
+		<div class="ref-panel" id="panel-tables">
+			<p class="body-text mb-6">{tables.length} tables covering the key "when X vs Y" exam decisions</p>
+			<div class="space-y-8">
+				{(tables as any[]).map((table: any) => {
+					const domain = DOMAINS.find((d) => d.id === table.domain);
+					return (
+						<section>
+							<div class="flex items-center gap-3 mb-3">
+								<span class={`badge-domain-${table.domain}`}>{domain?.shortName}</span>
+								<h2 class="heading-2">{table.title}</h2>
+							</div>
+							{table.description && <p class="body-text mb-3">{table.description}</p>}
+							<ComparisonTable client:visible table={table} />
+						</section>
+					);
+				})}
+			</div>
+		</div>
+
+		<!-- Rules tab -->
+		<div class="ref-panel hidden" id="panel-rules">
+			<p class="body-text mb-6">{rules.length} trigger-to-answer mappings. When the exam says X, the answer is Y.</p>
+			<RulesSearch client:load rules={rules as any} />
+		</div>
+
+		<!-- Architectures tab -->
+		<div class="ref-panel hidden" id="panel-architectures">
+			<p class="body-text mb-6">4 reference architectures that combine all exam domains</p>
+			<div class="space-y-6">
+				{(architectures as any[]).map((arch: any) => (
+					<div class="card-padded">
+						<h2 class="heading-2 mb-2">{arch.title}</h2>
+						<p class="body-text mb-3">{arch.description}</p>
+						<div class="bg-surface-0 border border-surface-3 rounded-sm p-3 overflow-x-auto">
+							<div class="flex items-center flex-wrap gap-2">
+								{arch.steps.map((step: any, i: number) => (
+									<>
+										<div class="flex items-center gap-2 bg-surface-1 border border-surface-3 rounded-sm px-2 py-1.5 text-sm font-mono whitespace-nowrap">
+											<span class="font-semibold text-accent-aqua">{step.service}</span>
+											{step.action && <span class="text-ink-muted">({step.action})</span>}
+										</div>
+										{i < arch.steps.length - 1 && (
+											<div class="i-lucide-arrow-right w-4 h-4 text-ink-muted flex-shrink-0" />
+										)}
+									</>
+								))}
+							</div>
+						</div>
+						{arch.monitoring && (
+							<div class="mt-3 text-sm text-ink-secondary"><strong>Monitoring:</strong> {arch.monitoring}</div>
+						)}
+						{arch.costNote && (
+							<div class="mt-1 text-sm text-ink-secondary"><strong>Cost:</strong> {arch.costNote}</div>
+						)}
+					</div>
+				))}
+			</div>
+		</div>
+
+		<!-- Services tab -->
+		<div class="ref-panel hidden" id="panel-services">
+			<p class="body-text mb-6">{services.length} AWS services in scope for the exam.</p>
+			{(() => {
+				const categories = [...new Set((services as any[]).map((s: any) => s.category))];
+				return categories.map((cat: string) => {
+					const catServices = (services as any[]).filter((s: any) => s.category === cat);
+					return (
+						<section class="mb-6">
+							<h2 class="heading-3 mb-2">{cat}</h2>
+							<div class="grid grid-cols-1 sm:grid-cols-2 gap-1">
+								{catServices.map((svc: any) => (
+									<label class="flex items-center gap-2 p-2 hover:bg-surface-2 cursor-pointer transition-colors body-sm">
+										<input type="checkbox" class="w-4 h-4 accent-[var(--grv-aqua)]" />
+										<span>{svc.name}</span>
+									</label>
+								))}
+							</div>
+						</section>
+					);
+				});
+			})()}
+		</div>
+	</div>
+
+	<script is:inline>
+		document.querySelectorAll('.ref-tab').forEach(function(tab) {
+			tab.addEventListener('click', function() {
+				document.querySelectorAll('.ref-tab').forEach(function(t) {
+					t.classList.remove('active');
+					t.style.borderBottomColor = 'transparent';
+					t.style.color = '';
+				});
+				tab.classList.add('active');
+				tab.style.borderBottomColor = 'var(--grv-aqua)';
+				tab.style.color = 'var(--grv-fg)';
+				document.querySelectorAll('.ref-panel').forEach(function(p) {
+					p.classList.add('hidden');
+				});
+				var panelId = 'panel-' + tab.getAttribute('data-tab');
+				document.getElementById(panelId)?.classList.remove('hidden');
+			});
+		});
+		// Set initial active tab style
+		var firstTab = document.querySelector('.ref-tab.active');
+		if (firstTab) {
+			firstTab.style.borderBottomColor = 'var(--grv-aqua)';
+			firstTab.style.color = 'var(--grv-fg)';
+		}
+	</script>
+</Layout>
