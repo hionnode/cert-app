@@ -7,69 +7,67 @@ interface Props {
 const { title, description = "Interactive 28-day study plan for the AWS Certified Generative AI Developer - Professional (AIP-C01) exam" } = Astro.props;
 ---
 
-<html lang="en">
+<html lang="en" class="dark">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content={description} />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+		<!-- 0xProto Nerd Font Mono - must be installed locally -->
 		<title>{title} | AIP-C01 Study Hub</title>
+		<script is:inline>
+			(function() {
+				const t = localStorage.getItem('theme');
+				if (t === 'light') {
+					document.documentElement.classList.remove('dark');
+				} else {
+					document.documentElement.classList.add('dark');
+					if (!t) localStorage.setItem('theme', 'dark');
+				}
+			})();
+		</script>
 	</head>
-	<body class="bg-surface-1 text-ink font-sans min-h-screen">
+	<body class="bg-surface-0 text-ink font-mono min-h-screen">
 		<!-- Mobile header -->
 		<header class="lg:hidden sticky top-0 z-50 bg-surface-0 border-b border-surface-3 px-4 py-3 flex items-center justify-between">
 			<a href="/" class="flex items-center gap-2">
-				<div class="w-8 h-8 bg-primary-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">AI</div>
-				<span class="font-display font-bold text-lg">AIP-C01</span>
+				<span class="text-accent-aqua font-bold text-base">AIP-C01</span>
+				<span class="text-[13px] text-ink-muted">Study Hub</span>
 			</a>
-			<nav class="flex items-center gap-1">
-				<a href="/scenarios" class="p-2 rounded-button hover:bg-surface-2" title="Scenarios">
-					<div class="i-lucide-lightbulb w-5 h-5 text-ink-secondary" />
-				</a>
-				<a href="/rules" class="p-2 rounded-button hover:bg-surface-2" title="Rules">
-					<div class="i-lucide-list-checks w-5 h-5 text-ink-secondary" />
-				</a>
-			</nav>
+			<button id="theme-toggle-mobile" class="p-1.5 hover:bg-surface-2 rounded-sm transition-colors" aria-label="Toggle theme">
+				<div class="i-lucide-sun w-4 h-4 text-accent-yellow hidden dark:block" />
+				<div class="i-lucide-moon w-4 h-4 text-accent-blue dark:hidden" />
+			</button>
 		</header>
 
 		<div class="flex min-h-screen">
 			<!-- Desktop sidebar -->
-			<aside class="hidden lg:flex flex-col w-64 bg-surface-0 border-r border-surface-3 sticky top-0 h-screen overflow-y-auto">
-				<div class="p-5">
-					<a href="/" class="flex items-center gap-3">
-						<div class="w-10 h-10 bg-primary-500 rounded-xl flex items-center justify-center text-white font-bold">AI</div>
-						<div>
-							<div class="font-display font-bold text-lg leading-tight">AIP-C01</div>
-							<div class="text-xs text-ink-muted">Study Hub</div>
-						</div>
+			<aside class="hidden lg:flex flex-col w-56 bg-surface-0 border-r border-surface-3 sticky top-0 h-screen overflow-y-auto">
+				<div class="p-5 border-b border-surface-3">
+					<a href="/" class="block">
+						<span class="text-accent-aqua font-bold text-base">AIP-C01</span>
+						<span class="text-[13px] text-ink-muted block">Study Hub</span>
 					</a>
 				</div>
 
-				<nav class="flex-1 px-3 space-y-1">
-					<div class="caption px-3 py-2 uppercase tracking-wider">Study</div>
-					<a href="/" class="nav-link"><div class="i-lucide-layout-dashboard w-5 h-5" /> Dashboard</a>
-					<a href="/overview" class="nav-link"><div class="i-lucide-info w-5 h-5" /> Overview</a>
-					<a href="/plan" class="nav-link"><div class="i-lucide-calendar w-5 h-5" /> Study Plan</a>
-					<a href="/scenarios" class="nav-link"><div class="i-lucide-lightbulb w-5 h-5" /> Scenarios</a>
-					<a href="/skills" class="nav-link"><div class="i-lucide-shield-check w-5 h-5" /> Skills</a>
-					<a href="/comparisons" class="nav-link"><div class="i-lucide-table-2 w-5 h-5" /> Tables</a>
-					<a href="/resources" class="nav-link"><div class="i-lucide-library w-5 h-5" /> Resources</a>
+				<nav class="flex-1 py-2">
+					<a href="/" class="nav-link">Dashboard</a>
+					<a href="/plan" class="nav-link">Plan</a>
+					<a href="/scenarios" class="nav-link">Scenarios</a>
+					<a href="/skills" class="nav-link">Skills</a>
 
-					<div class="caption px-3 py-2 mt-4 uppercase tracking-wider">Practice</div>
-					<a href="/rules" class="nav-link"><div class="i-lucide-list-checks w-5 h-5" /> Rules</a>
-					<a href="/architectures" class="nav-link"><div class="i-lucide-git-branch w-5 h-5" /> Architectures</a>
-					<a href="/drills" class="nav-link"><div class="i-lucide-dumbbell w-5 h-5" /> Drills</a>
-					<a href="/practice" class="nav-link"><div class="i-lucide-brain w-5 h-5" /> Practice</a>
-					<a href="/exams" class="nav-link"><div class="i-lucide-trophy w-5 h-5" /> Exams</a>
-					<a href="/services" class="nav-link"><div class="i-lucide-server w-5 h-5" /> Services</a>
+					<div class="mt-4"></div>
+					<a href="/practice" class="nav-link">Practice</a>
+					<a href="/reference" class="nav-link">Reference</a>
+					<a href="/resources" class="nav-link">Resources</a>
 				</nav>
 
-				<div class="p-4 border-t border-surface-3">
-					<div class="text-xs text-ink-muted">AWS GenAI Developer Pro</div>
-					<div class="text-xs text-ink-muted">28-Day Study Plan</div>
+				<div class="p-5 border-t border-surface-3 flex items-center justify-between">
+					<span class="text-[13px] text-ink-muted">28-day plan</span>
+					<button id="theme-toggle-desktop" class="p-1.5 hover:bg-surface-2 rounded-sm transition-colors" aria-label="Toggle theme">
+						<div class="i-lucide-sun w-4 h-4 text-accent-yellow hidden dark:block" />
+						<div class="i-lucide-moon w-4 h-4 text-accent-blue dark:hidden" />
+					</button>
 				</div>
 			</aside>
 
@@ -81,26 +79,35 @@ const { title, description = "Interactive 28-day study plan for the AWS Certifie
 
 		<!-- Mobile bottom nav -->
 		<nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-surface-0 border-t border-surface-3 flex justify-around py-2 z-50">
-			<a href="/" class="flex flex-col items-center gap-1 px-3 py-1 text-ink-muted hover:text-primary-500">
+			<a href="/" class="flex flex-col items-center gap-1 px-3 py-1 text-ink-muted hover:text-accent-aqua">
 				<div class="i-lucide-layout-dashboard w-5 h-5" />
-				<span class="text-[10px] font-semibold">Home</span>
+				<span class="text-[13px] font-semibold">Home</span>
 			</a>
-			<a href="/plan" class="flex flex-col items-center gap-1 px-3 py-1 text-ink-muted hover:text-primary-500">
+			<a href="/plan" class="flex flex-col items-center gap-1 px-3 py-1 text-ink-muted hover:text-accent-aqua">
 				<div class="i-lucide-calendar w-5 h-5" />
-				<span class="text-[10px] font-semibold">Plan</span>
+				<span class="text-[13px] font-semibold">Plan</span>
 			</a>
-			<a href="/scenarios" class="flex flex-col items-center gap-1 px-3 py-1 text-ink-muted hover:text-primary-500">
-				<div class="i-lucide-lightbulb w-5 h-5" />
-				<span class="text-[10px] font-semibold">Scenarios</span>
+			<a href="/practice" class="flex flex-col items-center gap-1 px-3 py-1 text-ink-muted hover:text-accent-aqua">
+				<div class="i-lucide-brain w-5 h-5" />
+				<span class="text-[13px] font-semibold">Practice</span>
 			</a>
-			<a href="/comparisons" class="flex flex-col items-center gap-1 px-3 py-1 text-ink-muted hover:text-primary-500">
+			<a href="/reference" class="flex flex-col items-center gap-1 px-3 py-1 text-ink-muted hover:text-accent-aqua">
 				<div class="i-lucide-table-2 w-5 h-5" />
-				<span class="text-[10px] font-semibold">Tables</span>
+				<span class="text-[13px] font-semibold">Reference</span>
 			</a>
-			<a href="/drills" class="flex flex-col items-center gap-1 px-3 py-1 text-ink-muted hover:text-primary-500">
-				<div class="i-lucide-dumbbell w-5 h-5" />
-				<span class="text-[10px] font-semibold">Drills</span>
+			<a href="/scenarios" class="flex flex-col items-center gap-1 px-3 py-1 text-ink-muted hover:text-accent-aqua">
+				<div class="i-lucide-lightbulb w-5 h-5" />
+				<span class="text-[13px] font-semibold">Scenarios</span>
 			</a>
 		</nav>
+
+		<script is:inline>
+			document.querySelectorAll('[id^="theme-toggle"]').forEach(function(btn) {
+				btn.addEventListener('click', function() {
+					var isDark = document.documentElement.classList.toggle('dark');
+					localStorage.setItem('theme', isDark ? 'dark' : 'light');
+				});
+			});
+		</script>
 	</body>
 </html>
