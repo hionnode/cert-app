@@ -39,8 +39,8 @@ export default function ComparisonTable({ table }: ComparisonTableProps) {
 
   const SortIcon = ({ col }: { col: string }) => {
     if (sortCol !== col) return <ArrowUpDown className="w-3 h-3 text-ink-muted" />;
-    if (sortDir === "asc") return <ArrowUp className="w-3 h-3 text-primary-500" />;
-    return <ArrowDown className="w-3 h-3 text-primary-500" />;
+    if (sortDir === "asc") return <ArrowUp className="w-3 h-3 text-accent-aqua" />;
+    return <ArrowDown className="w-3 h-3 text-accent-aqua" />;
   };
 
   return (
@@ -66,15 +66,15 @@ export default function ComparisonTable({ table }: ComparisonTableProps) {
                 return (
                   <th
                     key={col}
-                    className={`text-left px-4 py-3 font-semibold whitespace-nowrap cursor-pointer select-none transition-colors hover:bg-surface-2 ${
+                    className={`text-left px-5 py-4 font-semibold whitespace-nowrap cursor-pointer select-none transition-colors hover:bg-surface-2 ${
                       i === 0 ? "sticky left-0 z-10 bg-surface-1" : ""
-                    } ${isExamTrigger ? "bg-accent-gold/10" : ""}`}
+                    } ${isExamTrigger ? "bg-accent-yellow/10" : ""}`}
                     onClick={() => handleSort(col)}
                   >
                     <span className="inline-flex items-center gap-1.5">
                       {col}
                       {isExamTrigger && (
-                        <span className="badge bg-accent-gold/20 text-amber-700 text-[10px]">
+                        <span className="badge bg-accent-yellow/20 text-accent-yellow">
                           Exam
                         </span>
                       )}
@@ -96,11 +96,11 @@ export default function ComparisonTable({ table }: ComparisonTableProps) {
                   return (
                     <td
                       key={col}
-                      className={`px-4 py-3 ${
+                      className={`px-5 py-4 ${
                         ci === 0
                           ? "sticky left-0 z-10 bg-surface-0 font-medium text-ink"
                           : "text-ink-secondary"
-                      } ${isExamTrigger ? "bg-accent-gold/5 font-medium text-ink" : ""}`}
+                      } ${isExamTrigger ? "bg-accent-yellow/5 font-medium text-ink" : ""}`}
                     >
                       {row[col] ?? "\u2014"}
                     </td>

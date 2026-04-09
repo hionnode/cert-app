@@ -40,13 +40,13 @@ export default function RulesSearch({ rules }: RulesSearchProps) {
           placeholder="Search wrong-answer rules..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full pl-12 pr-4 py-3.5 bg-surface-0 border border-surface-3 rounded-card text-ink placeholder:text-ink-muted focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all text-base"
+          className="w-full pl-12 pr-4 py-3.5 bg-surface-0 border border-surface-3 rounded-card text-ink placeholder:text-ink-muted focus:outline-none focus:border-accent-aqua focus:ring-2 focus:ring-accent-aqua/20 transition-all text-base"
         />
         {query && (
           <button
             type="button"
             onClick={() => setQuery("")}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-ink-muted hover:text-ink transition-colors cursor-pointer"
+            className="absolute right-4 top-1/2 -translate-y-1/2 caption-sm hover:text-ink transition-colors cursor-pointer"
           >
             Clear
           </button>
@@ -70,12 +70,12 @@ export default function RulesSearch({ rules }: RulesSearchProps) {
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-semibold text-ink">{rule.trigger}</span>
                   <ArrowRight className="w-3.5 h-3.5 text-ink-muted shrink-0" />
-                  <span className="text-primary-600 font-medium">{rule.answer}</span>
+                  <span className="text-accent-aqua font-medium">{rule.answer}</span>
                 </div>
 
                 {rule.notThis && (
                   <p className="mt-1.5 text-sm">
-                    <span className="font-semibold text-accent-coral">NOT:</span>{" "}
+                    <span className="font-semibold text-accent-red">NOT:</span>{" "}
                     <span className="text-ink-secondary">{rule.notThis}</span>
                   </p>
                 )}

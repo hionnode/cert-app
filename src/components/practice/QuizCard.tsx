@@ -11,9 +11,9 @@ interface QuizCardProps {
 type Phase = "answering" | "feedback" | "complete";
 
 const levelLabels: Record<number, { label: string; cls: string }> = {
-	1: { label: "Foundation", cls: "bg-primary-100 text-primary-700" },
-	2: { label: "Applied", cls: "bg-accent-gold/15 text-amber-700" },
-	3: { label: "Expert", cls: "bg-red-100 text-red-700" },
+	1: { label: "Foundation", cls: "bg-surface-2 text-accent-aqua" },
+	2: { label: "Applied", cls: "bg-surface-2 text-accent-yellow" },
+	3: { label: "Expert", cls: "bg-surface-2 text-accent-red" },
 };
 
 export default function QuizCard({ questions, title }: QuizCardProps) {
@@ -78,9 +78,9 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 		const passed = pct >= 75;
 		return (
 			<div className="card-padded text-center py-10">
-				<Trophy className={`w-16 h-16 mx-auto mb-4 ${passed ? "text-primary-500" : "text-accent-gold"}`} />
+				<Trophy className={`w-16 h-16 mx-auto mb-4 ${passed ? "text-accent-aqua" : "text-accent-yellow"}`} />
 				<h2 className="heading-2 mb-2">{passed ? "Great job!" : "Keep practicing!"}</h2>
-				<div className="text-4xl font-bold font-display mb-1" style={{ color: passed ? "#1b7e4e" : "#e16e2e" }}>
+				<div className="text-4xl font-bold font-mono mb-1" style={{ color: passed ? "var(--grv-green)" : "var(--grv-orange)" }}>
 					{score}/{questions.length}
 				</div>
 				<p className="caption mb-1">{pct}% correct</p>
@@ -104,16 +104,15 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 	return (
 		<div className="card overflow-hidden">
 			{/* Header */}
-			<div className="flex items-center justify-between gap-2 px-5 pt-5 pb-3">
+			<div className="flex items-center justify-between gap-2 px-6 pt-6 pb-4">
 				<div className="flex items-center gap-2 flex-wrap">
 					<span className={`badge-domain-${q.domain}`}>D{q.domain}</span>
 					<span className={`badge ${level.cls}`}>{level.label}</span>
 					{q.integrationDomains.length > 0 && (
-						<span className="badge bg-violet-100 text-violet-700">
+						<span className="badge border border-accent-purple text-accent-purple">
 							+D{q.integrationDomains.join("+D")}
 						</span>
 					)}
-					<span className="badge bg-surface-2 text-ink-muted">{q.type}</span>
 				</div>
 				<span className="caption">
 					{currentIdx + 1} / {questions.length}
@@ -121,17 +120,17 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 			</div>
 
 			{/* Progress bar */}
-			<div className="mx-5 mb-4">
-				<div className="w-full h-1.5 bg-surface-2 rounded-full">
+			<div className="mx-6 mb-5">
+				<div className="w-full h-1.5 bg-surface-2 rounded-sm">
 					<div
-						className="h-1.5 bg-primary-500 rounded-full transition-all duration-300"
+						className="h-1.5 bg-accent-aqua rounded-sm transition-all duration-300"
 						style={{ width: `${((currentIdx + (phase === "feedback" ? 1 : 0)) / questions.length) * 100}%` }}
 					/>
 				</div>
 			</div>
 
 			{/* Question */}
-			<div className="px-5 pb-5">
+			<div className="px-6 pb-6">
 				<p className="body-text mb-5 font-medium text-ink">{q.question}</p>
 
 				{/* Multiple Choice / Multiple Response Options */}
@@ -144,21 +143,21 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 									? selected === letter
 									: selectedMultiple.includes(letter);
 
-							let optionStyle = "border-surface-3 hover:border-primary-400";
+							let optionStyle = "border-surface-3 hover:border-accent-aqua";
 							if (phase === "feedback") {
 								const isCorrectOpt =
 									q.type === "multiple-choice"
 										? letter === q.correctAnswer
 										: (q.correctAnswers ?? []).includes(letter);
 								if (isCorrectOpt) {
-									optionStyle = "border-primary-500 bg-primary-50";
+									optionStyle = "border-accent-aqua bg-surface-2";
 								} else if (isSelected && !isCorrectOpt) {
-									optionStyle = "border-red-400 bg-red-50";
+									optionStyle = "border-accent-red bg-accent-red/10";
 								} else {
 									optionStyle = "border-surface-3 opacity-60";
 								}
 							} else if (isSelected) {
-								optionStyle = "border-secondary-500 bg-secondary-50";
+								optionStyle = "border-accent-blue bg-surface-2";
 							}
 
 							return (
@@ -170,17 +169,17 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 										if (q.type === "multiple-choice") setSelected(letter);
 										else toggleMultiple(letter);
 									}}
-									className={`w-full text-left p-4 rounded-card border-2 transition-all cursor-pointer ${optionStyle}`}
+									className={`w-full text-left p-4 rounded-card border transition-all cursor-pointer ${optionStyle}`}
 								>
 									<div className="flex items-start gap-3">
-										<span className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 ${
+										<span className={`w-7 h-7 rounded-sm flex items-center justify-center text-sm font-bold flex-shrink-0 ${
 											isSelected
-												? "bg-secondary-500 text-white"
+												? "bg-accent-blue text-surface-0"
 												: "bg-surface-2 text-ink-secondary"
 										}`}>
 											{letter}
 										</span>
-										<span className="text-sm text-ink">{opt.substring(3)}</span>
+										<span className="body-sm text-ink">{opt.substring(3)}</span>
 									</div>
 								</button>
 							);
@@ -190,19 +189,19 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 
 				{/* Feedback */}
 				{phase === "feedback" && (
-					<div className={`rounded-card p-4 mb-5 ${isCorrect ? "bg-primary-50 border border-primary-200" : "bg-red-50 border border-red-200"}`}>
+					<div className={`rounded-card p-4 mb-5 ${isCorrect ? "bg-surface-2 border border-accent-aqua" : "bg-accent-red/10 border border-accent-red"}`}>
 						<div className="flex items-center gap-2 mb-2">
 							{isCorrect ? (
-								<><CheckCircle className="w-5 h-5 text-primary-500" /><span className="font-semibold text-primary-700">Correct!</span></>
+								<><CheckCircle className="w-5 h-5 text-accent-aqua" /><span className="font-semibold text-accent-aqua">Correct!</span></>
 							) : (
-								<><XCircle className="w-5 h-5 text-red-500" /><span className="font-semibold text-red-700">Incorrect</span></>
+								<><XCircle className="w-5 h-5 text-accent-red" /><span className="font-semibold text-accent-red">Incorrect</span></>
 							)}
 						</div>
-						<p className="text-sm text-ink-secondary whitespace-pre-line">{q.explanation}</p>
+						<p className="body-sm whitespace-pre-line">{q.explanation}</p>
 						{q.examSkills.length > 0 && (
 							<div className="flex flex-wrap gap-1.5 mt-3">
 								{q.examSkills.map((skill) => (
-									<span key={skill} className="badge bg-surface-0 text-ink-muted text-[10px]">{skill}</span>
+									<span key={skill} className="badge-muted">{skill}</span>
 								))}
 							</div>
 						)}

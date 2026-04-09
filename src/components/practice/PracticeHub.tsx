@@ -15,9 +15,9 @@ type FilterState = {
 };
 
 const levelConfig = [
-	{ value: 1 as const, label: "Foundation", icon: BookOpen, desc: "Direct recall, single-service", cls: "border-primary-300 hover:bg-primary-50" },
-	{ value: 2 as const, label: "Applied", icon: Layers, desc: "Scenario-based, multi-service", cls: "border-accent-gold/50 hover:bg-accent-gold/5" },
-	{ value: 3 as const, label: "Expert", icon: Crown, desc: "Complex trade-offs, architecture", cls: "border-red-300 hover:bg-red-50" },
+	{ value: 1 as const, label: "Foundation", icon: BookOpen, desc: "Direct recall, single-service", cls: "border-accent-aqua hover:bg-surface-2" },
+	{ value: 2 as const, label: "Applied", icon: Layers, desc: "Scenario-based, multi-service", cls: "border-accent-yellow/50 hover:bg-accent-yellow/5" },
+	{ value: 3 as const, label: "Expert", icon: Crown, desc: "Complex trade-offs, architecture", cls: "border-accent-red hover:bg-accent-red/10" },
 ];
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -101,15 +101,15 @@ export default function PracticeHub({ questions }: PracticeHubProps) {
 						type="button"
 						onClick={() => setFilter({ ...filter, domain: "all" })}
 						className={`card p-4 text-left transition-all cursor-pointer ${
-							filter.domain === "all" ? "border-primary-500 bg-primary-50 shadow-md" : "hover:border-primary-300"
+							filter.domain === "all" ? "border-accent-aqua bg-surface-2" : "hover:border-accent-aqua"
 						}`}
 					>
 						<div className="flex items-center justify-between mb-1">
-							<span className="badge bg-primary-100 text-primary-700">All</span>
+							<span className="badge bg-surface-2 text-accent-aqua">All</span>
 							<span className="caption">{totalByDomain.all} Qs</span>
 						</div>
-						<h3 className="text-sm font-semibold text-ink">All Domains</h3>
-						<p className="text-xs text-ink-muted">Full practice across everything</p>
+						<h3 className="body-sm font-semibold text-ink">All Domains</h3>
+						<p className="caption-sm">Full practice across everything</p>
 					</button>
 
 					{/* Per domain */}
@@ -119,7 +119,7 @@ export default function PracticeHub({ questions }: PracticeHubProps) {
 							type="button"
 							onClick={() => setFilter({ ...filter, domain: d.id })}
 							className={`card p-4 text-left transition-all cursor-pointer ${
-								filter.domain === d.id ? "shadow-md" : ""
+								filter.domain === d.id ? "" : ""
 							}`}
 							style={{
 								borderColor: filter.domain === d.id ? d.color : undefined,
@@ -130,8 +130,8 @@ export default function PracticeHub({ questions }: PracticeHubProps) {
 								<span className={`badge-domain-${d.id}`}>D{d.id}</span>
 								<span className="caption">{totalByDomain[d.id] ?? 0} Qs</span>
 							</div>
-							<h3 className="text-sm font-semibold text-ink">{d.shortName}</h3>
-							<p className="text-xs text-ink-muted">{d.weight}% of exam</p>
+							<h3 className="body-sm font-semibold text-ink">{d.shortName}</h3>
+							<p className="caption-sm">{d.weight}% of exam</p>
 						</button>
 					))}
 
@@ -140,15 +140,15 @@ export default function PracticeHub({ questions }: PracticeHubProps) {
 						type="button"
 						onClick={() => setFilter({ ...filter, domain: "integration" })}
 						className={`card p-4 text-left transition-all cursor-pointer ${
-							filter.domain === "integration" ? "border-violet-500 bg-violet-50 shadow-md" : "hover:border-violet-300"
+							filter.domain === "integration" ? "border-accent-purple bg-surface-2" : "hover:border-accent-purple"
 						}`}
 					>
 						<div className="flex items-center justify-between mb-1">
-							<span className="badge bg-violet-100 text-violet-700">Cross</span>
+							<span className="badge border border-accent-purple text-accent-purple">Cross</span>
 							<span className="caption">{totalByDomain.integration} Qs</span>
 						</div>
-						<h3 className="text-sm font-semibold text-ink">Cross-Domain</h3>
-						<p className="text-xs text-ink-muted">Integration questions spanning multiple domains</p>
+						<h3 className="body-sm font-semibold text-ink">Cross-Domain</h3>
+						<p className="caption-sm">Integration questions spanning multiple domains</p>
 					</button>
 				</div>
 			</section>
@@ -161,12 +161,12 @@ export default function PracticeHub({ questions }: PracticeHubProps) {
 						type="button"
 						onClick={() => setFilter({ ...filter, level: "all" })}
 						className={`card p-4 text-left transition-all cursor-pointer ${
-							filter.level === "all" ? "border-primary-500 bg-primary-50 shadow-md" : "hover:border-primary-300"
+							filter.level === "all" ? "border-accent-aqua bg-surface-2" : "hover:border-accent-aqua"
 						}`}
 					>
-						<Shuffle className="w-5 h-5 text-primary-500 mb-2" />
-						<h3 className="text-sm font-semibold">All Levels</h3>
-						<p className="text-xs text-ink-muted">{totalByLevel.all} questions</p>
+						<Shuffle className="w-5 h-5 text-accent-aqua mb-2" />
+						<h3 className="body-sm font-semibold">All Levels</h3>
+						<p className="caption-sm">{totalByLevel.all} questions</p>
 					</button>
 					{levelConfig.map(({ value, label, icon: Icon, desc, cls }) => (
 						<button
@@ -174,13 +174,13 @@ export default function PracticeHub({ questions }: PracticeHubProps) {
 							type="button"
 							onClick={() => setFilter({ ...filter, level: value })}
 							className={`card p-4 text-left transition-all cursor-pointer ${
-								filter.level === value ? `shadow-md ${cls.replace("hover:", "")}` : cls
+								filter.level === value ? `${cls.replace("hover:", "")}` : cls
 							}`}
 						>
 							<Icon className="w-5 h-5 mb-2 text-ink-secondary" />
-							<h3 className="text-sm font-semibold">Level {value}: {label}</h3>
-							<p className="text-xs text-ink-muted">{desc}</p>
-							<p className="text-xs text-ink-muted mt-1">{totalByLevel[value] ?? 0} questions</p>
+							<h3 className="body-sm font-semibold">Level {value}: {label}</h3>
+							<p className="caption-sm">{desc}</p>
+							<p className="caption-sm mt-1">{totalByLevel[value] ?? 0} questions</p>
 						</button>
 					))}
 				</div>

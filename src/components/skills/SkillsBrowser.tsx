@@ -63,16 +63,16 @@ export default function SkillsBrowser({ skills }: SkillsBrowserProps) {
 	return (
 		<div>
 			{/* Overall progress */}
-			<div className="card-padded mb-6 bg-primary-50 border-primary-200">
+			<div className="card-padded mb-6 bg-surface-2 border-accent-aqua">
 				<div className="flex items-center justify-between mb-2">
-					<span className="heading-3 text-primary-700">Overall Progress</span>
-					<span className="text-2xl font-bold text-primary-500">
+					<span className="heading-3 text-accent-aqua">Overall Progress</span>
+					<span className="text-2xl font-bold text-accent-aqua">
 						{totalReviewed}/{skills.length}
 					</span>
 				</div>
-				<div className="w-full h-3 bg-primary-100 rounded-full overflow-hidden">
+				<div className="w-full h-3 bg-surface-1 rounded-sm overflow-hidden">
 					<div
-						className="h-3 bg-primary-500 rounded-full transition-all duration-500"
+						className="h-3 bg-accent-aqua rounded-sm transition-all duration-500"
 						style={{ width: `${skills.length > 0 ? (totalReviewed / skills.length) * 100 : 0}%` }}
 					/>
 				</div>
@@ -88,7 +88,7 @@ export default function SkillsBrowser({ skills }: SkillsBrowserProps) {
 						value={searchQuery}
 						onChange={(e) => setSearchQuery(e.target.value)}
 						placeholder="Search skills..."
-						className="w-full pl-10 pr-4 py-2.5 rounded-card border border-surface-3 bg-surface-0 text-sm focus:border-secondary-400 focus:outline-none focus:ring-1 focus:ring-secondary-400"
+						className="w-full pl-10 pr-4 py-2.5 rounded-card border border-surface-3 bg-surface-0 text-sm focus:border-accent-blue focus:outline-none focus:ring-1 focus:ring-accent-blue"
 					/>
 				</div>
 
@@ -99,7 +99,7 @@ export default function SkillsBrowser({ skills }: SkillsBrowserProps) {
 						onClick={() => setDomainFilter("all")}
 						className={`badge cursor-pointer transition-colors ${
 							domainFilter === "all"
-								? "bg-primary-500 text-white"
+								? "bg-accent-aqua text-surface-0"
 								: "bg-surface-2 text-ink-secondary hover:bg-surface-3"
 						}`}
 					>
@@ -114,7 +114,7 @@ export default function SkillsBrowser({ skills }: SkillsBrowserProps) {
 								onClick={() => setDomainFilter(d.id)}
 								className={`badge cursor-pointer transition-colors ${
 									domainFilter === d.id
-										? `text-white`
+										? `text-surface-0`
 										: `badge-domain-${d.id}`
 								}`}
 								style={domainFilter === d.id ? { backgroundColor: d.color } : undefined}
@@ -136,7 +136,7 @@ export default function SkillsBrowser({ skills }: SkillsBrowserProps) {
 				{grouped.map((group) => (
 					<div key={group.taskId}>
 						<div className="flex items-center gap-3 mb-4">
-							<span className="badge bg-secondary-100 text-secondary-700">
+							<span className="badge bg-surface-2 text-accent-blue">
 								Task {group.taskId}
 							</span>
 							<h3 className="heading-3">{group.taskTitle}</h3>

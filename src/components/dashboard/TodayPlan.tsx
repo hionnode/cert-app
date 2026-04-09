@@ -35,8 +35,8 @@ export default function TodayPlan({ days }: TodayPlanProps) {
 					<h2 className="heading-3 mt-1">{day.title}</h2>
 				</div>
 				<div
-					className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold ${
-						allDone ? "bg-primary-100 text-primary-700" : "bg-surface-2 text-ink-secondary"
+					className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-sm font-semibold ${
+						allDone ? "bg-surface-2 text-accent-aqua" : "bg-surface-2 text-ink-secondary"
 					}`}
 				>
 					{allDone ? <CheckCircle className="w-4 h-4" /> : <Circle className="w-4 h-4" />}
@@ -50,12 +50,12 @@ export default function TodayPlan({ days }: TodayPlanProps) {
 					return (
 						<li key={task.id} className="flex items-center gap-2.5">
 							{done ? (
-								<CheckCircle className="w-4 h-4 text-primary-500 shrink-0" />
+								<CheckCircle className="w-4 h-4 text-accent-aqua shrink-0" />
 							) : (
 								<Circle className="w-4 h-4 text-ink-muted shrink-0" />
 							)}
 							<span
-								className={`text-sm leading-snug ${
+								className={`body-sm leading-snug ${
 									done ? "line-through text-ink-muted" : "text-ink-secondary"
 								}`}
 							>
@@ -65,7 +65,7 @@ export default function TodayPlan({ days }: TodayPlanProps) {
 					);
 				})}
 				{day.tasks.length > 4 && (
-					<li className="text-xs text-ink-muted pl-7">+{day.tasks.length - 4} more tasks</li>
+					<li className="caption-sm pl-7">+{day.tasks.length - 4} more tasks</li>
 				)}
 			</ul>
 

@@ -25,20 +25,20 @@ export default function WeekOverview({ days }: WeekOverviewProps) {
 					<a
 						key={week.number}
 						href="/plan"
-						className="card p-4 hover:border-primary-400 transition-colors"
+						className="card p-4 hover:border-accent-aqua transition-colors"
 					>
-						<p className="text-xs font-bold text-ink-muted uppercase tracking-wide mb-1">
+						<p className="caption-sm font-bold text-ink-muted uppercase tracking-wide mb-1">
 							Week {week.number}
 						</p>
-						<p className="text-sm font-semibold text-ink leading-tight mb-1">{week.title}</p>
-						<p className="text-xs text-ink-muted mb-3">{dayRange}</p>
-						<div className="w-full h-2 bg-surface-2 rounded-full overflow-hidden">
+						<p className="body-sm font-semibold text-ink leading-tight mb-1">{week.title}</p>
+						<p className="caption-sm mb-3">{dayRange}</p>
+						<div className="w-full h-2 bg-surface-2 rounded-sm overflow-hidden">
 							<div
-								className="h-full rounded-full bg-primary-500 transition-all duration-500"
+								className="h-full rounded-sm bg-accent-aqua transition-all duration-500"
 								style={{ width: `${pct}%` }}
 							/>
 						</div>
-						<p className="text-xs text-ink-muted mt-1.5">
+						<p className="caption-sm mt-1.5">
 							{completedTasks}/{totalTasks} tasks - {pct}%
 						</p>
 					</a>

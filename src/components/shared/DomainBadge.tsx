@@ -17,7 +17,7 @@ export default function DomainBadge({ domain, size = "sm" }: DomainBadgeProps) {
   const domainData = DOMAINS.find((d) => d.id === domain);
   if (!domainData) return null;
 
-  const sizeClasses = size === "sm" ? "text-xs px-2 py-0.5" : "text-sm px-3 py-1";
+  const sizeClasses = size === "sm" ? "text-[13px] px-2.5 py-1" : "text-sm px-3 py-1.5";
 
   return (
     <span className={`${badgeClasses[domain] ?? "badge"} ${sizeClasses}`}>

@@ -25,12 +25,11 @@ export default function DomainProgressRings({ days }: DomainProgressRingsProps) 
 								size={88}
 								color={domain.color}
 							/>
-							<div className="text-center max-w-24">
-								<p className="text-xs font-semibold text-ink leading-tight">
+							<div className="text-center max-w-28">
+								<p className="text-sm font-semibold text-ink leading-tight">
 									{domain.shortName}
 								</p>
-								<p className="text-[11px] text-ink-muted mt-0.5">{domain.weight}% weight</p>
-								<p className="text-[11px] text-ink-muted">
+								<p className="caption-sm mt-0.5">
 									{dp.completed}/{dp.total} tasks
 								</p>
 							</div>

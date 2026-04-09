@@ -28,9 +28,9 @@ export default function SkillReviewList({ skills, compact, maxVisible }: SkillRe
 		<div>
 			{/* Progress bar */}
 			<div className="flex items-center gap-3 mb-4">
-				<div className="flex-1 h-2 bg-surface-2 rounded-full overflow-hidden">
+				<div className="flex-1 h-2 bg-surface-2 rounded-sm overflow-hidden">
 					<div
-						className="h-2 bg-primary-500 rounded-full transition-all duration-500"
+						className="h-2 bg-accent-aqua rounded-sm transition-all duration-500"
 						style={{ width: `${pct}%` }}
 					/>
 				</div>
@@ -40,7 +40,7 @@ export default function SkillReviewList({ skills, compact, maxVisible }: SkillRe
 			</div>
 
 			{/* Skill cards */}
-			<div className="space-y-3">
+			<div className="space-y-4">
 				{visible.map((skill) => (
 					<SkillReviewCard key={skill.id} skill={skill} compact={compact} />
 				))}
@@ -51,7 +51,7 @@ export default function SkillReviewList({ skills, compact, maxVisible }: SkillRe
 				<button
 					type="button"
 					onClick={() => setShowAll(true)}
-					className="btn-ghost w-full justify-center mt-3 text-sm"
+					className="btn-ghost w-full justify-center mt-4 text-sm"
 				>
 					Show {hiddenCount} more skill{hiddenCount !== 1 ? "s" : ""}
 				</button>

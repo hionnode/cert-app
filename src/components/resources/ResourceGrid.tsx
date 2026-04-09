@@ -57,8 +57,8 @@ const tierLabels: Record<number, string> = {
 };
 
 const tierBadgeClasses: Record<number, string> = {
-  1: "bg-primary-100 text-primary-700",
-  2: "bg-secondary-100 text-secondary-700",
+  1: "bg-surface-2 text-accent-aqua",
+  2: "bg-surface-2 text-accent-blue",
   3: "bg-surface-2 text-ink-muted",
 };
 
@@ -91,7 +91,7 @@ export default function ResourceGrid({ resources }: ResourceGridProps) {
                 onClick={() => setTypeFilter(t)}
                 className={`px-3 py-1.5 rounded-button text-sm font-medium transition-colors cursor-pointer ${
                   active
-                    ? "bg-primary-500 text-white"
+                    ? "bg-accent-aqua text-surface-0"
                     : "bg-surface-0 border border-surface-3 text-ink-secondary hover:bg-surface-2"
                 }`}
               >
@@ -109,7 +109,7 @@ export default function ResourceGrid({ resources }: ResourceGridProps) {
             onChange={(e) =>
               setDomainFilter(e.target.value ? Number(e.target.value) : null)
             }
-            className="pl-9 pr-8 py-1.5 bg-surface-0 border border-surface-3 rounded-button text-sm text-ink appearance-none cursor-pointer focus:outline-none focus:border-primary-500"
+            className="pl-9 pr-8 py-1.5 bg-surface-0 border border-surface-3 rounded-button text-sm text-ink appearance-none cursor-pointer focus:outline-none focus:border-accent-aqua"
           >
             <option value="">All Domains</option>
             {DOMAINS.map((d) => (
@@ -126,7 +126,7 @@ export default function ResourceGrid({ resources }: ResourceGridProps) {
           <select
             value={topicFilter}
             onChange={(e) => setTopicFilter(e.target.value)}
-            className="pl-9 pr-8 py-1.5 bg-surface-0 border border-surface-3 rounded-button text-sm text-ink appearance-none cursor-pointer focus:outline-none focus:border-primary-500"
+            className="pl-9 pr-8 py-1.5 bg-surface-0 border border-surface-3 rounded-button text-sm text-ink appearance-none cursor-pointer focus:outline-none focus:border-accent-aqua"
           >
             {TOPIC_OPTIONS.map((t) => (
               <option key={t.value} value={t.value}>
@@ -143,7 +143,7 @@ export default function ResourceGrid({ resources }: ResourceGridProps) {
       </p>
 
       {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filtered.map((resource) => {
           const tc = typeConfig[resource.type];
           const Icon = tc?.icon ?? FileText;
@@ -154,24 +154,24 @@ export default function ResourceGrid({ resources }: ResourceGridProps) {
               href={resource.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="card p-5 flex flex-col gap-3 group hover:border-primary-300 transition-all"
+              className="card p-5 flex flex-col gap-3 group hover:border-accent-aqua transition-all"
             >
               {/* Top row: icon + badges */}
               <div className="flex items-start justify-between gap-2">
-                <div className="w-10 h-10 rounded-lg bg-surface-2 flex items-center justify-center shrink-0 group-hover:bg-primary-50 transition-colors">
-                  <Icon className="w-5 h-5 text-ink-secondary group-hover:text-primary-500 transition-colors" />
+                <div className="w-10 h-10 rounded-sm bg-surface-2 flex items-center justify-center shrink-0 group-hover:bg-surface-1 transition-colors">
+                  <Icon className="w-5 h-5 text-ink-secondary group-hover:text-accent-aqua transition-colors" />
                 </div>
                 <ExternalLink className="w-4 h-4 text-ink-muted opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
               </div>
 
               {/* Title */}
-              <h3 className="text-sm font-semibold text-ink leading-snug group-hover:text-primary-600 transition-colors">
+              <h3 className="body-sm font-semibold text-ink leading-snug group-hover:text-accent-aqua transition-colors">
                 {resource.title}
               </h3>
 
               {/* Description */}
               {resource.description && (
-                <p className="text-xs text-ink-secondary leading-relaxed line-clamp-2">
+                <p className="caption-sm text-ink-secondary leading-relaxed line-clamp-2">
                   {resource.description}
                 </p>
               )}
@@ -183,18 +183,18 @@ export default function ResourceGrid({ resources }: ResourceGridProps) {
                 )}
                 {resource.tier && (
                   <span
-                    className={`badge text-[11px] ${
+                    className={`badge ${
                       tierBadgeClasses[resource.tier] ?? "bg-surface-2 text-ink-muted"
                     }`}
                   >
                     {tierLabels[resource.tier] ?? `Tier ${resource.tier}`}
                   </span>
                 )}
-                <span className="badge bg-surface-2 text-ink-muted text-[11px]">
+                <span className="badge-muted">
                   {tc?.label ?? resource.type}
                 </span>
                 {resource.estimatedMinutes && (
-                  <span className="badge bg-surface-2 text-ink-muted text-[11px]">
+                  <span className="badge-muted">
                     ~{resource.estimatedMinutes}m
                   </span>
                 )}
