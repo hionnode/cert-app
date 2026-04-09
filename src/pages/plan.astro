@@ -1,45 +1,32 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { WEEKS } from "../lib/constants";
+import { WEEKS, DOMAINS } from "../lib/constants";
 import days from "../data/days.json";
 ---
 
 <Layout title="Study Plan">
-	<div class="page-container py-8">
-		<h1 class="heading-1 mb-2">28-Day Study Plan</h1>
-		<p class="body-text mb-8">Organized across 4 weeks covering all 5 exam domains</p>
+	<div class="page-container py-6">
+		<h1 class="heading-1 mb-1">28-Day Study Plan</h1>
+		<p class="body-text mb-8">4 weeks covering all 5 exam domains</p>
 
 		{WEEKS.map((week) => (
-			<section class="mb-10">
-				<div class="flex items-center gap-3 mb-4">
-					<div class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center font-bold">
-						W{week.number}
-					</div>
-					<div>
-						<h2 class="heading-2">Week {week.number}</h2>
-						<p class="caption">{week.title}</p>
-					</div>
+			<section class="mb-8">
+				<div class="flex items-baseline gap-2 mb-3 border-b border-surface-3 pb-2">
+					<h2 class="heading-2">Week {week.number}</h2>
+					<span class="caption">{week.title}</span>
 				</div>
 
-				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+				<div class="space-y-1">
 					{week.days.map((dayNum) => {
 						const day = (days as any[]).find((d: any) => d.number === dayNum);
 						if (!day) return null;
 						return (
-							<a href={`/day/${day.number}`} class="card p-4 hover:border-primary-400 transition-colors group">
-								<div class="flex items-center justify-between mb-2">
-									<span class={`badge-domain-${day.domain}`}>Domain {day.domain}</span>
-									<span class="caption">{day.weekday}</span>
-								</div>
-								<h3 class="font-semibold text-ink group-hover:text-primary-600 transition-colors mb-1">
-									Day {day.number}
-								</h3>
-								<p class="text-sm text-ink-secondary line-clamp-2">{day.title}</p>
-								<div class="mt-3 flex items-center gap-2 text-xs text-ink-muted">
-									<span>{day.tasks.length} tasks</span>
-									<span>-</span>
-									<span>{day.scenarioIds.length} scenarios</span>
-								</div>
+							<a href={`/day/${day.number}`} class="flex items-center gap-3 px-4 py-3 hover:bg-surface-2 rounded-sm transition-colors group">
+								<span class="body-sm font-mono text-ink-muted w-8">D{String(day.number).padStart(2, '0')}</span>
+								<span class="body-sm font-mono text-ink-muted w-10">{day.weekday}</span>
+								<span class="body-sm font-semibold flex-1 group-hover:text-accent-aqua transition-colors">{day.title}</span>
+								<span class={`badge-domain-${day.domain}`}>D{day.domain}</span>
+								<span class="caption w-16 text-right">{day.tasks.length} tasks</span>
 							</a>
 						);
 					})}

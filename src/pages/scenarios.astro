@@ -6,13 +6,13 @@ import { DOMAINS } from "../lib/constants";
 ---
 
 <Layout title="Scenarios">
-	<div class="page-container py-8">
-		<h1 class="heading-1 mb-2">Exam Scenarios</h1>
-		<p class="body-text mb-8">{scenarios.length} real-world scenarios to master. Think first, then reveal.</p>
+	<div class="page-container py-6">
+		<h1 class="heading-1 mb-1">Exam Scenarios</h1>
+		<p class="body-text mb-6">{scenarios.length} real-world scenarios. Think first, then reveal.</p>
 
 		<!-- Domain filter tabs -->
-		<div class="flex flex-wrap gap-2 mb-8">
-			<span class="badge bg-primary-100 text-primary-700 cursor-pointer">All ({scenarios.length})</span>
+		<div class="flex flex-wrap gap-2 mb-6">
+			<span class="badge border-accent-aqua text-accent-aqua cursor-pointer">All ({scenarios.length})</span>
 			{DOMAINS.map((d) => {
 				const count = (scenarios as any[]).filter((s: any) => s.domain === d.id).length;
 				return count > 0 ? (
@@ -21,7 +21,7 @@ import { DOMAINS } from "../lib/constants";
 			})}
 		</div>
 
-		<div class="space-y-6">
+		<div class="space-y-5">
 			{(scenarios as any[]).map((scenario: any) => (
 				<ScenarioCard client:visible scenario={scenario} />
 			))}

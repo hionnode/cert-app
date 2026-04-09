@@ -2,6 +2,8 @@
 import Layout from "../layouts/Layout.astro";
 import PracticeHub from "../components/practice/PracticeHub";
 import { DOMAINS } from "../lib/constants";
+import orderingSequences from "../data/ordering-sequences.json";
+import matchingExercises from "../data/matching-exercises.json";
 
 // Import both question banks
 let allQuestions: any[] = [];
@@ -14,48 +16,109 @@ try {
 	allQuestions = allQuestions.concat(d3d4d5.default ?? d3d4d5);
 } catch {}
 
-// Stats
 const totalQuestions = allQuestions.length;
-const byLevel = { 1: 0, 2: 0, 3: 0 };
-const byDomain: Record<number, number> = {};
 const integrationCount = allQuestions.filter((q: any) => q.integrationDomains?.length > 0).length;
-
-for (const q of allQuestions) {
-	byLevel[q.level as 1 | 2 | 3] = (byLevel[q.level as 1 | 2 | 3] ?? 0) + 1;
-	byDomain[q.domain] = (byDomain[q.domain] ?? 0) + 1;
-}
 ---
 
-<Layout title="Practice Exams">
-	<div class="page-container py-8">
-		<div class="flex items-center justify-between mb-2">
-			<h1 class="heading-1">Practice Exams</h1>
-		</div>
+<Layout title="Practice">
+	<div class="page-container py-6">
+		<h1 class="heading-1 mb-1">Practice</h1>
 		<p class="body-text mb-8">
-			{totalQuestions} practice questions across 5 domains and 3 difficulty levels.
-			Includes {integrationCount} cross-domain integration questions.
+			{totalQuestions} questions across 5 domains. Includes {integrationCount} cross-domain questions.
 		</p>
 
-		<!-- Quick stats -->
-		<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-			<div class="card-padded text-center">
-				<div class="text-3xl font-bold text-primary-500 font-display">{totalQuestions}</div>
-				<div class="caption">Total Questions</div>
-			</div>
-			<div class="card-padded text-center">
-				<div class="text-3xl font-bold text-primary-600 font-display">{byLevel[1]}</div>
-				<div class="caption">L1: Foundation</div>
-			</div>
-			<div class="card-padded text-center">
-				<div class="text-3xl font-bold text-accent-gold font-display">{byLevel[2]}</div>
-				<div class="caption">L2: Applied</div>
-			</div>
-			<div class="card-padded text-center">
-				<div class="text-3xl font-bold text-accent-coral font-display">{byLevel[3]}</div>
-				<div class="caption">L3: Expert</div>
-			</div>
-		</div>
-
 		<PracticeHub client:load questions={allQuestions as any} />
+
+		<!-- Drills Section (collapsed) -->
+		<details class="card mt-10">
+			<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
+				Drills (Ordering & Matching)
+				<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
+			</summary>
+			<div class="px-5 pb-5">
+				<h3 class="heading-3 mb-3">Ordering Sequences</h3>
+				<div class="space-y-4 mb-8">
+					{(orderingSequences as any[]).map((seq: any) => (
+						<details class="card group">
+							<summary class="p-4 cursor-pointer flex items-center justify-between hover:bg-surface-2 transition-colors">
+								<h4 class="body-sm font-semibold">{seq.title}</h4>
+								<div class="i-lucide-chevron-down w-4 h-4 text-ink-muted group-open:rotate-180 transition-transform" />
+							</summary>
+							<div class="px-4 pb-4">
+								<ol class="space-y-2">
+									{seq.steps.map((step: string, i: number) => (
+										<li class="flex items-center gap-2 p-2 bg-surface-0 border border-surface-3 rounded-sm body-sm">
+											<span class="text-accent-aqua font-bold w-5 text-center">{i + 1}</span>
+											<span>{step}</span>
+										</li>
+									))}
+								</ol>
+							</div>
+						</details>
+					))}
+				</div>
+
+				<h3 class="heading-3 mb-3">Matching Exercises</h3>
+				<div class="space-y-4 mb-8">
+					{(matchingExercises as any[]).map((exercise: any) => (
+						<details class="card group">
+							<summary class="p-4 cursor-pointer flex items-center justify-between hover:bg-surface-2 transition-colors">
+								<h4 class="body-sm font-semibold">{exercise.title}</h4>
+								<div class="i-lucide-chevron-down w-4 h-4 text-ink-muted group-open:rotate-180 transition-transform" />
+							</summary>
+							<div class="px-4 pb-4 overflow-x-auto">
+								<table class="w-full text-sm">
+									<thead>
+										<tr class="border-b border-surface-3">
+											<th class="text-left py-2 px-2 font-semibold text-ink-secondary">Trigger / Pattern</th>
+											<th class="text-left py-2 px-2 font-semibold text-ink-secondary">AWS Service / Answer</th>
+										</tr>
+									</thead>
+									<tbody>
+										{exercise.pairs.map((pair: any) => (
+											<tr class="border-b border-surface-3 hover:bg-surface-2">
+												<td class="py-2 px-2 font-medium">{pair.left}</td>
+												<td class="py-2 px-2 text-accent-aqua font-semibold">{pair.right}</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
+						</details>
+					))}
+				</div>
+			</div>
+		</details>
+
+		<!-- External Practice Exams (collapsed) -->
+		<details class="card mt-6">
+			<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
+				External Practice Exams
+				<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
+			</summary>
+			<div class="px-5 pb-5 space-y-2">
+				<a href="https://explore.skillbuilder.aws/" target="_blank" rel="noopener" class="flex items-center justify-between p-4 border border-surface-3 rounded-sm hover:bg-surface-2 transition-colors">
+					<div>
+						<div class="body-sm font-semibold">AWS Official Practice Set</div>
+						<div class="caption-sm">20 free exam-caliber questions</div>
+					</div>
+					<span class="badge border border-accent-green text-accent-green">Free</span>
+				</a>
+				<a href="https://certificationpractice.com/practice-exams/aws-certified-generative-ai-developer-professional" target="_blank" rel="noopener" class="flex items-center justify-between p-4 border border-surface-3 rounded-sm hover:bg-surface-2 transition-colors">
+					<div>
+						<div class="body-sm font-semibold">CertificationPractice.com</div>
+						<div class="caption-sm">510 questions across 6 practice exams</div>
+					</div>
+					<span class="badge border border-accent-green text-accent-green">Free</span>
+				</a>
+				<a href="https://portal.tutorialsdojo.com/courses/aws-certified-generative-ai-developer-professional-practice-exams-aip-c01-2025/" target="_blank" rel="noopener" class="flex items-center justify-between p-4 border border-surface-3 rounded-sm hover:bg-surface-2 transition-colors">
+					<div>
+						<div class="body-sm font-semibold">Tutorials Dojo</div>
+						<div class="caption-sm">275+ questions with detailed explanations</div>
+					</div>
+					<span class="badge border border-accent-yellow text-accent-yellow">~$15</span>
+				</a>
+			</div>
+		</details>
 	</div>
 </Layout>

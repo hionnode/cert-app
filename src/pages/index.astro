@@ -5,52 +5,38 @@ import TodayPlan from "../components/dashboard/TodayPlan";
 import StudyStreak from "../components/dashboard/StudyStreak";
 import WeekOverview from "../components/dashboard/WeekOverview";
 import days from "../data/days.json";
-import { DOMAINS, EXAM_INFO } from "../lib/constants";
 ---
 
 <Layout title="Dashboard">
-	<div class="page-container py-8">
-		<div class="flex items-center justify-between mb-8">
-			<div>
-				<h1 class="heading-1">Dashboard</h1>
-				<p class="body-text mt-1">AWS Certified Generative AI Developer - Professional</p>
-			</div>
-			<div class="hidden sm:flex items-center gap-3">
-				<div class="card-padded text-center">
-					<div class="text-2xl font-bold text-primary-500">{EXAM_INFO.passingScore}</div>
-					<div class="caption">Passing Score</div>
-				</div>
-				<div class="card-padded text-center">
-					<div class="text-2xl font-bold text-secondary-500">{EXAM_INFO.totalQuestions}</div>
-					<div class="caption">Questions</div>
-				</div>
-				<div class="card-padded text-center">
-					<div class="text-2xl font-bold text-ink">{EXAM_INFO.duration}m</div>
-					<div class="caption">Duration</div>
-				</div>
-			</div>
-		</div>
+	<div class="page-container py-6">
+		<h1 class="heading-1 mb-8">Dashboard</h1>
 
-		<!-- Domain Progress -->
+		<!-- Today's Plan (primary focus) -->
 		<section class="mb-8">
-			<h2 class="heading-3 mb-4">Domain Progress</h2>
-			<DomainProgressRings client:load days={days as any} />
+			<TodayPlan client:load days={days as any} />
 		</section>
 
-		<!-- Streak + Today -->
-		<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+		<!-- Domain Progress + Streak -->
+		<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-8">
+			<div class="lg:col-span-2">
+				<h2 class="heading-3 mb-3">Domain Progress</h2>
+				<DomainProgressRings client:load days={days as any} />
+			</div>
 			<div class="lg:col-span-1">
+				<h2 class="heading-3 mb-3">Study Streak</h2>
 				<StudyStreak client:load />
 			</div>
-			<div class="lg:col-span-2">
-				<TodayPlan client:load days={(days as any)} />
-			</div>
 		</div>
 
-		<!-- Week Overview -->
-		<section>
-			<h2 class="heading-3 mb-4">4-Week Plan</h2>
-			<WeekOverview client:load days={days as any} />
-		</section>
+		<!-- Week Overview (collapsed) -->
+		<details class="card">
+			<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
+				4-Week Plan
+				<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
+			</summary>
+			<div class="px-5 pb-5">
+				<WeekOverview client:load days={days as any} />
+			</div>
+		</details>
 	</div>
 </Layout>

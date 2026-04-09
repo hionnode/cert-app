@@ -30,16 +30,9 @@ const prevDay = day.number > 1 ? day.number - 1 : null;
 const nextDay = day.number < 28 ? day.number + 1 : null;
 const daySkills = (examSkills as any[]).filter((s: any) => day.examSkills.includes(s.id));
 
-// Map practice questions to days:
-// Week 1 (D1-7): Domain 1 standalone, progressive levels
-// Week 2 (D8-14): Domain 2 standalone + D1+D2 integration
-// Week 3 (D15-21): Domain 3/4/5 standalone + cross-domain integration
-// Week 4 (D22-28): All domains, all levels, full integration
 function getDayPractice(dayNum: number, domain: number, week: number): any[] {
 	if (allPractice.length === 0) return [];
-
 	if (week === 1) {
-		// D1 standalone, level matches day progression
 		const level = dayNum <= 2 ? 1 : dayNum <= 5 ? 2 : 3;
 		return allPractice.filter((q: any) => q.domain === 1 && !q.integrationDomains?.length && q.level <= level);
 	}
@@ -56,16 +49,15 @@ function getDayPractice(dayNum: number, domain: number, week: number): any[] {
 			return false;
 		});
 	}
-	// Week 4: everything
 	return allPractice;
 }
 
 const dayPractice = getDayPractice(day.number, day.domain, day.week);
 
 const HANDS_ON_DIFFICULTY_STYLES: Record<string, string> = {
-	beginner: "bg-primary-100 text-primary-700",
-	intermediate: "bg-accent-gold/15 text-amber-700",
-	advanced: "bg-red-100 text-red-700",
+	beginner: "bg-surface-2 text-accent-aqua",
+	intermediate: "bg-surface-2 text-accent-yellow",
+	advanced: "bg-surface-2 text-accent-red",
 };
 
 const FURTHER_READING_ICONS: Record<string, string> = {
@@ -78,7 +70,7 @@ const FURTHER_READING_ICONS: Record<string, string> = {
 ---
 
 <Layout title={`Day ${day.number}: ${day.title}`}>
-	<div class="page-container py-8">
+	<div class="page-container py-6">
 		<!-- Navigation -->
 		<div class="flex items-center justify-between mb-6">
 			{prevDay ? (
@@ -100,183 +92,165 @@ const FURTHER_READING_ICONS: Record<string, string> = {
 		<div class="mb-8">
 			<div class="flex items-center gap-3 mb-2">
 				<span class={`badge-domain-${day.domain}`}>{domain?.shortName}</span>
-				<span class="caption">Week {day.week} - {day.weekday}</span>
+				<span class="caption">Week {day.week} · {day.weekday}</span>
 			</div>
 			<h1 class="heading-1">Day {day.number}: {day.title}</h1>
 		</div>
 
-		<!-- Learning Objectives -->
+		<!-- Tasks (always visible, primary focus) -->
+		<section class="mb-8">
+			<TaskChecklist client:load tasks={day.tasks} dayNumber={day.number} />
+		</section>
+
+		<!-- Learning Objectives (collapsed) -->
 		{day.learningObjectives?.length > 0 && (
-			<section class="card-padded mb-6 bg-primary-50 border-primary-200">
-				<h2 class="heading-3 text-primary-700 mb-3">
-					<span class="i-lucide-target w-5 h-5 inline-block mr-2" />
-					Learning Objectives
-				</h2>
-				<ul class="space-y-2">
-					{day.learningObjectives.map((obj: string) => (
-						<li class="flex items-start gap-2 text-sm text-primary-800">
-							<div class="i-lucide-check-circle w-4 h-4 mt-0.5 text-primary-500 flex-shrink-0" />
-							{obj}
-						</li>
-					))}
-				</ul>
-			</section>
+			<details class="card mb-6">
+				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
+					Learning Objectives ({day.learningObjectives.length})
+					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
+				</summary>
+				<div class="px-5 pb-5 border-l-3 border-l-accent-aqua ml-5 mr-5">
+					<ul class="space-y-2">
+						{day.learningObjectives.map((obj: string) => (
+							<li class="flex items-start gap-2 body-sm">
+								<span class="text-accent-aqua">-</span>
+								{obj}
+							</li>
+						))}
+					</ul>
+				</div>
+			</details>
 		)}
 
-		<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-			<!-- Tasks (2/3 width) -->
-			<div class="xl:col-span-2">
-				<h2 class="heading-3 mb-4">
-					<span class="i-lucide-list-todo w-5 h-5 inline-block mr-2" />
-					Tasks
-				</h2>
-				<TaskChecklist client:load tasks={day.tasks} dayNumber={day.number} />
-			</div>
+		<!-- Spaced Repetition (collapsed) -->
+		{day.spacedRepetitionReview?.length > 0 && (
+			<details class="card mb-6">
+				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
+					Review Today ({day.spacedRepetitionReview.length} topics)
+					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
+				</summary>
+				<div class="px-5 pb-5 border-l-3 border-l-accent-yellow ml-5 mr-5">
+					<p class="caption mb-3">Spaced repetition — revisit these:</p>
+					<ul class="space-y-2">
+						{day.spacedRepetitionReview.map((topic: string) => (
+							<li class="flex items-start gap-2 body-sm">
+								<span class="text-accent-yellow">-</span>
+								{topic}
+							</li>
+						))}
+					</ul>
+				</div>
+			</details>
+		)}
 
-			<!-- Sidebar: Spaced Repetition -->
-			<div>
-				{day.spacedRepetitionReview?.length > 0 && (
-					<div class="card-padded bg-accent-gold/5 border-accent-gold/30">
-						<h3 class="heading-3 mb-3">
-							<span class="i-lucide-refresh-cw w-5 h-5 inline-block mr-2 text-accent-gold" />
-							Review Today
-						</h3>
-						<p class="caption mb-3">Spaced repetition - revisit these earlier topics:</p>
-						<ul class="space-y-2">
-							{day.spacedRepetitionReview.map((topic: string) => (
-								<li class="flex items-start gap-2 text-sm text-ink-secondary">
-									<div class="i-lucide-rotate-ccw w-3.5 h-3.5 mt-0.5 text-accent-gold flex-shrink-0" />
-									{topic}
-								</li>
-							))}
-						</ul>
-					</div>
-				)}
-			</div>
-		</div>
-
-		<!-- Exam Skills Review (full width) -->
+		<!-- Exam Skills (collapsed) -->
 		{daySkills.length > 0 && (
-			<section class="mt-10">
-				<h2 class="heading-2 mb-2">
-					<span class="i-lucide-shield-check w-6 h-6 inline-block mr-2 text-secondary-500" />
-					Exam Skills
-				</h2>
-				<p class="body-text mb-6">Write your understanding of each skill, then reveal the reference answer.</p>
-				<SkillReviewList client:visible skills={daySkills} compact={true} maxVisible={5} />
-			</section>
+			<details class="card mb-6">
+				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
+					Exam Skills ({daySkills.length})
+					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
+				</summary>
+				<div class="px-5 pb-5">
+					<SkillReviewList client:visible skills={daySkills} compact={true} maxVisible={5} />
+				</div>
+			</details>
 		)}
 
-		<!-- Hands-On Activities -->
+		<!-- Hands-On Lab (collapsed) -->
 		{day.handsOn?.length > 0 && (
-			<section class="mt-10">
-				<h2 class="heading-2 mb-2">
-					<span class="i-lucide-wrench w-6 h-6 inline-block mr-2 text-primary-500" />
-					Hands-On Lab
-				</h2>
-				<p class="body-text mb-6">Get your hands dirty. These activities build real muscle memory.</p>
-
-				<div class="space-y-4">
+			<details class="card mb-6">
+				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
+					Hands-On Lab ({day.handsOn.length} {day.handsOn.length === 1 ? 'activity' : 'activities'})
+					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
+				</summary>
+				<div class="px-5 pb-5 space-y-4">
 					{day.handsOn.map((activity: any) => (
-						<div class="card overflow-hidden">
-							<div class="flex items-center gap-3 px-5 pt-5 pb-3">
-								<span class={`badge ${HANDS_ON_DIFFICULTY_STYLES[activity.difficulty] ?? "bg-surface-2 text-ink-secondary"}`}>
+						<div class="card-padded">
+							<div class="flex items-center gap-3 mb-3">
+								<span class={`badge ${HANDS_ON_DIFFICULTY_STYLES[activity.difficulty] ?? "bg-surface-2 text-ink-muted"}`}>
 									{activity.difficulty}
 								</span>
 								{activity.estimatedMinutes && (
-									<span class="caption flex items-center gap-1">
-										<div class="i-lucide-clock w-3.5 h-3.5" />
-										{activity.estimatedMinutes} min
-									</span>
+									<span class="caption">{activity.estimatedMinutes} min</span>
 								)}
 							</div>
-							<div class="px-5 pb-5">
-								<h3 class="heading-3 mb-2">{activity.title}</h3>
-								<p class="body-text mb-4">{activity.description}</p>
+							<h3 class="heading-3 mb-1">{activity.title}</h3>
+							<p class="body-text mb-3">{activity.description}</p>
 
-								{activity.steps?.length > 0 && (
-									<ol class="space-y-2 mb-4">
-										{activity.steps.map((step: string, i: number) => (
-											<li class="flex items-start gap-3">
-												<span class="w-6 h-6 bg-primary-500 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">{i + 1}</span>
-												<span class="text-sm text-ink-secondary">{step}</span>
-											</li>
-										))}
-									</ol>
-								)}
+							{activity.steps?.length > 0 && (
+								<ol class="space-y-2 mb-3">
+									{activity.steps.map((step: string, i: number) => (
+										<li class="flex items-start gap-2 body-sm">
+											<span class="text-accent-aqua font-bold w-5 text-center">{i + 1}</span>
+											{step}
+										</li>
+									))}
+								</ol>
+							)}
 
-								{activity.url && (
-									<a href={activity.url} target="_blank" rel="noopener" class="btn-primary text-sm">
-										<div class="i-lucide-external-link w-4 h-4" />
-										Open Lab
-									</a>
-								)}
-							</div>
+							{activity.url && (
+								<a href={activity.url} target="_blank" rel="noopener" class="btn-primary text-sm">
+									Open Lab <div class="i-lucide-external-link w-4 h-4" />
+								</a>
+							)}
 						</div>
 					))}
 				</div>
-			</section>
+			</details>
 		)}
 
-		<!-- Scenarios -->
+		<!-- Scenarios (collapsed) -->
 		{dayScenarios.length > 0 && (
-			<section class="mt-10">
-				<h2 class="heading-2 mb-2">
-					<span class="i-lucide-lightbulb w-6 h-6 inline-block mr-2 text-accent-gold" />
-					Scenarios
-				</h2>
-				<p class="body-text mb-6">Think through each scenario before revealing the answer.</p>
-				<div class="space-y-6">
+			<details class="card mb-6">
+				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
+					Scenarios ({dayScenarios.length})
+					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
+				</summary>
+				<div class="px-5 pb-5 space-y-5">
 					{dayScenarios.map((scenario: any) => (
 						<ScenarioCard client:visible scenario={scenario} />
 					))}
 				</div>
-			</section>
+			</details>
 		)}
 
-		<!-- Practice Questions -->
+		<!-- Practice Questions (collapsed) -->
 		{dayPractice.length > 0 && (
-			<section class="mt-10">
-				<h2 class="heading-2 mb-2">
-					<span class="i-lucide-brain w-6 h-6 inline-block mr-2 text-secondary-500" />
-					Practice Questions
-				</h2>
-				<p class="body-text mb-6">Test your understanding with {dayPractice.length} questions across 3 difficulty levels.</p>
-				<DayPractice client:visible questions={dayPractice} dayNumber={day.number} />
-			</section>
+			<details class="card mb-6">
+				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
+					Practice Questions ({dayPractice.length})
+					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
+				</summary>
+				<div class="px-5 pb-5">
+					<DayPractice client:visible questions={dayPractice} dayNumber={day.number} />
+				</div>
+			</details>
 		)}
 
-		<!-- Further Reading -->
+		<!-- Further Reading (collapsed) -->
 		{day.furtherReading?.length > 0 && (
-			<section class="mt-10">
-				<h2 class="heading-2 mb-2">
-					<span class="i-lucide-book-marked w-6 h-6 inline-block mr-2 text-secondary-500" />
-					Further Reading
-				</h2>
-				<p class="body-text mb-6">Go deeper into today's topics with these curated resources.</p>
-
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-					{day.furtherReading.map((item: any) => (
-						<a href={item.url} target="_blank" rel="noopener" class="card p-4 hover:border-secondary-400 transition-colors group flex gap-4">
-							<div class={`${FURTHER_READING_ICONS[item.type] ?? "i-lucide-link"} w-5 h-5 text-secondary-500 flex-shrink-0 mt-1`} />
-							<div class="flex-1 min-w-0">
-								<h4 class="text-sm font-semibold text-ink group-hover:text-secondary-600 transition-colors line-clamp-2">{item.title}</h4>
-								<p class="text-xs text-ink-muted mt-1 line-clamp-2">{item.description}</p>
-								<div class="flex items-center gap-3 mt-2">
-									<span class="badge bg-surface-2 text-ink-muted text-[10px]">{item.type}</span>
+			<details class="card mb-6">
+				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
+					Further Reading ({day.furtherReading.length})
+					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
+				</summary>
+				<div class="px-5 pb-5">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+						{day.furtherReading.map((item: any) => (
+							<a href={item.url} target="_blank" rel="noopener" class="card p-4 hover:bg-surface-2 transition-colors group flex gap-3">
+								<div class={`${FURTHER_READING_ICONS[item.type] ?? "i-lucide-link"} w-4 h-4 text-accent-blue flex-shrink-0 mt-0.5`} />
+								<div class="flex-1 min-w-0">
+									<h4 class="body-sm font-semibold group-hover:text-accent-aqua transition-colors line-clamp-2">{item.title}</h4>
+									<p class="caption-sm mt-0.5 line-clamp-2">{item.description}</p>
 									{item.estimatedMinutes && (
-										<span class="text-[10px] text-ink-muted flex items-center gap-1">
-											<div class="i-lucide-clock w-3 h-3" />
-											{item.estimatedMinutes} min
-										</span>
+										<span class="caption-sm mt-1 block">{item.estimatedMinutes} min</span>
 									)}
 								</div>
-							</div>
-							<div class="i-lucide-external-link w-4 h-4 text-ink-muted group-hover:text-secondary-500 flex-shrink-0 mt-1" />
-						</a>
-					))}
+							</a>
+						))}
+					</div>
 				</div>
-			</section>
+			</details>
 		)}
 
 		<!-- Day Navigation (bottom) -->
@@ -291,8 +265,8 @@ const FURTHER_READING_ICONS: Record<string, string> = {
 					Day {nextDay} <div class="i-lucide-chevron-right w-4 h-4" />
 				</a>
 			) : (
-				<a href="/exams" class="btn-primary">
-					<div class="i-lucide-trophy w-4 h-4" /> Take Practice Exam
+				<a href="/practice" class="btn-primary">
+					Practice Exams <div class="i-lucide-chevron-right w-4 h-4" />
 				</a>
 			)}
 		</div>

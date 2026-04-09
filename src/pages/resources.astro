@@ -5,9 +5,9 @@ import resources from "../data/resources.json";
 ---
 
 <Layout title="Resources">
-	<div class="page-container py-8">
-		<h1 class="heading-1 mb-2">Resource Library</h1>
-		<p class="body-text mb-8">{resources.length} curated resources — AWS docs, blogs, videos, GitHub repos, and practice exams</p>
+	<div class="page-container py-6">
+		<h1 class="heading-1 mb-1">Resource Library</h1>
+		<p class="body-text mb-6">{resources.length} curated resources — docs, blogs, videos, repos, and practice exams</p>
 
 		<ResourceGrid client:load resources={resources as any} />
 	</div>
