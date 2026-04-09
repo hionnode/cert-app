@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
 	DOMAINS,
-	WEEKS,
+	PHASES,
 	TASK_TYPE_ICONS,
 	TASK_TYPE_LABELS,
 	RESOURCE_TYPE_ICONS,
@@ -41,28 +41,28 @@ describe("constants", () => {
 		});
 	});
 
-	describe("WEEKS", () => {
-		it("has 4 weeks", () => {
-			expect(WEEKS).toHaveLength(4);
+	describe("PHASES", () => {
+		it("has 4 phases", () => {
+			expect(PHASES).toHaveLength(4);
 		});
 
-		it("covers all 28 days", () => {
-			const allDays = WEEKS.flatMap((w) => w.days);
-			expect(allDays).toHaveLength(28);
-			expect(allDays[0]).toBe(1);
-			expect(allDays[allDays.length - 1]).toBe(28);
+		it("covers all 28 steps", () => {
+			const allSteps = PHASES.flatMap((p) => p.steps);
+			expect(allSteps).toHaveLength(28);
+			expect(allSteps[0]).toBe(1);
+			expect(allSteps[allSteps.length - 1]).toBe(28);
 		});
 
-		it("each week has 7 days", () => {
-			for (const w of WEEKS) {
-				expect(w.days).toHaveLength(7);
+		it("each phase has 7 steps", () => {
+			for (const p of PHASES) {
+				expect(p.steps).toHaveLength(7);
 			}
 		});
 
-		it("days are sequential and non-overlapping", () => {
-			const allDays = WEEKS.flatMap((w) => w.days);
-			for (let i = 0; i < allDays.length; i++) {
-				expect(allDays[i]).toBe(i + 1);
+		it("steps are sequential and non-overlapping", () => {
+			const allSteps = PHASES.flatMap((p) => p.steps);
+			for (let i = 0; i < allSteps.length; i++) {
+				expect(allSteps[i]).toBe(i + 1);
 			}
 		});
 	});

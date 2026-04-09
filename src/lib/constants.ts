@@ -43,15 +43,15 @@ export const DOMAINS: Domain[] = [
 	},
 ];
 
-export const WEEKS = [
-	{ number: 1, title: "FM Integration, RAG, and Vector Stores", days: [1, 2, 3, 4, 5, 6, 7] },
-	{ number: 2, title: "Implementation, Agents, and Hands-On", days: [8, 9, 10, 11, 12, 13, 14] },
+export const PHASES = [
+	{ number: 1, title: "FM Integration, RAG, and Vector Stores", steps: [1, 2, 3, 4, 5, 6, 7] },
+	{ number: 2, title: "Implementation, Agents, and Hands-On", steps: [8, 9, 10, 11, 12, 13, 14] },
 	{
 		number: 3,
 		title: "Security, Governance, Optimization, Testing",
-		days: [15, 16, 17, 18, 19, 20, 21],
+		steps: [15, 16, 17, 18, 19, 20, 21],
 	},
-	{ number: 4, title: "Practice Exams and Refinement", days: [22, 23, 24, 25, 26, 27, 28] },
+	{ number: 4, title: "Practice Exams and Refinement", steps: [22, 23, 24, 25, 26, 27, 28] },
 ];
 
 export const TASK_TYPE_ICONS: Record<string, string> = {
