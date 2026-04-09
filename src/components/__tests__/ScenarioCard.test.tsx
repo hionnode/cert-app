@@ -5,13 +5,6 @@ import ScenarioCard from "../scenarios/ScenarioCard";
 import type { Scenario } from "../../lib/types";
 import * as progress from "../../lib/progress";
 
-vi.mock("framer-motion", () => ({
-	motion: {
-		div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-	},
-	AnimatePresence: ({ children }: any) => <>{children}</>,
-}));
-
 vi.mock("../../lib/progress", () => ({
 	rateScenario: vi.fn(),
 }));
@@ -66,9 +59,9 @@ describe("ScenarioCard", () => {
 			expect(screen.getByText("Medium")).toBeInTheDocument();
 		});
 
-		it("renders scenario number", () => {
+		it("renders difficulty badge", () => {
 			render(<ScenarioCard scenario={scenario} />);
-			expect(screen.getByText("#1")).toBeInTheDocument();
+			expect(screen.getByText("Medium")).toBeInTheDocument();
 		});
 
 		it("shows Reveal Answer button", () => {

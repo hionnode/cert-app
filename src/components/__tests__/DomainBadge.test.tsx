@@ -32,7 +32,7 @@ describe("DomainBadge", () => {
 	it("applies sm size classes by default", () => {
 		render(<DomainBadge domain={1} />);
 		const badge = screen.getByText("D1: FM Integration");
-		expect(badge.className).toContain("text-xs");
+		expect(badge.className).toContain("text-[13px]");
 	});
 
 	it("applies md size classes when specified", () => {

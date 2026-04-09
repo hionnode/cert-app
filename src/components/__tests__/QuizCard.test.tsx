@@ -76,9 +76,9 @@ describe("QuizCard", () => {
 			expect(screen.getByText("Foundation")).toBeInTheDocument();
 		});
 
-		it("shows question type badge", () => {
+		it("shows domain badge", () => {
 			renderQuiz();
-			expect(screen.getByText("multiple-choice")).toBeInTheDocument();
+			expect(screen.getByText("D1")).toBeInTheDocument();
 		});
 
 		it("has disabled Check Answer button initially", () => {
