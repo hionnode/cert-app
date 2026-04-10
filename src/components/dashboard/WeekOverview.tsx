@@ -1,4 +1,4 @@
-import { WEEKS } from "../../lib/constants";
+import { PHASES } from "../../lib/constants";
 import { useProgress } from "../../lib/hooks/use-progress";
 import type { StudyDay } from "../../lib/types";
 
@@ -11,27 +11,27 @@ export default function WeekOverview({ days }: WeekOverviewProps) {
 
 	return (
 		<div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-			{WEEKS.map((week) => {
-				const weekDays = days.filter((d) => d.week === week.number);
-				const totalTasks = weekDays.reduce((sum, d) => sum + d.tasks.length, 0);
-				const completedTasks = weekDays.reduce(
+			{PHASES.map((phase) => {
+				const phaseDays = days.filter((d) => d.week === phase.number);
+				const totalTasks = phaseDays.reduce((sum, d) => sum + d.tasks.length, 0);
+				const completedTasks = phaseDays.reduce(
 					(sum, d) => sum + d.tasks.filter((t) => tasksCompleted[t.id]).length,
 					0,
 				);
 				const pct = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-				const dayRange = `Day ${week.days[0]}\u2013${week.days[week.days.length - 1]}`;
+				const stepRange = `Steps ${phase.steps[0]}\u2013${phase.steps[phase.steps.length - 1]}`;
 
 				return (
 					<a
-						key={week.number}
+						key={phase.number}
 						href="/plan"
 						className="card p-4 hover:border-accent-aqua transition-colors"
 					>
 						<p className="caption-sm font-bold text-ink-muted uppercase tracking-wide mb-1">
-							Week {week.number}
+							Phase {phase.number}
 						</p>
-						<p className="body-sm font-semibold text-ink leading-tight mb-1">{week.title}</p>
-						<p className="caption-sm mb-3">{dayRange}</p>
+						<p className="body-sm font-semibold text-ink leading-tight mb-1">{phase.title}</p>
+						<p className="caption-sm mb-3">{stepRange}</p>
 						<div className="w-full h-2 bg-surface-2 rounded-sm overflow-hidden">
 							<div
 								className="h-full rounded-sm bg-accent-aqua transition-all duration-500"

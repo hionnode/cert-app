@@ -30,7 +30,7 @@ export default function TodayPlan({ days }: TodayPlanProps) {
 			<div className="flex items-start justify-between gap-3 mb-4">
 				<div>
 					<p className="caption uppercase tracking-wide">
-						Day {day.number} &middot; {day.weekday}
+						Step {day.number} of 28
 					</p>
 					<h2 className="heading-3 mt-1">{day.title}</h2>
 				</div>
@@ -69,8 +69,8 @@ export default function TodayPlan({ days }: TodayPlanProps) {
 				)}
 			</ul>
 
-			<a href={`/day/${day.number}`} className="btn-primary w-full justify-center">
-				{allDone ? "Review Day" : "Continue Studying"}
+			<a href={`/step/${day.number}`} className="btn-primary w-full justify-center">
+				{allDone ? "Review Step" : "Continue"}
 				<ArrowRight className="w-4 h-4" />
 			</a>
 		</div>

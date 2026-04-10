@@ -1,29 +1,28 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { WEEKS, DOMAINS } from "../lib/constants";
+import { PHASES, DOMAINS } from "../lib/constants";
 import days from "../data/days.json";
 ---
 
 <Layout title="Study Plan">
 	<div class="page-container py-6">
-		<h1 class="heading-1 mb-1">28-Day Study Plan</h1>
-		<p class="body-text mb-8">4 weeks covering all 5 exam domains</p>
+		<h1 class="heading-1 mb-1">Study Plan</h1>
+		<p class="body-text mb-8">28 steps covering all 5 exam domains</p>
 
-		{WEEKS.map((week) => (
+		{PHASES.map((phase) => (
 			<section class="mb-8">
 				<div class="flex items-baseline gap-2 mb-3 border-b border-surface-3 pb-2">
-					<h2 class="heading-2">Week {week.number}</h2>
-					<span class="caption">{week.title}</span>
+					<h2 class="heading-2">Phase {phase.number}</h2>
+					<span class="caption">{phase.title}</span>
 				</div>
 
 				<div class="space-y-1">
-					{week.days.map((dayNum) => {
-						const day = (days as any[]).find((d: any) => d.number === dayNum);
+					{phase.steps.map((stepNum) => {
+						const day = (days as any[]).find((d: any) => d.number === stepNum);
 						if (!day) return null;
 						return (
-							<a href={`/day/${day.number}`} class="flex items-center gap-3 px-4 py-3 hover:bg-surface-2 rounded-sm transition-colors group">
-								<span class="body-sm font-mono text-ink-muted w-8">D{String(day.number).padStart(2, '0')}</span>
-								<span class="body-sm font-mono text-ink-muted w-10">{day.weekday}</span>
+							<a href={`/step/${day.number}`} class="flex items-center gap-3 px-4 py-3 hover:bg-surface-2 rounded-sm transition-colors group">
+								<span class="body-sm font-mono text-ink-muted w-12">Step {day.number}</span>
 								<span class="body-sm font-semibold flex-1 group-hover:text-accent-aqua transition-colors">{day.title}</span>
 								<span class={`badge-domain-${day.domain}`}>D{day.domain}</span>
 								<span class="caption w-16 text-right">{day.tasks.length} tasks</span>
