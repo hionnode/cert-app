@@ -1,0 +1,719 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const codeConverse = `response = bedrock_runtime.converse(
+    modelId="us.anthropic.claude-sonnet-4-20250514",
+    messages=[
+        {"role": "user", "content": [{"text": "Explain RAG in 3 bullets"}]}
+    ],
+    system=[{"text": "You are an AWS solutions architect."}],
+    inferenceConfig={"maxTokens": 512, "temperature": 0.7}
+)
+print(response["output"]["message"]["content"][0]["text"])`;
+
+const codeConverseStream = `response = bedrock_runtime.converse_stream(
+    modelId="us.anthropic.claude-sonnet-4-20250514",
+    messages=[{"role": "user", "content": [{"text": "Write a poem"}]}]
+)
+for event in response["stream"]:
+    if "contentBlockDelta" in event:
+        print(event["contentBlockDelta"]["delta"]["text"], end="")`;
+
+const codeInvokeModel = `# Model-specific format (Claude example)
+response = bedrock_runtime.invoke_model(
+    modelId="anthropic.claude-3-sonnet-20240229-v1:0",
+    body=json.dumps({
+        "anthropic_version": "bedrock-2023-05-31",
+        "messages": [{"role": "user", "content": "Hello"}],
+        "max_tokens": 256
+    })
+)`;
+
+const codeRetrieve = `response = bedrock_agent_runtime.retrieve(
+    knowledgeBaseId="KB_ID",
+    retrievalQuery={"text": "What is prompt caching?"},
+    retrievalConfiguration={
+        "vectorSearchConfiguration": {
+            "numberOfResults": 5,
+            "filter": {"equals": {"key": "domain", "value": "bedrock"}}
+        }
+    }
+)
+for chunk in response["retrievalResults"]:
+    print(chunk["content"]["text"])`;
+
+const codeRetrieveAndGenerate = `response = bedrock_agent_runtime.retrieve_and_generate(
+    input={"text": "What chunking strategy for legal docs?"},
+    retrieveAndGenerateConfiguration={
+        "type": "KNOWLEDGE_BASE",
+        "knowledgeBaseConfiguration": {
+            "knowledgeBaseId": "KB_ID",
+            "modelArn": "arn:aws:bedrock:us-east-1::foundation-model/..."
+        }
+    }
+)
+print(response["output"]["text"])
+for citation in response["citations"]:
+    print(citation["retrievedReferences"])`;
+
+const codeApplyGuardrail = `response = bedrock_runtime.apply_guardrail(
+    guardrailIdentifier="my-guardrail-id",
+    guardrailVersion="1",
+    source="OUTPUT",  # or "INPUT"
+    content=[{"text": {"text": "User email is john@example.com"}}]
+)
+# action: "GUARDRAIL_INTERVENED" or "NONE"
+print(response["action"])
+print(response["outputs"])`;
+
+const codeInvokeAgent = `response = bedrock_agent_runtime.invoke_agent(
+    agentId="AGENT_ID",
+    agentAliasId="ALIAS_ID",
+    sessionId="session-123",
+    inputText="What's the status of order #12345?",
+    enableTrace=True
+)
+for event in response["completion"]:
+    if "chunk" in event:
+        print(event["chunk"]["bytes"].decode())`;
+---
+
+<Layout title="Bedrock API Reference">
+	<div class="page-container py-6">
+		<h1 class="heading-1 mb-1">Bedrock API Reference</h1>
+		<p class="body-text mb-8">Every API you need for the AIP-C01 exam, with use cases and examples.</p>
+
+		<!-- Quick nav -->
+		<div class="flex flex-wrap gap-2 mb-8">
+			<a href="#runtime" class="badge border border-accent-aqua text-accent-aqua hover:bg-accent-aqua/10 transition-colors">Runtime APIs</a>
+			<a href="#knowledge-base" class="badge border border-accent-blue text-accent-blue hover:bg-accent-blue/10 transition-colors">Knowledge Base</a>
+			<a href="#guardrails" class="badge border border-accent-yellow text-accent-yellow hover:bg-accent-yellow/10 transition-colors">Guardrails</a>
+			<a href="#agents" class="badge border border-accent-purple text-accent-purple hover:bg-accent-purple/10 transition-colors">Agents & Flows</a>
+			<a href="#management" class="badge border border-accent-orange text-accent-orange hover:bg-accent-orange/10 transition-colors">Management</a>
+		</div>
+
+		<!-- ============================================ -->
+		<!-- RUNTIME APIs -->
+		<!-- ============================================ -->
+		<section id="runtime" class="mb-12">
+			<div class="flex items-center gap-3 mb-6">
+				<div class="i-lucide-zap w-6 h-6 text-accent-aqua" />
+				<h2 class="heading-2">Runtime APIs</h2>
+			</div>
+			<p class="body-text mb-6">Data plane operations for model inference. These are the APIs your application calls to generate responses.</p>
+
+			<!-- Converse -->
+			<div class="card mb-6" id="converse">
+				<div class="p-6 border-b border-surface-3">
+					<div class="flex items-center gap-3 mb-2">
+						<h3 class="heading-3">Converse</h3>
+						<span class="badge border border-accent-aqua text-accent-aqua">Recommended</span>
+					</div>
+					<p class="body-text">Unified, model-agnostic API for multi-turn conversations. Works identically across Claude, Nova, Llama, Mistral, and all Bedrock models without code changes.</p>
+				</div>
+				<div class="p-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">When to use</h4>
+							<ul class="space-y-2">
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Multi-turn chatbots and assistants</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Function calling / tool use</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Model-agnostic code (switch models without changes)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Vision / multimodal inputs (images + text)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Guardrails integration</li>
+							</ul>
+						</div>
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">Key features</h4>
+							<ul class="space-y-2">
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-yellow">-</span>Unified message format (role + content blocks)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-yellow">-</span>Built-in conversation history management</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-yellow">-</span>Native tool_use / tool_result blocks</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-yellow">-</span>System prompt as first-class parameter</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-yellow">-</span>Token usage in response metadata</li>
+							</ul>
+						</div>
+					</div>
+					<div class="mt-6 bg-surface-0 border border-surface-3 rounded-card p-4 overflow-x-auto">
+						<pre class="text-sm text-ink-secondary font-mono leading-relaxed" set:text={codeConverse} />
+					</div>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-runtime</span>
+						<span class="badge-muted">Sync</span>
+						<span class="badge-muted">All models</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- ConverseStream -->
+			<div class="card mb-6" id="conversestream">
+				<div class="p-6 border-b border-surface-3">
+					<h3 class="heading-3 mb-2">ConverseStream</h3>
+					<p class="body-text">Streaming variant of Converse. Returns tokens incrementally for real-time UIs. Same unified format, same tool use support.</p>
+				</div>
+				<div class="p-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">When to use</h4>
+							<ul class="space-y-2">
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Chat UIs needing real-time token display</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Reducing time-to-first-token for user experience</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>WebSocket or SSE endpoints</li>
+							</ul>
+						</div>
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">Exam trigger</h4>
+							<p class="body-sm text-accent-yellow">"reduce perceived latency" or "real-time token display" = ConverseStream</p>
+						</div>
+					</div>
+					<div class="mt-6 bg-surface-0 border border-surface-3 rounded-card p-4 overflow-x-auto">
+						<pre class="text-sm text-ink-secondary font-mono leading-relaxed" set:text={codeConverseStream} />
+					</div>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-runtime</span>
+						<span class="badge-muted">Streaming</span>
+						<span class="badge-muted">All models</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- InvokeModel -->
+			<div class="card mb-6" id="invokemodel">
+				<div class="p-6 border-b border-surface-3">
+					<div class="flex items-center gap-3 mb-2">
+						<h3 class="heading-3">InvokeModel</h3>
+						<span class="badge bg-surface-2 text-ink-muted">Legacy</span>
+					</div>
+					<p class="body-text">Low-level, model-specific inference API. Each model family requires a different request/response format. Use Converse API instead for new applications.</p>
+				</div>
+				<div class="p-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">When to use</h4>
+							<ul class="space-y-2">
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Model-specific features not in Converse (rare)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Embedding generation (Titan Embeddings)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Image generation (Nova Canvas, Titan Image)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Legacy applications already using model-specific formats</li>
+							</ul>
+						</div>
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">Exam trigger</h4>
+							<p class="body-sm text-accent-red">"model-agnostic" or "switch models without code changes" = NOT InvokeModel. Use Converse.</p>
+						</div>
+					</div>
+					<div class="mt-6 bg-surface-0 border border-surface-3 rounded-card p-4 overflow-x-auto">
+						<pre class="text-sm text-ink-secondary font-mono leading-relaxed" set:text={codeInvokeModel} />
+					</div>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-runtime</span>
+						<span class="badge-muted">Sync</span>
+						<span class="badge-muted">Model-specific format</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- InvokeModelWithResponseStream -->
+			<div class="card mb-6" id="invokemodel-stream">
+				<div class="p-6 border-b border-surface-3">
+					<div class="flex items-center gap-3 mb-2">
+						<h3 class="heading-3">InvokeModelWithResponseStream</h3>
+						<span class="badge bg-surface-2 text-ink-muted">Legacy</span>
+					</div>
+					<p class="body-text">Streaming variant of InvokeModel. Model-specific format. Prefer ConverseStream for new applications.</p>
+				</div>
+				<div class="p-6">
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-runtime</span>
+						<span class="badge-muted">Streaming</span>
+						<span class="badge-muted">Model-specific format</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- StartAsyncInvoke -->
+			<div class="card mb-6" id="async-invoke">
+				<div class="p-6 border-b border-surface-3">
+					<h3 class="heading-3 mb-2">StartAsyncInvoke / GetAsyncInvoke</h3>
+					<p class="body-text">Asynchronous batch inference. Submit jobs that process in the background at ~50% lower cost. Results written to S3.</p>
+				</div>
+				<div class="p-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">When to use</h4>
+							<ul class="space-y-2">
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Non-real-time workloads (overnight batch processing)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Cost-sensitive large-scale inference</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Processing thousands of documents</li>
+							</ul>
+						</div>
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">Exam trigger</h4>
+							<p class="body-sm text-accent-yellow">"reduce cost for batch processing" or "non-real-time" = batch inference with StartAsyncInvoke</p>
+						</div>
+					</div>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-runtime</span>
+						<span class="badge-muted">Async</span>
+						<span class="badge-muted">~50% cost savings</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- CountTokens -->
+			<div class="card mb-6" id="count-tokens">
+				<div class="p-6">
+					<h3 class="heading-3 mb-2">CountTokens</h3>
+					<p class="body-text">Count the number of tokens in input text for a specific model. Useful for cost estimation and context window management.</p>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-runtime</span>
+						<span class="badge-muted">Utility</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============================================ -->
+		<!-- KNOWLEDGE BASE APIs -->
+		<!-- ============================================ -->
+		<section id="knowledge-base" class="mb-12">
+			<div class="flex items-center gap-3 mb-6">
+				<div class="i-lucide-database w-6 h-6 text-accent-blue" />
+				<h2 class="heading-2">Knowledge Base & Retrieval APIs</h2>
+			</div>
+			<p class="body-text mb-6">APIs for RAG (Retrieval-Augmented Generation) workflows. Query knowledge bases and generate grounded responses.</p>
+
+			<!-- Retrieve -->
+			<div class="card mb-6" id="retrieve">
+				<div class="p-6 border-b border-surface-3">
+					<h3 class="heading-3 mb-2">Retrieve</h3>
+					<p class="body-text">Search a knowledge base and return relevant document chunks. You handle the generation step yourself (pass chunks to Converse/InvokeModel).</p>
+				</div>
+				<div class="p-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">When to use</h4>
+							<ul class="space-y-2">
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Custom RAG pipeline (control the generation prompt)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Retrieval-only search without generation</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Combining chunks from multiple knowledge bases</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Custom reranking or filtering logic</li>
+							</ul>
+						</div>
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">Exam trigger</h4>
+							<p class="body-sm text-accent-yellow">"custom RAG pipeline" or "control the prompt" = Retrieve (not RetrieveAndGenerate)</p>
+						</div>
+					</div>
+					<div class="mt-6 bg-surface-0 border border-surface-3 rounded-card p-4 overflow-x-auto">
+						<pre class="text-sm text-ink-secondary font-mono leading-relaxed" set:text={codeRetrieve} />
+					</div>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-agent-runtime</span>
+						<span class="badge-muted">Retrieval only</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- RetrieveAndGenerate -->
+			<div class="card mb-6" id="retrieve-and-generate">
+				<div class="p-6 border-b border-surface-3">
+					<div class="flex items-center gap-3 mb-2">
+						<h3 class="heading-3">RetrieveAndGenerate</h3>
+						<span class="badge border border-accent-aqua text-accent-aqua">Managed RAG</span>
+					</div>
+					<p class="body-text">Full managed RAG pipeline: retrieves relevant chunks from a knowledge base AND generates a grounded response in one call. Handles prompt construction, citation, and source attribution automatically.</p>
+				</div>
+				<div class="p-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">When to use</h4>
+							<ul class="space-y-2">
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Quick RAG implementation (minimal code)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Need automatic source citations</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Standard Q&A over documents</li>
+							</ul>
+						</div>
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">Exam trigger</h4>
+							<p class="body-sm text-accent-yellow">"managed RAG" or "automatic citations" = RetrieveAndGenerate</p>
+						</div>
+					</div>
+					<div class="mt-6 bg-surface-0 border border-surface-3 rounded-card p-4 overflow-x-auto">
+						<pre class="text-sm text-ink-secondary font-mono leading-relaxed" set:text={codeRetrieveAndGenerate} />
+					</div>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-agent-runtime</span>
+						<span class="badge-muted">Retrieval + Generation</span>
+						<span class="badge-muted">Auto-citations</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Rerank -->
+			<div class="card mb-6" id="rerank">
+				<div class="p-6 border-b border-surface-3">
+					<h3 class="heading-3 mb-2">Rerank</h3>
+					<p class="body-text">Re-score and reorder retrieved chunks by relevance to the query. Improves RAG quality by surfacing the most relevant context to the generation model.</p>
+				</div>
+				<div class="p-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">When to use</h4>
+							<ul class="space-y-2">
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>After Retrieve, before generation</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Improving retrieval precision for complex queries</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Combining results from multiple retrieval sources</li>
+							</ul>
+						</div>
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">Exam trigger</h4>
+							<p class="body-sm text-accent-yellow">"improve retrieval quality" or "reorder by relevance" = Rerank API</p>
+						</div>
+					</div>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-agent-runtime</span>
+						<span class="badge-muted">Post-retrieval</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- OptimizePrompt -->
+			<div class="card mb-6" id="optimize-prompt">
+				<div class="p-6">
+					<h3 class="heading-3 mb-2">OptimizePrompt</h3>
+					<p class="body-text">Automatically optimize a prompt for better model performance. Rewrites prompts to improve clarity, specificity, and output quality.</p>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-agent-runtime</span>
+						<span class="badge-muted">Prompt optimization</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============================================ -->
+		<!-- GUARDRAILS -->
+		<!-- ============================================ -->
+		<section id="guardrails" class="mb-12">
+			<div class="flex items-center gap-3 mb-6">
+				<div class="i-lucide-shield-check w-6 h-6 text-accent-yellow" />
+				<h2 class="heading-2">Guardrails API</h2>
+			</div>
+
+			<!-- ApplyGuardrail -->
+			<div class="card mb-6" id="apply-guardrail">
+				<div class="p-6 border-b border-surface-3">
+					<div class="flex items-center gap-3 mb-2">
+						<h3 class="heading-3">ApplyGuardrail</h3>
+						<span class="badge border border-accent-yellow text-accent-yellow">Works with any model</span>
+					</div>
+					<p class="body-text">Apply safety filters independently to any text — not just Bedrock model outputs. Works with self-hosted models, third-party APIs, or any text source.</p>
+				</div>
+				<div class="p-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">8 filter types</h4>
+							<ul class="space-y-2">
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">1.</span>Content filters (hate, violence, sexual, etc.)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">2.</span>Denied topics (custom blocklist)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">3.</span>Word filters (profanity, custom words)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">4.</span>PII detection (BLOCK or ANONYMIZE)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">5.</span>Regex filters (custom patterns)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">6.</span>Contextual grounding (RAG faithfulness)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">7.</span>Automated reasoning (logical correctness)</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">8.</span>Invocation logging (prompt/response audit)</li>
+							</ul>
+						</div>
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">Exam triggers</h4>
+							<ul class="space-y-2">
+								<li class="body-sm"><span class="text-accent-yellow">PII handling:</span> BLOCK = reject entirely, ANONYMIZE = mask and continue</li>
+								<li class="body-sm"><span class="text-accent-yellow">Non-Bedrock model:</span> ApplyGuardrail works independently</li>
+								<li class="body-sm"><span class="text-accent-yellow">RAG faithfulness:</span> Contextual Grounding check</li>
+								<li class="body-sm"><span class="text-accent-yellow">Math/logic verification:</span> Automated Reasoning check</li>
+							</ul>
+						</div>
+					</div>
+					<div class="mt-6 bg-surface-0 border border-surface-3 rounded-card p-4 overflow-x-auto">
+						<pre class="text-sm text-ink-secondary font-mono leading-relaxed" set:text={codeApplyGuardrail} />
+					</div>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-runtime</span>
+						<span class="badge-muted">Model-independent</span>
+						<span class="badge-muted">Input + Output filtering</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============================================ -->
+		<!-- AGENTS & FLOWS -->
+		<!-- ============================================ -->
+		<section id="agents" class="mb-12">
+			<div class="flex items-center gap-3 mb-6">
+				<div class="i-lucide-bot w-6 h-6 text-accent-purple" />
+				<h2 class="heading-2">Agents & Flows APIs</h2>
+			</div>
+			<p class="body-text mb-6">Execute agents and orchestration flows. These APIs invoke pre-configured agents and workflows.</p>
+
+			<!-- InvokeAgent -->
+			<div class="card mb-6" id="invoke-agent">
+				<div class="p-6 border-b border-surface-3">
+					<h3 class="heading-3 mb-2">InvokeAgent</h3>
+					<p class="body-text">Send a user prompt to a Bedrock Agent. The agent reasons about the input, selects tools (action groups), queries knowledge bases, and returns a response. Supports multi-turn sessions.</p>
+				</div>
+				<div class="p-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">When to use</h4>
+							<ul class="space-y-2">
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Autonomous task execution with tools</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Multi-step reasoning with ReAct</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Customer service bots with KB + Lambda tools</li>
+							</ul>
+						</div>
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">Key parameters</h4>
+							<ul class="space-y-2">
+								<li class="body-sm"><span class="text-accent-yellow">agentId</span> — the prepared agent</li>
+								<li class="body-sm"><span class="text-accent-yellow">agentAliasId</span> — version alias</li>
+								<li class="body-sm"><span class="text-accent-yellow">sessionId</span> — for multi-turn conversations</li>
+								<li class="body-sm"><span class="text-accent-yellow">enableTrace</span> — debug agent reasoning</li>
+							</ul>
+						</div>
+					</div>
+					<div class="mt-6 bg-surface-0 border border-surface-3 rounded-card p-4 overflow-x-auto">
+						<pre class="text-sm text-ink-secondary font-mono leading-relaxed" set:text={codeInvokeAgent} />
+					</div>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-agent-runtime</span>
+						<span class="badge-muted">Streaming response</span>
+						<span class="badge-muted">Multi-turn sessions</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- InvokeFlow -->
+			<div class="card mb-6" id="invoke-flow">
+				<div class="p-6 border-b border-surface-3">
+					<h3 class="heading-3 mb-2">InvokeFlow</h3>
+					<p class="body-text">Execute a Bedrock Prompt Flow. Flows are visual, no-code workflows that chain prompts, conditions, and data transformations.</p>
+				</div>
+				<div class="p-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">When to use</h4>
+							<ul class="space-y-2">
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>No-code prompt orchestration</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Conditional branching based on model output</li>
+								<li class="flex items-start gap-2 body-sm"><span class="text-accent-aqua">-</span>Chaining multiple prompts with data flow</li>
+							</ul>
+						</div>
+						<div>
+							<h4 class="caption font-semibold uppercase tracking-wide mb-3">Exam trigger</h4>
+							<p class="body-sm text-accent-yellow">"no-code workflow" or "visual orchestration" = Bedrock Flows (InvokeFlow)</p>
+						</div>
+					</div>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-agent-runtime</span>
+						<span class="badge-muted">Orchestration</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- InvokeInlineAgent -->
+			<div class="card mb-6" id="invoke-inline-agent">
+				<div class="p-6">
+					<h3 class="heading-3 mb-2">InvokeInlineAgent</h3>
+					<p class="body-text">Invoke an agent defined inline (without pre-creating it). Define the agent's instructions, model, and tools in the API call itself. Useful for dynamic, one-off agent configurations.</p>
+					<div class="mt-4 flex flex-wrap gap-2">
+						<span class="badge-muted">Service: bedrock-agent-runtime</span>
+						<span class="badge-muted">No pre-creation required</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============================================ -->
+		<!-- MANAGEMENT APIs -->
+		<!-- ============================================ -->
+		<section id="management" class="mb-12">
+			<div class="flex items-center gap-3 mb-6">
+				<div class="i-lucide-settings w-6 h-6 text-accent-orange" />
+				<h2 class="heading-2">Management APIs (Control Plane)</h2>
+			</div>
+			<p class="body-text mb-6">Control plane operations for creating and managing Bedrock resources. These are setup/configuration APIs, not inference APIs.</p>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<!-- KB Management -->
+				<div class="card p-5">
+					<h4 class="heading-3 mb-3">Knowledge Bases</h4>
+					<ul class="space-y-2">
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">CreateKnowledgeBase</span> — create with vector store config</li>
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">CreateDataSource</span> — connect S3, Confluence, SharePoint</li>
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">StartIngestionJob</span> — sync documents into vector store</li>
+						<li class="body-sm text-ink-muted">Also: Get, Update, Delete, List variants</li>
+					</ul>
+				</div>
+
+				<!-- Agent Management -->
+				<div class="card p-5">
+					<h4 class="heading-3 mb-3">Agents</h4>
+					<ul class="space-y-2">
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">CreateAgent</span> — define agent instructions + model</li>
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">CreateAgentActionGroup</span> — add Lambda tools</li>
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">PrepareAgent</span> — compile agent for deployment</li>
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">CreateAgentAlias</span> — version for production</li>
+						<li class="body-sm text-ink-muted">Also: AssociateAgentKnowledgeBase, Collaborators</li>
+					</ul>
+				</div>
+
+				<!-- Prompt Management -->
+				<div class="card p-5">
+					<h4 class="heading-3 mb-3">Prompts</h4>
+					<ul class="space-y-2">
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">CreatePrompt</span> — centralized prompt template</li>
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">CreatePromptVersion</span> — immutable version snapshot</li>
+						<li class="body-sm text-ink-muted">Versioning + CloudTrail audit trail</li>
+					</ul>
+				</div>
+
+				<!-- Flow Management -->
+				<div class="card p-5">
+					<h4 class="heading-3 mb-3">Flows</h4>
+					<ul class="space-y-2">
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">CreateFlow</span> — visual prompt workflow</li>
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">PrepareFlow</span> — compile for execution</li>
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">ValidateFlowDefinition</span> — check for errors</li>
+						<li class="body-sm text-ink-muted">Also: Versions, Aliases for deployment</li>
+					</ul>
+				</div>
+
+				<!-- Model Customization -->
+				<div class="card p-5">
+					<h4 class="heading-3 mb-3">Model Customization</h4>
+					<ul class="space-y-2">
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">CreateModelCustomizationJob</span> — fine-tune or continue pre-training</li>
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">CreateProvisionedModelThroughput</span> — required for custom models</li>
+						<li class="body-sm text-ink-muted">Input: JSONL training data in S3</li>
+					</ul>
+				</div>
+
+				<!-- Evaluation -->
+				<div class="card p-5">
+					<h4 class="heading-3 mb-3">Evaluation</h4>
+					<ul class="space-y-2">
+						<li class="body-sm"><span class="text-accent-aqua font-semibold">CreateEvaluationJob</span> — automated model evaluation</li>
+						<li class="body-sm text-ink-muted">Supports LLM-as-a-judge and human evaluation</li>
+						<li class="body-sm text-ink-muted">Metrics: accuracy, robustness, toxicity</li>
+					</ul>
+				</div>
+			</div>
+		</section>
+
+		<!-- ============================================ -->
+		<!-- SERVICE ENDPOINTS -->
+		<!-- ============================================ -->
+		<section class="mb-12">
+			<h2 class="heading-2 mb-6">Service Endpoints</h2>
+			<div class="card overflow-hidden">
+				<table class="w-full text-sm">
+					<thead>
+						<tr class="border-b border-surface-3 bg-surface-1">
+							<th class="text-left px-5 py-4 font-semibold">Service</th>
+							<th class="text-left px-5 py-4 font-semibold">Type</th>
+							<th class="text-left px-5 py-4 font-semibold">Purpose</th>
+							<th class="text-left px-5 py-4 font-semibold">Key Operations</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-surface-3">
+						<tr>
+							<td class="px-5 py-4 font-semibold text-accent-aqua">bedrock-runtime</td>
+							<td class="px-5 py-4">Data Plane</td>
+							<td class="px-5 py-4">Model inference</td>
+							<td class="px-5 py-4 text-ink-secondary">Converse, InvokeModel, ApplyGuardrail</td>
+						</tr>
+						<tr>
+							<td class="px-5 py-4 font-semibold text-accent-blue">bedrock-agent-runtime</td>
+							<td class="px-5 py-4">Data Plane</td>
+							<td class="px-5 py-4">Agent execution, RAG</td>
+							<td class="px-5 py-4 text-ink-secondary">InvokeAgent, Retrieve, RetrieveAndGenerate</td>
+						</tr>
+						<tr>
+							<td class="px-5 py-4 font-semibold text-accent-orange">bedrock</td>
+							<td class="px-5 py-4">Control Plane</td>
+							<td class="px-5 py-4">Resource management</td>
+							<td class="px-5 py-4 text-ink-secondary">CreateAgent, CreateKnowledgeBase, CreatePrompt</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<!-- ============================================ -->
+		<!-- FURTHER READING -->
+		<!-- ============================================ -->
+		<section class="mb-12">
+			<h2 class="heading-2 mb-6">Documentation & Blog Posts</h2>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+				<a href="https://docs.aws.amazon.com/bedrock/latest/APIReference/welcome.html" target="_blank" rel="noopener" class="card p-4 hover:bg-surface-2 transition-colors group flex gap-3">
+					<div class="i-lucide-file-text w-4 h-4 text-accent-blue flex-shrink-0 mt-0.5" />
+					<div>
+						<h4 class="body-sm font-semibold group-hover:text-accent-aqua transition-colors">Bedrock API Reference</h4>
+						<p class="caption-sm">Complete API documentation for all Bedrock services</p>
+					</div>
+				</a>
+				<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-call.html" target="_blank" rel="noopener" class="card p-4 hover:bg-surface-2 transition-colors group flex gap-3">
+					<div class="i-lucide-file-text w-4 h-4 text-accent-blue flex-shrink-0 mt-0.5" />
+					<div>
+						<h4 class="body-sm font-semibold group-hover:text-accent-aqua transition-colors">Converse API User Guide</h4>
+						<p class="caption-sm">Multi-turn conversations, tool use, and streaming</p>
+					</div>
+				</a>
+				<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html" target="_blank" rel="noopener" class="card p-4 hover:bg-surface-2 transition-colors group flex gap-3">
+					<div class="i-lucide-file-text w-4 h-4 text-accent-blue flex-shrink-0 mt-0.5" />
+					<div>
+						<h4 class="body-sm font-semibold group-hover:text-accent-aqua transition-colors">Guardrails User Guide</h4>
+						<p class="caption-sm">Content filtering, PII handling, and safety controls</p>
+					</div>
+				</a>
+				<a href="https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html" target="_blank" rel="noopener" class="card p-4 hover:bg-surface-2 transition-colors group flex gap-3">
+					<div class="i-lucide-file-text w-4 h-4 text-accent-blue flex-shrink-0 mt-0.5" />
+					<div>
+						<h4 class="body-sm font-semibold group-hover:text-accent-aqua transition-colors">Knowledge Bases User Guide</h4>
+						<p class="caption-sm">RAG setup, chunking, embeddings, and retrieval</p>
+					</div>
+				</a>
+				<a href="https://aws.amazon.com/blogs/machine-learning/getting-started-with-cross-region-inference-in-amazon-bedrock/" target="_blank" rel="noopener" class="card p-4 hover:bg-surface-2 transition-colors group flex gap-3">
+					<div class="i-lucide-newspaper w-4 h-4 text-accent-blue flex-shrink-0 mt-0.5" />
+					<div>
+						<h4 class="body-sm font-semibold group-hover:text-accent-aqua transition-colors">Cross-Region Inference Guide</h4>
+						<p class="caption-sm">Multi-region deployment with inference profiles</p>
+					</div>
+				</a>
+				<a href="https://aws.amazon.com/blogs/machine-learning/structured-outputs-on-amazon-bedrock-schema-compliant-ai-responses/" target="_blank" rel="noopener" class="card p-4 hover:bg-surface-2 transition-colors group flex gap-3">
+					<div class="i-lucide-newspaper w-4 h-4 text-accent-blue flex-shrink-0 mt-0.5" />
+					<div>
+						<h4 class="body-sm font-semibold group-hover:text-accent-aqua transition-colors">Structured Outputs on Bedrock</h4>
+						<p class="caption-sm">JSON Schema-compliant responses with Converse API</p>
+					</div>
+				</a>
+				<a href="https://github.com/aws-samples/amazon-bedrock-workshop" target="_blank" rel="noopener" class="card p-4 hover:bg-surface-2 transition-colors group flex gap-3">
+					<div class="i-lucide-code w-4 h-4 text-accent-blue flex-shrink-0 mt-0.5" />
+					<div>
+						<h4 class="body-sm font-semibold group-hover:text-accent-aqua transition-colors">Amazon Bedrock Workshop</h4>
+						<p class="caption-sm">32 hands-on Jupyter notebooks covering all APIs</p>
+					</div>
+				</a>
+				<a href="https://aws.amazon.com/blogs/machine-learning/category/artificial-intelligence/amazon-bedrock/" target="_blank" rel="noopener" class="card p-4 hover:bg-surface-2 transition-colors group flex gap-3">
+					<div class="i-lucide-newspaper w-4 h-4 text-accent-blue flex-shrink-0 mt-0.5" />
+					<div>
+						<h4 class="body-sm font-semibold group-hover:text-accent-aqua transition-colors">All Bedrock Blog Posts</h4>
+						<p class="caption-sm">Latest AWS blog posts about Amazon Bedrock</p>
+					</div>
+				</a>
+			</div>
+		</section>
+	</div>
+</Layout>

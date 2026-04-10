@@ -104,6 +104,7 @@ export const NAV_ITEMS = [
 
 export const SECONDARY_NAV = [
 	{ label: "Practice", href: "/practice", icon: "i-lucide-brain" },
+	{ label: "API Ref", href: "/api", icon: "i-lucide-code-2" },
 	{ label: "Reference", href: "/reference", icon: "i-lucide-table-2" },
 	{ label: "Resources", href: "/resources", icon: "i-lucide-library" },
 ] as const;
