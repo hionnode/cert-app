@@ -6,6 +6,8 @@ import type { Scenario, ScenarioRating } from "../../lib/types";
 
 interface ScenarioCardProps {
   scenario: Scenario;
+  onRated?: () => void;
+  embedded?: boolean;
 }
 
 type CardState = "question" | "answer" | "rated";
@@ -22,7 +24,7 @@ const ratingConfig = [
   { value: "missed" as ScenarioRating, label: "Missed", icon: X, cls: "bg-accent-red hover:bg-accent-red/80 text-surface-0" },
 ];
 
-export default function ScenarioCard({ scenario }: ScenarioCardProps) {
+export default function ScenarioCard({ scenario, onRated, embedded }: ScenarioCardProps) {
   const [state, setState] = useState<CardState>("question");
   const [selectedRating, setSelectedRating] = useState<ScenarioRating | undefined>();
 
@@ -34,6 +36,7 @@ export default function ScenarioCard({ scenario }: ScenarioCardProps) {
     setSelectedRating(r);
     rateScenario(scenario.id, r);
     setState("rated");
+    if (onRated) setTimeout(onRated, 600);
   }
 
   function handleReset() {
@@ -42,9 +45,9 @@ export default function ScenarioCard({ scenario }: ScenarioCardProps) {
   }
 
   return (
-    <div className="card overflow-hidden">
+    <div className={embedded ? "" : "card overflow-hidden"}>
       {/* Header bar */}
-      <div className="flex items-center justify-between gap-2 px-6 pt-6 pb-4">
+      <div className={`flex items-center justify-between gap-2 ${embedded ? "mb-4" : "px-6 pt-6 pb-4"}`}>
         <div className="flex items-center gap-2 flex-wrap">
           <DomainBadge domain={scenario.domain} size="sm" />
           <span className={`badge ${difficultyStyles[scenario.difficulty]}`}>
@@ -54,12 +57,12 @@ export default function ScenarioCard({ scenario }: ScenarioCardProps) {
       </div>
 
       {/* Title */}
-      <div className="px-6 pb-4">
+      <div className={embedded ? "mb-4" : "px-6 pb-4"}>
         <h3 className="heading-3">{scenario.title}</h3>
       </div>
 
       {/* State content */}
-      <div className="px-6 pb-6">
+      <div className={embedded ? "" : "px-6 pb-6"}>
         {/* STATE 1: Question */}
         {state === "question" && (
           <div>
