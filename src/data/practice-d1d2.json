@@ -558,5 +558,275 @@
     "explanation": "Circuit breaker maps to Step Functions because Step Functions can track failure counts in state, open the circuit after a threshold, and use Wait states for cooldown before gradually resuming calls. Model cascading maps to Lambda routing because a Lambda function can classify request complexity and route to the appropriate model (Nova Micro for simple, Nova Pro for moderate, Sonnet for complex). Semantic caching maps to ElastiCache because ElastiCache can store vector embeddings as keys and cached responses as values, enabling fast similarity-based lookup for near-duplicate queries. Human-in-the-loop maps to Step Functions callback tasks because the callback pattern pauses workflow execution, sends a token to a human reviewer, and only resumes when the human approves or rejects the action.",
     "examSkills": ["1.2.1", "2.2.1", "2.2.2"],
     "tags": ["circuit-breaker", "model-cascading", "semantic-cache", "human-in-loop", "step-functions", "lambda", "elasticache"]
+  },
+  {
+    "id": "conv-q1",
+    "domain": 1,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A developer wants to build a chatbot that works with Claude today but may switch to Amazon Nova next quarter without changing application code. Which Amazon Bedrock API should they use?",
+    "options": [
+      "A. InvokeModel, which provides the most flexible request format for any model",
+      "B. Converse API, which provides a unified request/response format across all Bedrock models",
+      "C. InvokeModelWithResponseStream, which abstracts away model-specific streaming formats",
+      "D. BatchInvokeModel, which supports multi-model routing in a single call"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because the Converse API uses a single unified request/response format that works identically across all Bedrock foundation models, enabling model switching without code changes. A is wrong because InvokeModel requires model-specific request body formats -- switching from Claude (messages format) to Nova (different format) requires code changes. C is wrong because InvokeModelWithResponseStream also uses model-specific formats, and the question is about model portability, not streaming. D is wrong because BatchInvokeModel does not exist as a Bedrock API.",
+    "examSkills": ["1.1.1"],
+    "tags": ["converse-api", "invoke-model", "model-agnostic", "bedrock"]
+  },
+  {
+    "id": "conv-q2",
+    "domain": 1,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A team building a customer support chatbot needs their FM to look up order status by calling a backend API during the conversation. Which Bedrock API feature supports this natively?",
+    "options": [
+      "A. InvokeModel with a custom JSON payload containing API credentials",
+      "B. Converse API with tool use (function calling) that defines the order lookup as a tool",
+      "C. Bedrock Agents action groups, which are required for any external API call",
+      "D. Converse API with the built-in HTTP client that makes API calls on the model's behalf"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because the Converse API supports native tool use (function calling) where you define tools with their input schemas, and the model generates structured tool call requests that your application executes. A is wrong because InvokeModel does not have native tool use support -- you would need to implement tool calling manually in the prompt and parse the response. C is wrong because Bedrock Agents action groups are for the managed agent service, not required for all external API calls -- the Converse API handles tool use independently. D is wrong because the Converse API does not make HTTP calls on the model's behalf -- it returns a tool use request that your application code executes.",
+    "examSkills": ["1.1.1", "2.4.1"],
+    "tags": ["converse-api", "tool-use", "function-calling", "bedrock"]
+  },
+  {
+    "id": "conv-q3",
+    "domain": 1,
+    "level": 1,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "Which statement correctly describes a key difference between the Converse API and InvokeModel API in Amazon Bedrock?",
+    "options": [
+      "A. Converse API supports more models than InvokeModel",
+      "B. InvokeModel provides a unified format while Converse requires model-specific payloads",
+      "C. Converse API manages conversation history as a first-class parameter, while InvokeModel requires manual message array construction in model-specific formats",
+      "D. InvokeModel supports streaming but Converse API does not"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because the Converse API accepts a messages array as a standard parameter with a unified format, managing multi-turn conversation history as a first-class concept. InvokeModel requires you to construct the message history in the model-specific format (e.g., Claude's messages array vs other models' prompt formats). A is wrong because InvokeModel actually supports more models -- some older or specialized models may not support Converse. B is wrong because it is the reverse -- Converse provides the unified format. D is wrong because Converse does support streaming via the ConverseStream API.",
+    "examSkills": ["1.1.1"],
+    "tags": ["converse-api", "invoke-model", "multi-turn", "bedrock"]
+  },
+  {
+    "id": "conv-q4",
+    "domain": 1,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A developer is migrating from InvokeModel to the Converse API. Their application currently parses Claude-specific response JSON to extract the assistant message. After migration, how will the response format change?",
+    "options": [
+      "A. The response will still be Claude-specific JSON but wrapped in a Converse envelope",
+      "B. The response will use a standardized format with an output.message structure containing role and content, regardless of which model is invoked",
+      "C. The response will be a plain text string instead of JSON",
+      "D. The response format will not change -- Converse uses the same response format as InvokeModel"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because the Converse API returns responses in a standardized format with output.message containing role ('assistant') and content (array of content blocks), regardless of the underlying model. This is the key benefit -- one response parser works for all models. A is wrong because Converse fully standardizes the response format, not just wrapping the model-specific format. C is wrong because the response is structured JSON, not plain text. D is wrong because the formats are different -- InvokeModel uses model-specific response structures while Converse uses a unified one.",
+    "examSkills": ["1.1.1", "2.4.1"],
+    "tags": ["converse-api", "response-format", "migration", "bedrock"]
+  },
+  {
+    "id": "conv-q5",
+    "domain": 1,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [2],
+    "question": "An application team uses InvokeModel with Claude and needs to add support for multimodal inputs (images + text) in conversations while maintaining the ability to switch to Nova. What is the MOST efficient approach?",
+    "options": [
+      "A. Use InvokeModel with separate code paths for Claude's vision format and Nova's image format",
+      "B. Use the Converse API, which supports images as content blocks in the unified message format across both Claude and Nova",
+      "C. Use Rekognition to describe images as text, then pass the text descriptions to InvokeModel",
+      "D. Use Bedrock Data Automation to preprocess images before sending to InvokeModel"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because the Converse API supports multimodal content blocks (text and images) in the same unified message format, and this format works identically for both Claude and Nova without model-specific code. A is wrong because maintaining separate code paths for each model defeats the purpose and increases maintenance burden. C is wrong because it loses the richness of direct image understanding and adds unnecessary complexity and latency. D is wrong because Bedrock Data Automation is for batch document/media processing pipelines, not real-time multimodal conversation.",
+    "examSkills": ["1.1.1", "2.4.1"],
+    "tags": ["converse-api", "multimodal", "images", "model-agnostic", "bedrock"]
+  },
+  {
+    "id": "ft-q1",
+    "domain": 1,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company fine-tunes a model using Amazon Bedrock Custom Model Training. After training completes, how must they deploy the custom model for inference?",
+    "options": [
+      "A. The custom model is automatically available on Bedrock's on-demand pricing tier",
+      "B. They must purchase Provisioned Throughput for the custom model before it can serve inference requests",
+      "C. They must export the model weights to SageMaker and deploy to a SageMaker endpoint",
+      "D. They must create a model package in AWS Marketplace before deployment"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Bedrock custom (fine-tuned) models require Provisioned Throughput to serve inference -- they are not available on the on-demand tier. You must purchase a commitment (1-month or 6-month) for a specific number of model units. A is wrong because custom models cannot use on-demand pricing -- this is a critical exam distinction. C is wrong because Bedrock custom models stay within Bedrock; you do not need to export to SageMaker. D is wrong because AWS Marketplace is for third-party model distribution, not deploying your own custom models.",
+    "examSkills": ["1.2.4"],
+    "tags": ["fine-tuning", "provisioned-throughput", "custom-model", "bedrock"]
+  },
+  {
+    "id": "ft-q2",
+    "domain": 1,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A healthcare company has a large corpus of unlabeled medical research papers. They want a foundation model to better understand medical terminology before fine-tuning it on specific clinical tasks. Which Bedrock approach should they use FIRST?",
+    "options": [
+      "A. Fine-tuning with the research papers formatted as prompt-completion pairs",
+      "B. Continued Pre-Training with the unlabeled medical corpus, followed by fine-tuning on labeled clinical data",
+      "C. Prompt engineering with few-shot examples from the medical papers",
+      "D. RAG with the medical papers as the knowledge base"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Continued Pre-Training is designed for unlabeled domain-specific corpora -- it teaches the model the vocabulary, patterns, and concepts of a domain (like medical terminology) without requiring labeled examples. After Continued Pre-Training, you fine-tune on labeled clinical task data for specific outputs. A is wrong because fine-tuning requires labeled prompt-completion pairs, and the question states the corpus is unlabeled. C is wrong because prompt engineering does not permanently adapt the model to the domain -- it works at inference time only. D is wrong because RAG retrieves relevant passages at query time but does not teach the model medical terminology at the model weight level.",
+    "examSkills": ["1.2.4"],
+    "tags": ["continued-pre-training", "fine-tuning", "domain-adaptation", "bedrock"]
+  },
+  {
+    "id": "ft-q3",
+    "domain": 1,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A data science team needs to fine-tune a model with custom training scripts, specific LoRA rank configuration, and custom evaluation metrics. They want full control over the training loop. Which approach should they use?",
+    "options": [
+      "A. Amazon Bedrock Custom Model Training with hyperparameter overrides",
+      "B. Amazon SageMaker with a custom training container and LoRA configuration",
+      "C. Amazon Bedrock Continued Pre-Training with a custom loss function",
+      "D. AWS Lambda with PyTorch for lightweight fine-tuning"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because SageMaker provides full control over the training process -- custom training scripts, custom containers, configurable LoRA parameters (rank, alpha, target modules), custom evaluation metrics, and integration with SageMaker Experiments for tracking. A is wrong because Bedrock Custom Model Training is a managed service with limited hyperparameter control -- you cannot provide custom training scripts or configure specific LoRA parameters. C is wrong because Continued Pre-Training does not support custom loss functions -- it is a managed pre-training process. D is wrong because Lambda has a 15-minute timeout and limited compute resources, making it unsuitable for model fine-tuning.",
+    "examSkills": ["1.2.4"],
+    "tags": ["sagemaker", "fine-tuning", "lora", "custom-training", "bedrock"]
+  },
+  {
+    "id": "ft-q4",
+    "domain": 1,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [3],
+    "question": "A company fine-tunes a model on Bedrock and needs to ensure the training data in S3 is encrypted with their own keys, the training job runs in their VPC, and all API calls are logged. Which combination of services achieves this?",
+    "options": [
+      "A. S3 SSE-S3 encryption, default Bedrock networking, CloudWatch Logs",
+      "B. S3 with KMS customer-managed key (CMK), VPC configuration for the training job, CloudTrail for API logging",
+      "C. S3 with KMS AWS-managed key, Bedrock VPC endpoint, AWS Config for logging",
+      "D. S3 client-side encryption, PrivateLink, Amazon Inspector for audit"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because KMS customer-managed keys give the company full control over encryption (key rotation, policies, audit), VPC configuration for Bedrock training keeps data traffic private, and CloudTrail logs all Bedrock API calls for compliance auditing. A is wrong because SSE-S3 uses AWS-managed keys (not customer-managed), default networking goes over public endpoints, and CloudWatch Logs captures operational logs, not API-level audit trails. C is wrong because AWS-managed KMS keys do not give the company full control over key policies, and AWS Config tracks resource configuration changes, not API call auditing. D is wrong because client-side encryption adds complexity without benefit over KMS CMK, and Amazon Inspector is for vulnerability assessment, not API audit logging.",
+    "examSkills": ["1.2.4", "3.2.1"],
+    "tags": ["fine-tuning", "security", "kms", "vpc", "cloudtrail", "bedrock"]
+  },
+  {
+    "id": "ft-q5",
+    "domain": 1,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "After fine-tuning, a company discovers their custom Bedrock model performs worse than the base model on general knowledge questions while performing better on their domain-specific task. What is the MOST LIKELY cause and recommended mitigation?",
+    "options": [
+      "A. The model was over-fit on the fine-tuning data; mitigate by reducing the number of training epochs and adding regularization",
+      "B. The training data was too small; mitigate by increasing the dataset to at least 100,000 examples",
+      "C. Catastrophic forgetting during fine-tuning; mitigate by using parameter-efficient fine-tuning (LoRA) on SageMaker or including diverse general examples in the training set",
+      "D. The base model was too large for fine-tuning; mitigate by using a smaller base model"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because catastrophic forgetting occurs when fine-tuning overwrites the model's general knowledge with domain-specific patterns. Parameter-efficient methods like LoRA only modify a small subset of parameters, preserving general capabilities. Alternatively, including general examples in the training data helps maintain broad knowledge. A is wrong because while overfitting causes poor performance on unseen examples, the pattern described (good on domain, worse on general) is specifically catastrophic forgetting, not overfitting. B is wrong because the dataset size is not the core issue -- the model is learning the domain well, just losing general knowledge. D is wrong because model size does not cause catastrophic forgetting -- it is a training methodology issue.",
+    "examSkills": ["1.2.4"],
+    "tags": ["fine-tuning", "catastrophic-forgetting", "lora", "sagemaker"]
+  },
+  {
+    "id": "fw-q1",
+    "domain": 2,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "An enterprise team needs to build a production agent that uses AgentCore Memory for cross-session persistence and AgentCore Policy for Cedar-based action governance. Which agent framework has the deepest native integration with these AgentCore services?",
+    "options": [
+      "A. LangChain, which has community-maintained AgentCore adapters",
+      "B. Strands Agents SDK, which is AWS-built with native AgentCore integration",
+      "C. CrewAI, which has built-in AWS service connectors",
+      "D. AutoGen, which supports AgentCore through its plugin system"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Strands Agents SDK is built by AWS specifically for production agent deployments with native, first-party integration with all AgentCore services including Memory, Policy, Gateway, and Runtime. A is wrong because LangChain can deploy to AgentCore Runtime but does not have native Memory or Policy integration -- you would need custom bridging code. C is wrong because CrewAI does not have built-in AWS service connectors for AgentCore services. D is wrong because AutoGen does not have a plugin system with AgentCore support.",
+    "examSkills": ["2.1.1", "2.1.7"],
+    "tags": ["strands-sdk", "agentcore", "framework-selection", "production"]
+  },
+  {
+    "id": "fw-q2",
+    "domain": 2,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A startup is prototyping an AI agent and wants to leverage the largest ecosystem of pre-built tools, chains, and community examples. They plan to evaluate AWS-native options later for production. Which framework is BEST for this prototyping phase?",
+    "options": [
+      "A. Strands Agents SDK for its AWS-native production features",
+      "B. Bedrock Agents for its fully managed simplicity",
+      "C. LangChain for its extensive community ecosystem, pre-built integrations, and rapid prototyping support",
+      "D. Custom Python scripts using boto3 directly"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because LangChain has the largest community ecosystem with thousands of pre-built tool integrations, chains, and examples, making it ideal for rapid prototyping and experimentation. A is wrong because Strands SDK is optimized for production AWS-native deployments -- while capable for prototyping, it does not match LangChain's breadth of community integrations for exploration. B is wrong because Bedrock Agents is fully managed but less flexible for rapid experimentation with different architectures and tools. D is wrong because building from scratch with boto3 is the slowest path for prototyping.",
+    "examSkills": ["2.1.1"],
+    "tags": ["langchain", "prototyping", "framework-selection", "community"]
+  },
+  {
+    "id": "fw-q3",
+    "domain": 2,
+    "level": 2,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "A company needs a simple agent that answers questions using a Bedrock Knowledge Base and executes Lambda functions as actions. They want zero infrastructure management and the fastest path to production. Which option is BEST?",
+    "options": [
+      "A. Strands Agents SDK deployed to AgentCore Runtime",
+      "B. LangChain agent deployed to ECS Fargate",
+      "C. Bedrock Agents with Knowledge Base integration and action groups",
+      "D. Custom agent framework deployed to Lambda"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because Bedrock Agents is a fully managed agent service with native Knowledge Base integration and action groups (Lambda functions as tools), requiring zero infrastructure management and providing the fastest path to production for straightforward use cases. A is wrong because while Strands + AgentCore Runtime is production-grade, it requires more setup than the fully managed Bedrock Agents service. B is wrong because ECS Fargate requires container management and does not provide native Bedrock KB integration. D is wrong because a custom framework on Lambda requires significant development effort and has execution time limits.",
+    "examSkills": ["2.1.1", "2.1.2"],
+    "tags": ["bedrock-agents", "managed", "knowledge-base", "action-groups"]
+  },
+  {
+    "id": "fw-q4",
+    "domain": 2,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [],
+    "question": "An enterprise has agents built with three different frameworks (Strands, LangGraph, and a custom Python framework). They need a single deployment platform that can host all of them with session isolation, auto-scaling, and consistent observability. Which service should they use?",
+    "options": [
+      "A. Amazon ECS with separate task definitions for each framework",
+      "B. Amazon Bedrock Agents, which can import agents from any framework",
+      "C. Amazon Bedrock AgentCore Runtime, which deploys agents from any framework with microVM isolation",
+      "D. AWS Lambda with separate functions for each agent framework"
+    ],
+    "correctAnswer": "C",
+    "explanation": "C is correct because AgentCore Runtime is purpose-built as a framework-agnostic agent deployment platform. It supports any agent framework (Strands, LangGraph, CrewAI, custom), provides session isolation via microVMs, auto-scales based on demand, and integrates with AgentCore Observability for consistent monitoring across all agents. A is wrong because ECS requires manual configuration of isolation, scaling policies, and observability for each framework separately. B is wrong because Bedrock Agents is its own managed agent service -- it does not import or host agents from other frameworks. D is wrong because Lambda has timeout limits (15 min) and cold starts that are problematic for long-running agent sessions.",
+    "examSkills": ["2.1.1", "2.1.5"],
+    "tags": ["agentcore-runtime", "framework-agnostic", "deployment", "microvm"]
+  },
+  {
+    "id": "fw-q5",
+    "domain": 2,
+    "level": 3,
+    "type": "multiple-choice",
+    "integrationDomains": [1],
+    "question": "A team is deciding between Bedrock Agents and building with Strands SDK + AgentCore for a new project. The agent needs to use non-Bedrock models (GPT-4 via API), integrate with a custom vector database not supported by Bedrock KB, and enforce fine-grained action policies. Which approach is BEST?",
+    "options": [
+      "A. Bedrock Agents with a custom Lambda connector for GPT-4 and an external vector DB adapter",
+      "B. Strands Agents SDK with AgentCore, supporting any FM, custom tool integrations via Gateway, and Cedar-based Policy",
+      "C. LangChain deployed to EC2 with manual policy enforcement in application code",
+      "D. Bedrock Agents with a SageMaker endpoint proxy to route to GPT-4"
+    ],
+    "correctAnswer": "B",
+    "explanation": "B is correct because Strands SDK + AgentCore supports any foundation model (not just Bedrock), AgentCore Gateway integrates custom tools and APIs (including custom vector DBs), and AgentCore Policy provides Cedar-based fine-grained action governance. A is wrong because Bedrock Agents only supports Bedrock models natively -- there is no standard Lambda connector pattern for routing to non-Bedrock models. C is wrong because manual policy enforcement in application code is fragile, not auditable, and does not provide the governance features of Cedar-based Policy. D is wrong because SageMaker endpoint proxy to GPT-4 is an over-engineered anti-pattern that adds latency and cost.",
+    "examSkills": ["2.1.1", "2.1.7"],
+    "tags": ["strands-sdk", "agentcore", "multi-model", "policy", "gateway"]
   }
 ]

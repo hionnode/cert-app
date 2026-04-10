@@ -458,5 +458,133 @@
         "Service": "Lambda + CloudWatch"
       }
     ]
+  },
+  {
+    "id": "converse-vs-invokemodel",
+    "title": "Converse API vs InvokeModel",
+    "domain": 1,
+    "description": "Critical API selection question. Know when to use the unified Converse API vs the model-specific InvokeModel.",
+    "columns": ["Feature", "Converse API", "InvokeModel"],
+    "rows": [
+      {
+        "Feature": "Request format",
+        "Converse API": "Unified format across all models",
+        "InvokeModel": "Model-specific JSON body (varies per model)"
+      },
+      {
+        "Feature": "Multi-turn support",
+        "Converse API": "First-class messages parameter",
+        "InvokeModel": "Manual message history in model-specific format"
+      },
+      {
+        "Feature": "Tool use / function calling",
+        "Converse API": "Native toolConfig parameter",
+        "InvokeModel": "Model-specific tool format (if supported)"
+      },
+      {
+        "Feature": "Streaming",
+        "Converse API": "ConverseStream API",
+        "InvokeModel": "InvokeModelWithResponseStream"
+      },
+      {
+        "Feature": "Model switching",
+        "Converse API": "Change model ID only -- zero code changes",
+        "InvokeModel": "Requires rewriting request/response parsing"
+      },
+      {
+        "Feature": "Model coverage",
+        "Converse API": "Most Bedrock models (some older models excluded)",
+        "InvokeModel": "All Bedrock models"
+      },
+      {
+        "Feature": "Best for",
+        "Converse API": "Model-agnostic apps, multi-turn, tool use",
+        "InvokeModel": "Maximum control, model-specific features"
+      }
+    ],
+    "examTriggerColumn": "Feature"
+  },
+  {
+    "id": "fine-tuning-approaches",
+    "title": "Fine-Tuning Approaches",
+    "domain": 1,
+    "description": "The exam tests three distinct fine-tuning paths. Match the approach to the right service and data type.",
+    "columns": ["Approach", "Service", "Input Data", "Use Case", "Exam Trigger"],
+    "rows": [
+      {
+        "Approach": "Supervised fine-tuning",
+        "Service": "Bedrock Custom Model Training",
+        "Input Data": "Labeled JSONL (prompt-completion pairs)",
+        "Use Case": "Task-specific adaptation, minimal infra",
+        "Exam Trigger": "'fine-tune with labeled data' + 'least operational overhead'"
+      },
+      {
+        "Approach": "Continued Pre-Training",
+        "Service": "Bedrock Custom Model Training",
+        "Input Data": "Unlabeled domain corpus (text files)",
+        "Use Case": "Teach domain vocabulary before fine-tuning",
+        "Exam Trigger": "'unlabeled domain data' + 'domain language adaptation'"
+      },
+      {
+        "Approach": "Full fine-tuning with LoRA",
+        "Service": "Amazon SageMaker",
+        "Input Data": "Custom format, custom training scripts",
+        "Use Case": "Full control, custom metrics, parameter-efficient",
+        "Exam Trigger": "'custom training scripts' + 'LoRA' + 'custom evaluation'"
+      },
+      {
+        "Approach": "Distillation",
+        "Service": "Bedrock Model Distillation",
+        "Input Data": "Teacher model outputs (auto-generated)",
+        "Use Case": "Create smaller, cheaper model from a larger one",
+        "Exam Trigger": "'reduce model size' + 'maintain quality' + 'lower cost inference'"
+      }
+    ],
+    "examTriggerColumn": "Exam Trigger"
+  },
+  {
+    "id": "agent-frameworks",
+    "title": "Agent Frameworks",
+    "domain": 2,
+    "description": "Know when to use each agent framework based on production requirements, ecosystem needs, and AWS integration depth.",
+    "columns": ["Framework", "Type", "Key Strength", "AWS Integration", "Best For"],
+    "rows": [
+      {
+        "Framework": "Bedrock Agents",
+        "Type": "Fully managed service",
+        "Key Strength": "Zero infra, built-in KB + action groups",
+        "AWS Integration": "Native (Bedrock-only models)",
+        "Best For": "Simple agents, fastest path to production, AWS-native"
+      },
+      {
+        "Framework": "Strands Agents SDK",
+        "Type": "AWS-built open-source SDK",
+        "Key Strength": "Native AgentCore integration (Memory, Policy, Gateway)",
+        "AWS Integration": "Deepest (all 9 AgentCore services)",
+        "Best For": "Production AWS-native agents, Cedar governance, multi-model"
+      },
+      {
+        "Framework": "LangChain / LangGraph",
+        "Type": "Community open-source",
+        "Key Strength": "Largest ecosystem, 1000+ integrations",
+        "AWS Integration": "Via AgentCore Runtime (deploy only)",
+        "Best For": "Prototyping, community tools, existing LangChain codebases"
+      },
+      {
+        "Framework": "CrewAI",
+        "Type": "Community open-source",
+        "Key Strength": "Multi-agent collaboration with roles",
+        "AWS Integration": "Via AgentCore Runtime (deploy only)",
+        "Best For": "Multi-agent workflows with role-based task delegation"
+      },
+      {
+        "Framework": "Custom (boto3/SDK)",
+        "Type": "Self-built",
+        "Key Strength": "Total control, no dependencies",
+        "AWS Integration": "Manual via AWS SDKs",
+        "Best For": "Unique requirements not met by any framework"
+      }
+    ],
+    "examTriggerColumn": "Best For"
   }
 ]

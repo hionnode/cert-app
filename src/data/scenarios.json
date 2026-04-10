@@ -345,5 +345,95 @@
     "whyExplanation": "Hallucination in RAG usually has one of three root causes: 1) retrieval returning irrelevant chunks (fix chunking/reranking), 2) prompt not properly constraining the model to use retrieved context (fix system prompt), 3) no grounding check to catch ungrounded responses (add Guardrails contextual grounding).",
     "examSkills": ["5.2.1", "5.2.3", "5.2.4"],
     "difficulty": "hard"
+  },
+  {
+    "id": "s-conv-1",
+    "number": "20",
+    "domain": 1,
+    "week": 1,
+    "day": 1,
+    "title": "Converse API vs InvokeModel Selection",
+    "question": "A startup building a multi-turn customer service chatbot needs to choose between InvokeModel and Converse API. They want model-agnostic code that can switch between Claude, Nova, and Llama without code changes. They need function calling for order lookups and want to avoid maintaining model-specific request/response parsing.",
+    "thinkPrompts": [
+      "Which API uses a unified request format across all Bedrock models?",
+      "How does InvokeModel differ from Converse for multi-turn conversations?",
+      "Which API has native tool/function calling support?"
+    ],
+    "answer": "Converse API -- it provides a unified request/response format across all Bedrock models, so switching from Claude to Nova to Llama requires zero code changes. It has built-in multi-turn conversation management (message history as a first-class parameter). Native tool use / function calling support for order lookups without model-specific tool formatting. InvokeModel requires model-specific JSON request bodies (Claude uses 'messages' format, Llama uses 'prompt' format, etc.), making model switching a code change.",
+    "whyExplanation": "The exam tests Converse vs InvokeModel selection. Key triggers: 'model-agnostic' or 'switch models without code changes' or 'multi-turn' or 'tool use' = Converse API. 'Maximum control over model-specific parameters' or 'custom request format' = InvokeModel. Converse is the higher-level abstraction; InvokeModel is the lower-level, model-specific API.",
+    "examSkills": ["1.1.1", "2.4.1"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "s-frame-1",
+    "number": "21",
+    "domain": 2,
+    "week": 1,
+    "day": 8,
+    "title": "LangChain vs Bedrock-Native Framework Selection",
+    "question": "An enterprise team with existing LangChain code needs to decide whether to migrate to Strands Agents SDK for a new production deployment. They need AgentCore Memory for session persistence across user sessions, Cedar policy enforcement to restrict agent actions, and want AWS-supported tooling with SLA-backed support.",
+    "thinkPrompts": [
+      "Does LangChain have native AgentCore integration?",
+      "Which framework is AWS-supported with enterprise SLAs?",
+      "Can you mix frameworks -- use one for prototyping and another for production?"
+    ],
+    "answer": "Strands Agents SDK for production -- it has native AgentCore integration (Memory for session persistence, Policy for Cedar-based action governance, Gateway for tool integration). AWS-supported with enterprise SLAs, purpose-built for production AWS-native workloads. Keep LangChain for prototyping and experimentation where its large community ecosystem is valuable. LangChain can deploy to AgentCore Runtime but lacks native AgentCore Memory/Policy integration, requiring custom bridging code.",
+    "whyExplanation": "The exam tests framework selection. Key triggers: 'AWS-native production deployment' or 'AgentCore integration' or 'Cedar policies' = Strands SDK. 'Prototyping' or 'community ecosystem' or 'existing LangChain code' = keep LangChain but consider migration for production. AgentCore Runtime can host any framework, but Strands has the deepest native integration.",
+    "examSkills": ["2.1.1", "2.1.7"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s-img-1",
+    "number": "22",
+    "domain": 1,
+    "week": 1,
+    "day": 5,
+    "title": "Image Generation Architecture with Brand Safety",
+    "question": "A marketing team wants automated product image generation from text descriptions with brand safety controls. They need to prevent generation of inappropriate content, enforce brand guidelines (approved color palettes, no competitor logos), and watermark all AI-generated outputs for regulatory compliance.",
+    "thinkPrompts": [
+      "Which Bedrock model generates images from text?",
+      "How do you filter inappropriate prompts before they reach the image model?",
+      "How do you detect if an image was AI-generated?"
+    ],
+    "answer": "Amazon Nova Canvas for text-to-image generation with style control parameters for brand consistency. Bedrock Guardrails content filters on input prompts to block inappropriate generation requests before they reach the model. Denied topics filter for competitor brand names. Nova Canvas includes built-in watermark embedding (C2PA metadata). Use the Nova watermark detection API to verify AI provenance of generated images. Store generated images in S3, Lambda for orchestration, and CloudFront for delivery. For advanced brand compliance, add a human review step via Step Functions approval workflow before publishing.",
+    "whyExplanation": "The exam tests image generation pipelines. Key components: Nova Canvas for generation, Guardrails for input filtering (not output -- you cannot filter images with Guardrails, only text prompts), watermark detection for AI provenance. The C2PA watermark is embedded automatically by Nova Canvas -- you do not need a separate watermarking step.",
+    "examSkills": ["1.1.1", "3.1.2"],
+    "difficulty": "medium"
+  },
+  {
+    "id": "s-ft-1",
+    "number": "23",
+    "domain": 1,
+    "week": 1,
+    "day": 3,
+    "title": "Bedrock Fine-Tuning vs SageMaker for Domain Adaptation",
+    "question": "A legal tech company needs to customize a model for contract clause extraction. They have 5,000 labeled prompt-completion pairs in JSONL format. They want minimal infrastructure management but need to run the model within their VPC for compliance. Their data science team does not have deep ML expertise.",
+    "thinkPrompts": [
+      "Which fine-tuning path requires the least infrastructure management?",
+      "How do you deploy a Bedrock custom model within a VPC?",
+      "When would you choose SageMaker over Bedrock for fine-tuning?"
+    ],
+    "answer": "Bedrock custom model fine-tuning -- managed training with JSONL input format (matches their data), no infrastructure to manage, no ML expertise required for the training pipeline. After training, purchase Provisioned Throughput for the custom model to deploy it. Use a VPC endpoint for Bedrock to keep all inference traffic within their VPC. If they needed custom training scripts, LoRA adapters with specific rank configuration, or custom loss functions, then SageMaker would be the right choice. If they had a large unlabeled legal corpus instead, Continued Pre-Training on Bedrock would be appropriate to teach the model legal language before fine-tuning on the labeled data.",
+    "whyExplanation": "The exam distinguishes three fine-tuning paths: (1) Bedrock fine-tuning = managed, JSONL, least overhead, requires Provisioned Throughput for deployment. (2) Bedrock Continued Pre-Training = unlabeled domain corpus, teaches domain language. (3) SageMaker = full control, custom scripts, LoRA, custom metrics. Key trap: Bedrock custom models REQUIRE Provisioned Throughput -- they cannot run on on-demand pricing.",
+    "examSkills": ["1.2.4", "3.2.1"],
+    "difficulty": "hard"
+  },
+  {
+    "id": "s-cri-1",
+    "number": "24",
+    "domain": 2,
+    "week": 1,
+    "day": 2,
+    "title": "Cross-Region Inference Design for Global SaaS",
+    "question": "A global SaaS company deploying a Bedrock-powered feature to users in US, EU, and Asia-Pacific needs high availability and low latency. They want automatic failover if a region goes down, fair request distribution across regions, and a single API endpoint for their application code.",
+    "thinkPrompts": [
+      "What Bedrock feature handles automatic cross-region routing?",
+      "Do you need to deploy infrastructure in each region?",
+      "How do you add application-level resilience on top of Bedrock routing?"
+    ],
+    "answer": "Cross-Region Inference with inference profiles. Create an inference profile that selects regions like us-east-1, eu-west-1, and ap-northeast-1. Use the inference profile ARN in API calls instead of a model ARN -- Bedrock handles routing, load distribution, and automatic failover transparently. No application code changes needed for failover. Pair with a Step Functions circuit breaker pattern for application-level resilience: if the entire Bedrock service experiences issues, the circuit breaker can route to a fallback (e.g., cached responses or a degraded mode). Use CloudWatch cross-region dashboards to monitor latency and error rates across all regions.",
+    "whyExplanation": "Cross-Region Inference is a managed Bedrock feature that abstracts away multi-region complexity. The inference profile ARN is the single endpoint -- the application does not need to know which region is handling the request. This is different from manually deploying to multiple regions. The exam tests whether you know that inference profiles replace model ARNs in API calls.",
+    "examSkills": ["1.2.3", "2.4.3"],
+    "difficulty": "medium"
   }
 ]

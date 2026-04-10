@@ -33,5 +33,10 @@
   { "id": "war-32", "trigger": "existing relational database for vectors", "answer": "Aurora PostgreSQL (pgvector)", "notThis": "OpenSearch Serverless", "domain": 1 },
   { "id": "war-33", "trigger": "entity relationships / graph-based retrieval", "answer": "Neptune", "notThis": "OpenSearch", "domain": 1 },
   { "id": "war-34", "trigger": "existing MongoDB for vectors", "answer": "DocumentDB", "notThis": "DynamoDB", "domain": 1 },
-  { "id": "war-35", "trigger": "multilingual embeddings (100+ languages)", "answer": "Cohere Embed v3", "notThis": "Amazon Titan Embeddings v2", "domain": 1 }
+  { "id": "war-35", "trigger": "multilingual embeddings (100+ languages)", "answer": "Cohere Embed v3", "notThis": "Amazon Titan Embeddings v2", "domain": 1 },
+  { "id": "war-36", "trigger": "model-agnostic API / switch models without code changes", "answer": "Converse API", "notThis": "InvokeModel", "domain": 1 },
+  { "id": "war-37", "trigger": "fine-tune with minimal infra + labeled JSONL data", "answer": "Bedrock Custom Model Training", "notThis": "SageMaker fine-tuning", "domain": 1 },
+  { "id": "war-38", "trigger": "custom training scripts or LoRA configuration", "answer": "SageMaker fine-tuning", "notThis": "Bedrock Custom Model Training", "domain": 1 },
+  { "id": "war-39", "trigger": "AI image provenance / watermark detection", "answer": "Nova watermark detection API (C2PA)", "notThis": "Rekognition image moderation", "domain": 1 },
+  { "id": "war-40", "trigger": "production agent with AgentCore Memory + Policy", "answer": "Strands Agents SDK", "notThis": "LangChain", "domain": 2 }
 ]
