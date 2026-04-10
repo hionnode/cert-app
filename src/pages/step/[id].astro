@@ -9,7 +9,6 @@ import scenarios from "../../data/scenarios.json";
 import examSkills from "../../data/exam-skills.json";
 import { DOMAINS } from "../../lib/constants";
 
-// Import practice questions
 let allPractice: any[] = [];
 try { const d1d2 = await import("../../data/practice-d1d2.json"); allPractice = allPractice.concat(d1d2.default ?? d1d2); } catch {}
 try { const d3d4d5 = await import("../../data/practice-d3d4d5.json"); allPractice = allPractice.concat(d3d4d5.default ?? d3d4d5); } catch {}
@@ -67,6 +66,15 @@ const FURTHER_READING_ICONS: Record<string, string> = {
 	github: "i-lucide-code",
 	workshop: "i-lucide-flask-conical",
 };
+
+// Build section summary for info hovers
+const sectionCounts = {
+	skills: daySkills.length,
+	handsOn: day.handsOn?.length ?? 0,
+	scenarios: dayScenarios.length,
+	practice: stepPractice.length,
+	reading: day.furtherReading?.length ?? 0,
+};
 ---
 
 <Layout title={`Step ${day.number}: ${day.title}`}>
@@ -89,7 +97,7 @@ const FURTHER_READING_ICONS: Record<string, string> = {
 		</div>
 
 		<!-- Header -->
-		<div class="mb-8">
+		<div class="mb-6">
 			<div class="flex items-center gap-3 mb-2">
 				<span class={`badge-domain-${day.domain}`}>{domain?.shortName}</span>
 				<span class="caption">Step {day.number} of 28</span>
@@ -97,30 +105,89 @@ const FURTHER_READING_ICONS: Record<string, string> = {
 			<h1 class="heading-1">{day.title}</h1>
 		</div>
 
-		<!-- Tasks (stepper + minimap) -->
+		<!-- Learning Objectives (always visible, on top) -->
+		{day.learningObjectives?.length > 0 && (
+			<section class="mb-8 border-l-3 border-l-accent-aqua pl-5">
+				<h2 class="heading-3 mb-2">What you'll learn</h2>
+				<ul class="space-y-1.5">
+					{day.learningObjectives.map((obj: string) => (
+						<li class="flex items-start gap-2 body-sm text-ink-secondary">
+							<span class="text-accent-aqua mt-0.5">-</span>
+							{obj}
+						</li>
+					))}
+				</ul>
+			</section>
+		)}
+
+		<!-- Section indicators with info hovers -->
+		<div class="flex flex-wrap gap-3 mb-8">
+			{sectionCounts.skills > 0 && (
+				<div class="group relative">
+					<span class="badge-muted cursor-default flex items-center gap-1.5">
+						<div class="i-lucide-shield-check w-4 h-4" />
+						{sectionCounts.skills} Exam Skills
+						<div class="i-lucide-info w-3.5 h-3.5 text-ink-muted" />
+					</span>
+					<div class="absolute left-0 top-full mt-2 z-20 hidden group-hover:block w-64 bg-surface-1 border border-surface-3 rounded-card p-4 shadow-lg">
+						<p class="caption-sm">Skills mapped to this step. Write your understanding, then reveal the reference answer.</p>
+					</div>
+				</div>
+			)}
+			{sectionCounts.handsOn > 0 && (
+				<div class="group relative">
+					<span class="badge-muted cursor-default flex items-center gap-1.5">
+						<div class="i-lucide-wrench w-4 h-4" />
+						{sectionCounts.handsOn} Hands-On
+						<div class="i-lucide-info w-3.5 h-3.5 text-ink-muted" />
+					</span>
+					<div class="absolute left-0 top-full mt-2 z-20 hidden group-hover:block w-64 bg-surface-1 border border-surface-3 rounded-card p-4 shadow-lg">
+						<p class="caption-sm">Build real muscle memory with guided lab activities.</p>
+					</div>
+				</div>
+			)}
+			{sectionCounts.scenarios > 0 && (
+				<div class="group relative">
+					<span class="badge-muted cursor-default flex items-center gap-1.5">
+						<div class="i-lucide-lightbulb w-4 h-4" />
+						{sectionCounts.scenarios} Scenarios
+						<div class="i-lucide-info w-3.5 h-3.5 text-ink-muted" />
+					</span>
+					<div class="absolute left-0 top-full mt-2 z-20 hidden group-hover:block w-64 bg-surface-1 border border-surface-3 rounded-card p-4 shadow-lg">
+						<p class="caption-sm">Think through each real-world scenario before revealing the answer.</p>
+					</div>
+				</div>
+			)}
+			{sectionCounts.practice > 0 && (
+				<div class="group relative">
+					<span class="badge-muted cursor-default flex items-center gap-1.5">
+						<div class="i-lucide-brain w-4 h-4" />
+						{sectionCounts.practice} Practice Qs
+						<div class="i-lucide-info w-3.5 h-3.5 text-ink-muted" />
+					</span>
+					<div class="absolute left-0 top-full mt-2 z-20 hidden group-hover:block w-64 bg-surface-1 border border-surface-3 rounded-card p-4 shadow-lg">
+						<p class="caption-sm">Multiple-choice and multi-response questions across 3 difficulty levels.</p>
+					</div>
+				</div>
+			)}
+			{sectionCounts.reading > 0 && (
+				<div class="group relative">
+					<span class="badge-muted cursor-default flex items-center gap-1.5">
+						<div class="i-lucide-book-open w-4 h-4" />
+						{sectionCounts.reading} Further Reading
+						<div class="i-lucide-info w-3.5 h-3.5 text-ink-muted" />
+					</span>
+					<div class="absolute left-0 top-full mt-2 z-20 hidden group-hover:block w-64 bg-surface-1 border border-surface-3 rounded-card p-4 shadow-lg">
+						<p class="caption-sm">Go deeper with curated docs, blogs, videos, and repos.</p>
+					</div>
+				</div>
+			)}
+		</div>
+
+		<!-- Tasks (stepper with inline minimap) -->
 		<section class="mb-8">
 			<TaskView client:load tasks={day.tasks} stepNumber={day.number} />
 		</section>
-
-		<!-- Learning Objectives (collapsed) -->
-		{day.learningObjectives?.length > 0 && (
-			<details class="card mb-6">
-				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
-					Learning Objectives ({day.learningObjectives.length})
-					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
-				</summary>
-				<div class="px-5 pb-5 border-l-3 border-l-accent-aqua ml-5 mr-5">
-					<ul class="space-y-2">
-						{day.learningObjectives.map((obj: string) => (
-							<li class="flex items-start gap-2 body-sm">
-								<span class="text-accent-aqua">-</span>
-								{obj}
-							</li>
-						))}
-					</ul>
-				</div>
-			</details>
-		)}
 
 		<!-- Spaced Repetition (collapsed) -->
 		{day.spacedRepetitionReview?.length > 0 && (

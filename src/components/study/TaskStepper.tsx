@@ -94,7 +94,32 @@ export default function TaskStepper({
 
 	return (
 		<div>
-			{/* Progress indicator */}
+			{/* Inline minimap — horizontal dots */}
+			<div className="flex items-center justify-center gap-1.5 mb-5">
+				{tasks.map((t, i) => {
+					const isDone = completed[t.id];
+					const isActive = i === currentIndex;
+
+					let dotClass = "bg-surface-3 hover:bg-surface-4";
+					if (isDone) dotClass = "bg-accent-aqua";
+					if (isActive)
+						dotClass =
+							"bg-accent-yellow ring-1 ring-accent-yellow ring-offset-1 ring-offset-surface-0";
+
+					return (
+						<button
+							key={t.id}
+							type="button"
+							onClick={() => onNavigate(i)}
+							className={`${isActive ? "w-8 h-2.5" : "w-6 h-2"} rounded-full cursor-pointer transition-all duration-200 ${dotClass}`}
+							title={`${i + 1}. ${t.title}`}
+							aria-label={`Go to task ${i + 1}: ${t.title}`}
+						/>
+					);
+				})}
+			</div>
+
+			{/* Progress text */}
 			<div className="flex items-center justify-between mb-4">
 				<span className="caption">
 					Task {currentIndex + 1} of {tasks.length}
@@ -102,14 +127,6 @@ export default function TaskStepper({
 				<span className="caption">
 					{totalDone}/{tasks.length} completed
 				</span>
-			</div>
-
-			{/* Progress bar */}
-			<div className="w-full h-1.5 bg-surface-2 rounded-sm mb-6">
-				<div
-					className="h-1.5 bg-accent-aqua rounded-sm transition-all duration-500"
-					style={{ width: `${(totalDone / tasks.length) * 100}%` }}
-				/>
 			</div>
 
 			{/* Task card */}
@@ -129,7 +146,9 @@ export default function TaskStepper({
 						<Clock className="w-4 h-4" />
 						{task.estimatedMinutes}m
 					</span>
-					{done && <CheckCircle className="w-5 h-5 text-accent-aqua ml-auto" />}
+					{done && (
+						<CheckCircle className="w-5 h-5 text-accent-aqua ml-auto" />
+					)}
 				</div>
 
 				{/* Title */}
