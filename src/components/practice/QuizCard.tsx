@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CheckCircle, XCircle, ArrowRight, RotateCcw, Trophy } from "lucide-react";
+import { CheckCircle, XCircle, ArrowRight, RotateCcw, Trophy, ChevronLeft } from "lucide-react";
 import type { PracticeQuestion } from "../../lib/types";
 import { DOMAINS } from "../../lib/constants";
 
@@ -23,6 +23,7 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 	const [phase, setPhase] = useState<Phase>("answering");
 	const [score, setScore] = useState(0);
 	const [answered, setAnswered] = useState(0);
+	const [answeredSet, setAnsweredSet] = useState<Set<number>>(new Set());
 
 	const q = questions[currentIdx];
 	if (!q) return null;
@@ -44,6 +45,7 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 
 		if (correct) setScore((s) => s + 1);
 		setAnswered((a) => a + 1);
+		setAnsweredSet((prev) => new Set(prev).add(currentIdx));
 		setPhase("feedback");
 	}
 
@@ -102,7 +104,40 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 				: false;
 
 	return (
-		<div className="card overflow-hidden">
+		<div>
+			{/* Dot navigation */}
+			{questions.length > 1 && (
+				<>
+					<div className={`flex items-center justify-center ${questions.length > 10 ? "gap-1" : "gap-1.5"} mb-5`}>
+						{questions.map((_, i) => {
+							const isAnswered = answeredSet.has(i);
+							const isActive = i === currentIdx;
+							let dotClass = "bg-surface-3 hover:bg-surface-4";
+							if (isAnswered) dotClass = "bg-accent-aqua";
+							if (isActive) dotClass = "bg-accent-yellow ring-1 ring-accent-yellow ring-offset-1 ring-offset-surface-0";
+							const compact = questions.length > 10;
+							const sizeClass = isActive
+								? compact ? "w-6 h-2" : "w-8 h-2.5"
+								: compact ? "w-4 h-1.5" : "w-6 h-2";
+							return (
+								<button
+									key={i}
+									type="button"
+									className={`${sizeClass} rounded-full cursor-pointer transition-all duration-200 ${dotClass}`}
+									aria-label={`Question ${i + 1}`}
+									disabled
+								/>
+							);
+						})}
+					</div>
+					<div className="flex items-center justify-between mb-4">
+						<span className="caption">Question {currentIdx + 1} of {questions.length}</span>
+						<span className="caption">{answeredSet.size}/{questions.length} answered</span>
+					</div>
+				</>
+			)}
+
+			<div className="card overflow-hidden">
 			{/* Header */}
 			<div className="flex items-center justify-between gap-2 px-6 pt-6 pb-4">
 				<div className="flex items-center gap-2 flex-wrap">
@@ -113,19 +148,6 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 							+D{q.integrationDomains.join("+D")}
 						</span>
 					)}
-				</div>
-				<span className="caption">
-					{currentIdx + 1} / {questions.length}
-				</span>
-			</div>
-
-			{/* Progress bar */}
-			<div className="mx-6 mb-5">
-				<div className="w-full h-1.5 bg-surface-2 rounded-sm">
-					<div
-						className="h-1.5 bg-accent-aqua rounded-sm transition-all duration-300"
-						style={{ width: `${((currentIdx + (phase === "feedback" ? 1 : 0)) / questions.length) * 100}%` }}
-					/>
 				</div>
 			</div>
 
@@ -209,7 +231,23 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 				)}
 
 				{/* Action buttons */}
-				<div className="flex justify-end gap-3">
+				<div className="flex items-center justify-between mt-6 pt-4 border-t border-surface-3">
+					<button
+						type="button"
+						disabled={currentIdx === 0}
+						onClick={() => {
+							if (currentIdx > 0) {
+								setCurrentIdx(currentIdx - 1);
+								setSelected(null);
+								setSelectedMultiple([]);
+								setPhase(answeredSet.has(currentIdx - 1) ? "feedback" : "answering");
+							}
+						}}
+						className={`btn-ghost text-sm ${currentIdx === 0 ? "opacity-30 pointer-events-none" : ""}`}
+					>
+						<ChevronLeft className="w-4 h-4" /> <span className="hidden sm:inline">Back</span>
+					</button>
+
 					{phase === "answering" && (
 						<button
 							type="button"
@@ -222,12 +260,15 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 					)}
 					{phase === "feedback" && (
 						<button type="button" onClick={nextQuestion} className="btn-primary">
-							{currentIdx + 1 >= questions.length ? "See Results" : "Next Question"}
+							{currentIdx + 1 >= questions.length ? "See Results" : "Next"}
 							<ArrowRight className="w-4 h-4" />
 						</button>
 					)}
+
+					<div className="w-16" />
 				</div>
 			</div>
+		</div>
 		</div>
 	);
 }

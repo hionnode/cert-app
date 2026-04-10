@@ -61,9 +61,9 @@ describe("QuizCard", () => {
 			expect(screen.getByText("Amazon RDS")).toBeInTheDocument();
 		});
 
-		it("shows question counter", () => {
+		it("shows question text", () => {
 			renderQuiz();
-			expect(screen.getByText("1 / 1")).toBeInTheDocument();
+			expect(screen.getByText("Which service is best for vector storage?")).toBeInTheDocument();
 		});
 
 		it("shows domain badge", () => {
@@ -214,13 +214,13 @@ describe("QuizCard", () => {
 			const user = userEvent.setup();
 			renderQuiz([mcQuestion, mrQuestion]);
 
-			expect(screen.getByText("1 / 2")).toBeInTheDocument();
+			expect(screen.getByText("Question 1 of 2")).toBeInTheDocument();
 
 			await user.click(screen.getByText("Amazon OpenSearch"));
 			await user.click(screen.getByRole("button", { name: /check answer/i }));
-			await user.click(screen.getByRole("button", { name: /next question/i }));
+			await user.click(screen.getByRole("button", { name: /^next$/i }));
 
-			expect(screen.getByText("2 / 2")).toBeInTheDocument();
+			expect(screen.getByText("Question 2 of 2")).toBeInTheDocument();
 			expect(screen.getByText("Which two are agent frameworks?")).toBeInTheDocument();
 		});
 	});
