@@ -13,6 +13,7 @@ function defaultProgress(): UserProgress {
 		examAttempts: [],
 		drillScores: {},
 		skillScenariosViewed: {},
+		handsOnCompleted: {},
 		streak: { current: 0, lastDate: "" },
 		lastVisitedDay: 1,
 	};
@@ -116,6 +117,13 @@ export function getCompletionByDomain(
 		}
 	}
 	return result;
+}
+
+export function toggleHandsOn(activityId: string) {
+	const p = loadProgress();
+	if (!p.handsOnCompleted) p.handsOnCompleted = {};
+	p.handsOnCompleted[activityId] = !p.handsOnCompleted[activityId];
+	save(p);
 }
 
 export function markSkillScenarioViewed(skillId: string, scenarioIndex: number) {

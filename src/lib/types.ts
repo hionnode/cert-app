@@ -201,6 +201,7 @@ export interface UserProgress {
 	examAttempts: ExamAttempt[];
 	drillScores: Record<string, number>;
 	skillScenariosViewed: Record<string, number[]>;
+	handsOnCompleted: Record<string, boolean>;
 	streak: { current: number; lastDate: string };
 	lastVisitedDay: number;
 }
