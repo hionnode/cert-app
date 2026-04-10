@@ -1,8 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import TaskView from "../../components/study/TaskView";
-import ScenarioCard from "../../components/scenarios/ScenarioCard";
-import SkillReviewList from "../../components/skills/SkillReviewList";
+import ScenarioStepper from "../../components/scenarios/ScenarioStepper";
+import SkillStepper from "../../components/skills/SkillStepper";
+import HandsOnStepper from "../../components/study/HandsOnStepper";
 import DayPractice from "../../components/practice/DayPractice";
 import days from "../../data/days.json";
 import scenarios from "../../data/scenarios.json";
@@ -53,27 +54,12 @@ function getStepPractice(stepNum: number, domain: number, phase: number): any[] 
 
 const stepPractice = getStepPractice(day.number, day.domain, day.week);
 
-const HANDS_ON_DIFFICULTY_STYLES: Record<string, string> = {
-	beginner: "bg-surface-2 text-accent-aqua",
-	intermediate: "bg-surface-2 text-accent-yellow",
-	advanced: "bg-surface-2 text-accent-red",
-};
-
 const FURTHER_READING_ICONS: Record<string, string> = {
 	blog: "i-lucide-newspaper",
 	video: "i-lucide-play-circle",
 	docs: "i-lucide-file-text",
 	github: "i-lucide-code",
 	workshop: "i-lucide-flask-conical",
-};
-
-// Build section summary for info hovers
-const sectionCounts = {
-	skills: daySkills.length,
-	handsOn: day.handsOn?.length ?? 0,
-	scenarios: dayScenarios.length,
-	practice: stepPractice.length,
-	reading: day.furtherReading?.length ?? 0,
 };
 ---
 
@@ -105,7 +91,7 @@ const sectionCounts = {
 			<h1 class="heading-1">{day.title}</h1>
 		</div>
 
-		<!-- Learning Objectives (always visible, on top) -->
+		<!-- Learning Objectives (always visible) -->
 		{day.learningObjectives?.length > 0 && (
 			<section class="mb-8 border-l-3 border-l-accent-aqua pl-5">
 				<h2 class="heading-3 mb-2">What you'll learn</h2>
@@ -120,74 +106,43 @@ const sectionCounts = {
 			</section>
 		)}
 
-		<!-- Section indicators with info hovers -->
-		<div class="flex flex-wrap gap-3 mb-8">
-			{sectionCounts.skills > 0 && (
-				<div class="group relative">
-					<span class="badge-muted cursor-default flex items-center gap-1.5">
-						<div class="i-lucide-shield-check w-4 h-4" />
-						{sectionCounts.skills} Exam Skills
-						<div class="i-lucide-info w-3.5 h-3.5 text-ink-muted" />
-					</span>
-					<div class="absolute left-0 top-full mt-2 z-20 hidden group-hover:block w-64 bg-surface-1 border border-surface-3 rounded-card p-4 shadow-lg">
-						<p class="caption-sm">Skills mapped to this step. Write your understanding, then reveal the reference answer.</p>
-					</div>
-				</div>
-			)}
-			{sectionCounts.handsOn > 0 && (
-				<div class="group relative">
-					<span class="badge-muted cursor-default flex items-center gap-1.5">
-						<div class="i-lucide-wrench w-4 h-4" />
-						{sectionCounts.handsOn} Hands-On
-						<div class="i-lucide-info w-3.5 h-3.5 text-ink-muted" />
-					</span>
-					<div class="absolute left-0 top-full mt-2 z-20 hidden group-hover:block w-64 bg-surface-1 border border-surface-3 rounded-card p-4 shadow-lg">
-						<p class="caption-sm">Build real muscle memory with guided lab activities.</p>
-					</div>
-				</div>
-			)}
-			{sectionCounts.scenarios > 0 && (
-				<div class="group relative">
-					<span class="badge-muted cursor-default flex items-center gap-1.5">
-						<div class="i-lucide-lightbulb w-4 h-4" />
-						{sectionCounts.scenarios} Scenarios
-						<div class="i-lucide-info w-3.5 h-3.5 text-ink-muted" />
-					</span>
-					<div class="absolute left-0 top-full mt-2 z-20 hidden group-hover:block w-64 bg-surface-1 border border-surface-3 rounded-card p-4 shadow-lg">
-						<p class="caption-sm">Think through each real-world scenario before revealing the answer.</p>
-					</div>
-				</div>
-			)}
-			{sectionCounts.practice > 0 && (
-				<div class="group relative">
-					<span class="badge-muted cursor-default flex items-center gap-1.5">
-						<div class="i-lucide-brain w-4 h-4" />
-						{sectionCounts.practice} Practice Qs
-						<div class="i-lucide-info w-3.5 h-3.5 text-ink-muted" />
-					</span>
-					<div class="absolute left-0 top-full mt-2 z-20 hidden group-hover:block w-64 bg-surface-1 border border-surface-3 rounded-card p-4 shadow-lg">
-						<p class="caption-sm">Multiple-choice and multi-response questions across 3 difficulty levels.</p>
-					</div>
-				</div>
-			)}
-			{sectionCounts.reading > 0 && (
-				<div class="group relative">
-					<span class="badge-muted cursor-default flex items-center gap-1.5">
-						<div class="i-lucide-book-open w-4 h-4" />
-						{sectionCounts.reading} Further Reading
-						<div class="i-lucide-info w-3.5 h-3.5 text-ink-muted" />
-					</span>
-					<div class="absolute left-0 top-full mt-2 z-20 hidden group-hover:block w-64 bg-surface-1 border border-surface-3 rounded-card p-4 shadow-lg">
-						<p class="caption-sm">Go deeper with curated docs, blogs, videos, and repos.</p>
-					</div>
-				</div>
-			)}
-		</div>
-
-		<!-- Tasks (stepper with inline minimap) -->
+		<!-- Tasks -->
 		<section class="mb-8">
+			<h2 class="heading-3 mb-4">Tasks</h2>
 			<TaskView client:load tasks={day.tasks} stepNumber={day.number} />
 		</section>
+
+		<!-- Scenarios -->
+		{dayScenarios.length > 0 && (
+			<section class="mb-8">
+				<h2 class="heading-3 mb-4">Scenarios</h2>
+				<ScenarioStepper client:visible scenarios={dayScenarios} />
+			</section>
+		)}
+
+		<!-- Exam Skills -->
+		{daySkills.length > 0 && (
+			<section class="mb-8">
+				<h2 class="heading-3 mb-4">Exam Skills</h2>
+				<SkillStepper client:visible skills={daySkills} />
+			</section>
+		)}
+
+		<!-- Hands-On Lab -->
+		{day.handsOn?.length > 0 && (
+			<section class="mb-8">
+				<h2 class="heading-3 mb-4">Hands-On Lab</h2>
+				<HandsOnStepper client:load activities={day.handsOn} />
+			</section>
+		)}
+
+		<!-- Practice Questions -->
+		{stepPractice.length > 0 && (
+			<section class="mb-8">
+				<h2 class="heading-3 mb-4">Practice Questions</h2>
+				<DayPractice client:visible questions={stepPractice} dayNumber={day.number} />
+			</section>
+		)}
 
 		<!-- Spaced Repetition (collapsed) -->
 		{day.spacedRepetitionReview?.length > 0 && (
@@ -210,112 +165,25 @@ const sectionCounts = {
 			</details>
 		)}
 
-		<!-- Exam Skills (collapsed) -->
-		{daySkills.length > 0 && (
-			<details class="card mb-6">
-				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
-					Exam Skills ({daySkills.length})
-					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
-				</summary>
-				<div class="px-5 pb-5">
-					<SkillReviewList client:visible skills={daySkills} compact={true} maxVisible={5} />
-				</div>
-			</details>
-		)}
-
-		<!-- Hands-On Lab (collapsed) -->
-		{day.handsOn?.length > 0 && (
-			<details class="card mb-6">
-				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
-					Hands-On Lab ({day.handsOn.length} {day.handsOn.length === 1 ? 'activity' : 'activities'})
-					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
-				</summary>
-				<div class="px-5 pb-5 space-y-4">
-					{day.handsOn.map((activity: any) => (
-						<div class="card-padded">
-							<div class="flex items-center gap-3 mb-3">
-								<span class={`badge ${HANDS_ON_DIFFICULTY_STYLES[activity.difficulty] ?? "bg-surface-2 text-ink-muted"}`}>
-									{activity.difficulty}
-								</span>
-								{activity.estimatedMinutes && (
-									<span class="caption">{activity.estimatedMinutes} min</span>
+		<!-- Further Reading (always visible, grid) -->
+		{day.furtherReading?.length > 0 && (
+			<section class="mb-8">
+				<h2 class="heading-3 mb-4">Further Reading</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					{day.furtherReading.map((item: any) => (
+						<a href={item.url} target="_blank" rel="noopener" class="card p-4 hover:bg-surface-2 transition-colors group flex gap-3">
+							<div class={`${FURTHER_READING_ICONS[item.type] ?? "i-lucide-link"} w-4 h-4 text-accent-blue flex-shrink-0 mt-0.5`} />
+							<div class="flex-1 min-w-0">
+								<h4 class="body-sm font-semibold group-hover:text-accent-aqua transition-colors line-clamp-2">{item.title}</h4>
+								<p class="caption-sm mt-0.5 line-clamp-2">{item.description}</p>
+								{item.estimatedMinutes && (
+									<span class="caption-sm mt-1 block">{item.estimatedMinutes} min</span>
 								)}
 							</div>
-							<h3 class="heading-3 mb-1">{activity.title}</h3>
-							<p class="body-text mb-3">{activity.description}</p>
-							{activity.steps?.length > 0 && (
-								<ol class="space-y-2 mb-3">
-									{activity.steps.map((step: string, i: number) => (
-										<li class="flex items-start gap-2 body-sm">
-											<span class="text-accent-aqua font-bold w-5 text-center">{i + 1}</span>
-											{step}
-										</li>
-									))}
-								</ol>
-							)}
-							{activity.url && (
-								<a href={activity.url} target="_blank" rel="noopener" class="btn-primary text-sm">
-									Open Lab <div class="i-lucide-external-link w-4 h-4" />
-								</a>
-							)}
-						</div>
+						</a>
 					))}
 				</div>
-			</details>
-		)}
-
-		<!-- Scenarios (collapsed) -->
-		{dayScenarios.length > 0 && (
-			<details class="card mb-6">
-				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
-					Scenarios ({dayScenarios.length})
-					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
-				</summary>
-				<div class="px-5 pb-5 space-y-5">
-					{dayScenarios.map((scenario: any) => (
-						<ScenarioCard client:visible scenario={scenario} />
-					))}
-				</div>
-			</details>
-		)}
-
-		<!-- Practice Questions (collapsed) -->
-		{stepPractice.length > 0 && (
-			<details class="card mb-6">
-				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
-					Practice Questions ({stepPractice.length})
-					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
-				</summary>
-				<div class="px-5 pb-5">
-					<DayPractice client:visible questions={stepPractice} dayNumber={day.number} />
-				</div>
-			</details>
-		)}
-
-		<!-- Further Reading (collapsed) -->
-		{day.furtherReading?.length > 0 && (
-			<details class="card mb-6">
-				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
-					Further Reading ({day.furtherReading.length})
-					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
-				</summary>
-				<div class="px-5 pb-5">
-					<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-						{day.furtherReading.map((item: any) => (
-							<a href={item.url} target="_blank" rel="noopener" class="card p-4 hover:bg-surface-2 transition-colors group flex gap-3">
-								<div class={`${FURTHER_READING_ICONS[item.type] ?? "i-lucide-link"} w-4 h-4 text-accent-blue flex-shrink-0 mt-0.5`} />
-								<div class="flex-1 min-w-0">
-									<h4 class="body-sm font-semibold group-hover:text-accent-aqua transition-colors line-clamp-2">{item.title}</h4>
-									<p class="caption-sm mt-0.5 line-clamp-2">{item.description}</p>
-									{item.estimatedMinutes && (
-										<span class="caption-sm mt-1 block">{item.estimatedMinutes} min</span>
-									)}
-								</div>
-							</a>
-						))}
-					</div>
-				</div>
-			</details>
+			</section>
 		)}
 
 		<!-- Step Navigation (bottom) -->
