@@ -10,7 +10,8 @@
       "Identify architectural design patterns for GenAI on AWS",
       "Understand when to use Bedrock vs SageMaker vs custom deployment",
       "Learn the InvokeModel, Converse, and streaming APIs",
-      "Apply Well-Architected GenAI Lens principles"
+      "Apply Well-Architected GenAI Lens principles",
+      "Use Converse API for multi-turn conversations, streaming, and function calling"
     ],
     "tasks": [
       {
@@ -52,6 +53,21 @@
         "description": "AWS official walkthrough of the Bedrock console, model access, and playground.",
         "estimatedMinutes": 15,
         "url": "https://aws.amazon.com/video/watch/6ff4cd6fa97/"
+      },
+      {
+        "id": "d1-t6",
+        "type": "hands-on",
+        "title": "Converse API Multi-Turn Lab",
+        "description": "Practice multi-turn conversations using the Converse API. Compare the unified format with InvokeModel's model-specific format. Test streaming with ConverseStream.",
+        "estimatedMinutes": 45,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/01_Generation"
+      },
+      {
+        "id": "d1-t7",
+        "type": "hands-on",
+        "title": "Streaming Responses with ConverseStream",
+        "description": "Implement real-time token streaming using ConverseStream API. Understand how streaming reduces time-to-first-token for production chatbots.",
+        "estimatedMinutes": 30
       }
     ],
     "scenarioIds": [
@@ -91,6 +107,21 @@
           "Run the InvokeModel example with Claude and observe the request/response format",
           "Run the Converse API example and compare the unified format to InvokeModel",
           "Modify the prompt and temperature parameter to see how outputs change"
+        ]
+      },
+      {
+        "id": "d1-ho3",
+        "title": "Converse API Deep Dive",
+        "description": "Master the unified Converse API for multi-turn conversations, function calling, and streaming.",
+        "estimatedMinutes": 45,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/01_Generation",
+        "difficulty": "beginner",
+        "steps": [
+          "Set up a Python environment with boto3 and bedrock-runtime client",
+          "Call converse() with a system prompt and user message",
+          "Add conversation history for multi-turn dialog",
+          "Use ConverseStream for real-time token streaming",
+          "Test function calling by defining a tool schema and handling tool_use responses"
         ]
       }
     ],
@@ -143,7 +174,8 @@
       "Understand inference parameters (temperature, top-p, max tokens)",
       "Design dynamic model selection with Lambda + AppConfig",
       "Implement resilience with Cross-Region Inference and circuit breakers",
-      "Use Step Functions for circuit breaker patterns"
+      "Use Step Functions for circuit breaker patterns",
+      "Configure inference profiles for cross-region resilience and improved throughput"
     ],
     "tasks": [
       {
@@ -185,6 +217,14 @@
         "description": "Overview of model selection, customization, and deployment patterns in Bedrock.",
         "estimatedMinutes": 20,
         "url": "https://aws.amazon.com/video/watch/1fec548f4d2/"
+      },
+      {
+        "id": "d2-t6",
+        "type": "hands-on",
+        "title": "Cross-Region Inference Profiles Lab",
+        "description": "Create and test inference profiles for automatic multi-region routing. Understand how CRIS improves throughput and provides failover.",
+        "estimatedMinutes": 40,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/07_Cross_Region_Inference"
       }
     ],
     "scenarioIds": [
@@ -240,6 +280,21 @@
           "Use the AWS CLI to invoke the model via the inference profile ARN: aws bedrock-runtime invoke-model --model-id <profile-arn>",
           "Verify in CloudWatch that the request was routed to one of the configured regions"
         ]
+      },
+      {
+        "id": "d2-ho4",
+        "title": "Configure Cross-Region Inference Profiles",
+        "description": "Set up inference profiles for automatic multi-region model access with failover.",
+        "estimatedMinutes": 40,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/07_Cross_Region_Inference",
+        "difficulty": "intermediate",
+        "steps": [
+          "Open the Bedrock console and navigate to Cross-region inference",
+          "Create an inference profile selecting multiple regions",
+          "Test model invocation using the inference profile ARN instead of model ID",
+          "Verify that requests are routed to available regions",
+          "Monitor request distribution in CloudWatch metrics"
+        ]
       }
     ],
     "furtherReading": [
@@ -291,7 +346,9 @@
       "Know when to use SageMaker JumpStart vs Bedrock",
       "Understand LoRA, QLoRA, and full fine-tuning trade-offs",
       "Use SageMaker Model Registry for version management",
-      "Apply SageMaker Clarify for bias detection and Model Monitor for drift"
+      "Apply SageMaker Clarify for bias detection and Model Monitor for drift",
+      "Distinguish Bedrock-native fine-tuning from SageMaker fine-tuning",
+      "Know when to use continued pre-training vs fine-tuning vs prompt engineering"
     ],
     "tasks": [
       {
@@ -341,6 +398,21 @@
         "description": "Community exam guide covering SageMaker topics for the certification.",
         "estimatedMinutes": 20,
         "url": "https://tutorialsdojo.com/aws-certified-generative-ai-developer-professional-certification-aip-c01-exam-guide-and-aip-c01-exam-topics-list/"
+      },
+      {
+        "id": "d3-t6",
+        "type": "read",
+        "title": "Bedrock Custom Models - Fine-Tuning Guide",
+        "description": "Learn Bedrock-native fine-tuning for Amazon Nova and Titan models. Understand JSONL training data format, hyperparameters, and when to choose Bedrock fine-tuning over SageMaker.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/custom-models.html"
+      },
+      {
+        "id": "d3-t7",
+        "type": "study",
+        "title": "Compare: Bedrock Fine-Tuning vs SageMaker vs Continued Pre-Training",
+        "description": "Critical exam distinction: Bedrock fine-tuning (managed, JSONL labeled data), SageMaker (custom training scripts, LoRA/QLoRA), continued pre-training (unlabeled domain data).",
+        "estimatedMinutes": 20
       }
     ],
     "scenarioIds": [
@@ -394,6 +466,22 @@
           "Review the approval status workflow: PendingManualApproval → Approved → Deployed",
           "Note how model versions are tracked with metadata, metrics, and lineage"
         ]
+      },
+      {
+        "id": "d3-ho4",
+        "title": "Bedrock Custom Model Training Job",
+        "description": "Set up a Bedrock-native fine-tuning job for Amazon Nova or Titan Text.",
+        "estimatedMinutes": 50,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/03_Model_customization",
+        "difficulty": "advanced",
+        "steps": [
+          "Prepare training data in JSONL format with prompt-completion pairs",
+          "Upload training data to S3 with proper IAM permissions",
+          "Create a custom model training job in the Bedrock console",
+          "Configure hyperparameters (epochs, batch size, learning rate)",
+          "Monitor training progress and review validation metrics",
+          "Test the customized model via provisioned throughput endpoint"
+        ]
       }
     ],
     "furtherReading": [
@@ -445,7 +533,8 @@
       "Design multimodal data processing pipelines",
       "Understand Bedrock Data Automation for automated processing",
       "Use Macie for PII discovery and Lake Formation for data access control",
-      "Build Step Functions orchestrations for batch document processing"
+      "Build Step Functions orchestrations for batch document processing",
+      "Use multimodal embeddings for cross-modal search (text-to-image, image-to-image)"
     ],
     "tasks": [
       {
@@ -503,6 +592,14 @@
         "description": "Video walkthrough of building data pipelines with Bedrock.",
         "estimatedMinutes": 20,
         "url": "https://aws.amazon.com/video/watch/d671ebacb24/"
+      },
+      {
+        "id": "d4-t5",
+        "type": "hands-on",
+        "title": "Nova Multimodal Embeddings Lab",
+        "description": "Generate multimodal embeddings using Amazon Nova for cross-modal search (search images by text, search text by image).",
+        "estimatedMinutes": 40,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/04_Image_and_Multimodal"
       }
     ],
     "scenarioIds": [
@@ -545,6 +642,21 @@
           "Configure the extraction blueprint to extract key fields",
           "Run the automation and review the structured output",
           "Compare the result with the manual Textract → Comprehend pipeline from the previous activity"
+        ]
+      },
+      {
+        "id": "d4-ho3",
+        "title": "Multimodal Embeddings with Nova",
+        "description": "Generate and use multimodal embeddings for cross-modal search.",
+        "estimatedMinutes": 40,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/04_Image_and_Multimodal",
+        "difficulty": "intermediate",
+        "steps": [
+          "Set up the Nova multimodal embeddings model in Bedrock",
+          "Generate text embeddings for a set of product descriptions",
+          "Generate image embeddings for corresponding product images",
+          "Build a simple cross-modal search: query by text, return images",
+          "Compare embedding similarity scores between text-text and text-image pairs"
         ]
       }
     ],
@@ -596,7 +708,8 @@
       "Compare all Bedrock KB vector store options (OpenSearch, Aurora pgvector, Neptune, Kendra, DocumentDB)",
       "Understand hybrid search (BM25 + k-NN) and when it matters",
       "Know the 'exam trigger' phrases for each vector store selection",
-      "Design vector store architecture for different use cases"
+      "Design vector store architecture for different use cases",
+      "Compare image generation models on Bedrock and their use cases"
     ],
     "tasks": [
       {
@@ -638,6 +751,21 @@
         "description": "Work through KB setup with different vector stores. Focus on OpenSearch Serverless setup.",
         "estimatedMinutes": 90,
         "url": "https://github.com/aws-samples/amazon-bedrock-rag-workshop"
+      },
+      {
+        "id": "d5-t5",
+        "type": "hands-on",
+        "title": "Image Generation with Nova Canvas",
+        "description": "Generate images using Amazon Nova Canvas. Understand text-to-image prompting, image editing, and safety controls.",
+        "estimatedMinutes": 30,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/04_Image_and_Multimodal"
+      },
+      {
+        "id": "d5-t6",
+        "type": "study",
+        "title": "Compare Image Models: Nova Canvas vs Titan Image Generator vs Stable Diffusion",
+        "description": "Know the differences in capabilities, pricing, and use cases for each image generation model on Bedrock.",
+        "estimatedMinutes": 20
       }
     ],
     "scenarioIds": [
@@ -737,7 +865,8 @@
       "Select embedding models (Titan Embeddings v2, Cohere Embed v3, Nova Multimodal)",
       "Understand Retrieve vs RetrieveAndGenerate APIs",
       "Implement query expansion, decomposition, and reranking",
-      "Use MCP for consistent vector query access patterns"
+      "Use MCP for consistent vector query access patterns",
+      "Apply RAGAS metrics (faithfulness, answer relevancy, context precision) to evaluate RAG quality"
     ],
     "tasks": [
       {
@@ -779,6 +908,14 @@
         "description": "Work through different chunking strategies and embedding model selections.",
         "estimatedMinutes": 120,
         "url": "https://github.com/aws-samples/amazon-bedrock-rag-workshop"
+      },
+      {
+        "id": "d6-t5",
+        "type": "read",
+        "title": "RAGAS Framework for RAG Evaluation",
+        "description": "Learn the RAGAS evaluation framework: faithfulness, answer relevancy, context precision, and context recall metrics for measuring RAG quality.",
+        "estimatedMinutes": 30,
+        "url": "https://docs.ragas.io/en/latest/"
       }
     ],
     "scenarioIds": [
@@ -822,6 +959,21 @@
           "Create a third KB with hierarchical chunking (parent: 1500 tokens, child: 300 tokens)",
           "Run the same 3 test queries against all 3 KBs and compare chunk relevance scores",
           "Document which strategy works best for your document type and why"
+        ]
+      },
+      {
+        "id": "d6-ho3",
+        "title": "Evaluate RAG Quality with RAGAS Metrics",
+        "description": "Use the RAGAS framework to quantitatively evaluate your RAG pipeline's retrieval and generation quality.",
+        "estimatedMinutes": 50,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/06_OpenSource_examples/04_RAGAS_eval",
+        "difficulty": "intermediate",
+        "steps": [
+          "Install the ragas Python package and set up dependencies",
+          "Prepare a test dataset with questions, ground truth answers, and expected contexts",
+          "Run your RAG pipeline to generate answers and retrieved contexts",
+          "Compute RAGAS metrics: faithfulness, answer_relevancy, context_precision, context_recall",
+          "Analyze which metrics are weak and iterate on chunking/embedding strategies"
         ]
       }
     ],
@@ -874,7 +1026,8 @@
       "Build Prompt Flows with conditional branching",
       "Implement prompt versioning and governance with CloudTrail",
       "Apply advanced prompting patterns (chain-of-thought, JSON Schema enforcement)",
-      "Validate learning with the AWS Official 20-question Practice Set"
+      "Validate learning with the AWS Official 20-question Practice Set",
+      "Integrate Bedrock with LangChain for text generation and chatbots"
     ],
     "tasks": [
       {
@@ -924,6 +1077,22 @@
         "description": "Score yourself. For every wrong answer, note which skill number it maps to.",
         "estimatedMinutes": 60,
         "url": "https://skillbuilder.aws/learn/HSEKTD11NX"
+      },
+      {
+        "id": "d7-t5",
+        "type": "hands-on",
+        "title": "LangChain + Bedrock: Zero-Shot Generation",
+        "description": "Run the LangChain zero-shot text generation notebook from the Bedrock workshop. Understand how LangChain wraps Bedrock APIs.",
+        "estimatedMinutes": 30,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/06_OpenSource_examples/01_Langchain_KnowledgeBases_and_RAG"
+      },
+      {
+        "id": "d7-t6",
+        "type": "hands-on",
+        "title": "Build a Simple Chatbot with LangChain + Bedrock",
+        "description": "Create a conversational chatbot using LangChain's ChatBedrock integration with memory and history management.",
+        "estimatedMinutes": 30,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/06_OpenSource_examples/01_Langchain_KnowledgeBases_and_RAG"
       }
     ],
     "scenarioIds": [
@@ -1018,7 +1187,8 @@
       "Know all 9 AgentCore services and their exam triggers",
       "Understand MCP server implementation patterns (Lambda vs ECS)",
       "Design multi-agent orchestration (supervisor vs routing mode)",
-      "Implement Strands Agents SDK with tool use"
+      "Implement Strands Agents SDK with tool use",
+      "Compare Bedrock Agents, Strands, LangGraph, and CrewAI for agent development"
     ],
     "tasks": [
       {
@@ -1068,6 +1238,21 @@
         "description": "Hands-on deploy, Gateway, Memory, Observability demo by AWS Dev Advocate.",
         "estimatedMinutes": 30,
         "url": "https://aws.amazon.com/bedrock/agentcore/resources/"
+      },
+      {
+        "id": "d8-t5",
+        "type": "hands-on",
+        "title": "Build a LangGraph Agent with Tool Use",
+        "description": "Create a multi-step agent using LangGraph with Bedrock as the LLM backbone. Add custom tools and test multi-turn reasoning.",
+        "estimatedMinutes": 45,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/06_OpenSource_examples/02_Langgraph_agent_w_bedrock"
+      },
+      {
+        "id": "d8-t6",
+        "type": "study",
+        "title": "Agent Framework Comparison: Strands vs LangGraph vs CrewAI",
+        "description": "Know when to choose each framework. Strands = AWS-native + AgentCore integration. LangGraph = graph-based workflows. CrewAI = role-based multi-agent. Bedrock Agents = fully managed.",
+        "estimatedMinutes": 25
       }
     ],
     "scenarioIds": [
@@ -1113,6 +1298,22 @@
           "Test the agent with Well-Architected queries",
           "Examine how the action group schema maps to Lambda invocations",
           "Review the agent trace to understand the ReAct reasoning loop"
+        ]
+      },
+      {
+        "id": "d8-ho3",
+        "title": "Multi-Agent System with LangGraph",
+        "description": "Build a multi-agent system using LangGraph with specialized agents for different tasks.",
+        "estimatedMinutes": 60,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/06_OpenSource_examples/02_Langgraph_agent_w_bedrock",
+        "difficulty": "advanced",
+        "steps": [
+          "Install LangGraph and langchain-aws packages",
+          "Define a simple agent graph with a Bedrock LLM node",
+          "Add tool nodes (web search, calculator) to the graph",
+          "Configure a supervisor agent that routes to specialized sub-agents",
+          "Test the multi-agent system with a complex query requiring multiple tools",
+          "Compare the architecture with Bedrock Agents and Strands"
         ]
       }
     ],
@@ -1165,7 +1366,8 @@
       "Understand container-based LLM deployment (ECS/EKS with GPU)",
       "Know edge/hybrid options (Outposts, Wavelength, Lambda@Edge)",
       "Implement WebSocket streaming with API Gateway + Lambda + Bedrock",
-      "Apply the AI Gateway pattern for rate limiting and access control"
+      "Apply the AI Gateway pattern for rate limiting and access control",
+      "Implement real-time streaming responses via WebSocket and server-sent events"
     ],
     "tasks": [
       {
@@ -1207,6 +1409,13 @@
         "description": "Video overview of Step Functions integration with GenAI services.",
         "estimatedMinutes": 20,
         "url": "https://aws.amazon.com/video/watch/de313da02ff/"
+      },
+      {
+        "id": "d9-t5",
+        "type": "hands-on",
+        "title": "WebSocket Streaming with API Gateway + Bedrock",
+        "description": "Implement real-time token streaming via WebSocket API Gateway connected to Lambda + Bedrock ConverseStream.",
+        "estimatedMinutes": 40
       }
     ],
     "scenarioIds": [
@@ -1670,7 +1879,8 @@
       "Deploy an agent with AgentCore CLI in 2 commands",
       "Implement AgentCore Memory (session + episodic)",
       "Try AgentCore Code Interpreter for data analysis",
-      "Build comprehensive service comparison tables from memory"
+      "Build comprehensive service comparison tables from memory",
+      "Use AgentCore Code Interpreter for sandboxed data analysis"
     ],
     "tasks": [
       {
@@ -1711,6 +1921,13 @@
         "title": "Build Your Own Service Comparison Tables",
         "description": "From memory, build tables for: Bedrock vs SageMaker, Agents vs AgentCore, Vector stores, Caching, Guardrails filters.",
         "estimatedMinutes": 120
+      },
+      {
+        "id": "d13-t5",
+        "type": "hands-on",
+        "title": "AgentCore Code Interpreter for Data Analysis",
+        "description": "Use AgentCore Code Interpreter to run sandboxed Python code for data analysis tasks. Understand when to use Code Interpreter vs Lambda tools.",
+        "estimatedMinutes": 40
       }
     ],
     "scenarioIds": [],
@@ -2245,7 +2462,8 @@
       "Design model cascading and Intelligent Prompt Routing architectures",
       "Know batch inference (50% discount) for non-real-time workloads",
       "Implement cost monitoring with CloudWatch + Cost Explorer",
-      "Understand provisioned throughput vs on-demand pricing"
+      "Understand provisioned throughput vs on-demand pricing",
+      "Know when to use batch inference (50% discount) vs on-demand for cost optimization"
     ],
     "tasks": [
       {
@@ -2287,6 +2505,13 @@
         "description": "Log all prompts/responses to CloudWatch or S3. Essential for cost analysis and debugging.",
         "estimatedMinutes": 15,
         "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
+      },
+      {
+        "id": "d18-t5",
+        "type": "study",
+        "title": "Batch Inference vs On-Demand Pricing",
+        "description": "Bedrock batch inference offers ~50% cost savings for non-real-time workloads. Know the StartAsyncInvoke API, S3 input/output format, and when batch makes sense.",
+        "estimatedMinutes": 25
       }
     ],
     "scenarioIds": [
@@ -2398,7 +2623,8 @@
       "Apply LLM-as-a-judge for automated evaluation (98% cost savings)",
       "Use AgentCore Evaluations for agent correctness and safety",
       "Implement X-Ray tracing for end-to-end FM call debugging",
-      "Design RAG evaluation with precision, recall, MRR, NDCG metrics"
+      "Design RAG evaluation with precision, recall, MRR, NDCG metrics",
+      "Choose between Bedrock Evaluations, RAGAS, and human evaluation based on use case"
     ],
     "tasks": [
       {
@@ -2448,6 +2674,21 @@
         "description": "Work through the evaluation notebooks for hands-on practice.",
         "estimatedMinutes": 60,
         "url": "https://github.com/aws-samples/evaluating-large-language-models-using-llm-as-a-judge"
+      },
+      {
+        "id": "d19-t6",
+        "type": "study",
+        "title": "Evaluation Framework Comparison: Bedrock vs RAGAS vs Human",
+        "description": "Bedrock Evaluations = managed, LLM-as-judge. RAGAS = open-source RAG-specific metrics. Human evaluation = gold standard but expensive. Know when to use each.",
+        "estimatedMinutes": 30
+      },
+      {
+        "id": "d19-t7",
+        "type": "hands-on",
+        "title": "RAGAS Agent Evaluation Notebook",
+        "description": "Run the RAGAS agent evaluation notebook from the Bedrock workshop to evaluate agent task completion and tool effectiveness.",
+        "estimatedMinutes": 40,
+        "url": "https://github.com/aws-samples/amazon-bedrock-workshop/tree/main/06_OpenSource_examples/04_RAGAS_eval"
       }
     ],
     "scenarioIds": [
