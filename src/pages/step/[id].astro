@@ -120,14 +120,6 @@ const FURTHER_READING_ICONS: Record<string, string> = {
 			</section>
 		)}
 
-		<!-- Exam Skills -->
-		{daySkills.length > 0 && (
-			<section class="mb-8">
-				<h2 class="heading-3 mb-4">Exam Skills</h2>
-				<SkillStepper client:visible skills={daySkills} />
-			</section>
-		)}
-
 		<!-- Hands-On Lab -->
 		{day.handsOn?.length > 0 && (
 			<section class="mb-8">
@@ -141,6 +133,17 @@ const FURTHER_READING_ICONS: Record<string, string> = {
 			<section class="mb-8">
 				<h2 class="heading-3 mb-4">Practice Questions</h2>
 				<DayPractice client:visible questions={stepPractice} dayNumber={day.number} />
+			</section>
+		)}
+
+		<!-- Exam Skills Deep Dive -->
+		{daySkills.length > 0 && (
+			<section class="mb-8">
+				<div class="border-l-3 border-l-accent-blue pl-5 mb-4">
+					<h2 class="heading-3">Exam Skills Deep Dive</h2>
+					<p class="caption mt-1">Each skill maps directly to the exam guide. Explore scenarios, study the answers, and follow the resources to build deep understanding.</p>
+				</div>
+				<SkillStepper client:visible skills={daySkills} />
 			</section>
 		)}
 

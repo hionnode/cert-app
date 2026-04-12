@@ -1,5 +1,17 @@
 import { useState } from "react";
-import { CheckCircle, Eye, Lightbulb, ExternalLink, FileText, Newspaper, PlayCircle, Code, FlaskConical } from "lucide-react";
+import {
+	CheckCircle,
+	Eye,
+	Lightbulb,
+	ExternalLink,
+	FileText,
+	Newspaper,
+	PlayCircle,
+	Code,
+	FlaskConical,
+	BookOpen,
+	ArrowRight,
+} from "lucide-react";
 import ItemStepper from "../shared/ItemStepper";
 import { markSkillScenarioViewed } from "../../lib/progress";
 import { useProgress } from "../../lib/hooks/use-progress";
@@ -55,21 +67,37 @@ export default function SkillStepper({ skills }: SkillStepperProps) {
 
 				return (
 					<>
-						<div className="flex items-center gap-2 mb-3">
-							<span className={`badge-domain-${skill.domain}`}>{skill.id}</span>
-							{isSkillDone(skill) && <CheckCircle className="w-5 h-5 text-accent-aqua" />}
+						{/* Skill header */}
+						<div className="flex items-center gap-2 mb-2">
+							<span className={`badge-domain-${skill.domain}`}>
+								{skill.id}
+							</span>
+							<span className="caption">
+								Task {skill.taskId}: {skill.taskTitle}
+							</span>
+							{isSkillDone(skill) && (
+								<CheckCircle className="w-5 h-5 text-accent-aqua ml-auto" />
+							)}
 						</div>
-						<p className="caption mb-2">Task {skill.taskId}: {skill.taskTitle}</p>
-						<p className="body-text mb-4">{skill.description}</p>
 
-						{/* Scenarios within this skill */}
+						{/* Skill description — the core "what you need to know" */}
+						<p className="body-text mb-6">{skill.description}</p>
+
+						{/* Scenarios — the deep dive */}
 						{skill.scenarios?.length > 0 && (
-							<div className="space-y-3 mb-4">
-								<p className="caption font-semibold">{viewed.length}/{skill.scenarios.length} scenarios viewed</p>
+							<div className="space-y-4 mb-6">
+								<div className="flex items-center gap-2">
+									<BookOpen className="w-4 h-4 text-accent-blue" />
+									<p className="caption font-semibold">
+										Deep Dive — {viewed.length}/
+										{skill.scenarios.length} explored
+									</p>
+								</div>
 								{skill.scenarios.map((scenario, idx) => (
 									<SkillScenarioCard
 										key={`${skill.id}-s${idx}`}
 										skillId={skill.id}
+										skill={skill}
 										scenario={scenario}
 										index={idx}
 										isViewed={viewed.includes(idx)}
@@ -78,24 +106,49 @@ export default function SkillStepper({ skills }: SkillStepperProps) {
 							</div>
 						)}
 
-						{/* Resources */}
+						{/* Resources — curated learning links */}
 						{skill.resources?.length > 0 && (
-							<div className="pt-3 border-t border-surface-3">
-								<p className="caption font-semibold mb-2">Resources</p>
-								<div className="flex flex-wrap gap-2">
+							<div className="border-t border-surface-3 pt-4">
+								<div className="flex items-center gap-2 mb-3">
+									<ExternalLink className="w-4 h-4 text-accent-blue" />
+									<p className="caption font-semibold">
+										Go Deeper
+									</p>
+								</div>
+								<div className="space-y-2">
 									{skill.resources.map((res, i) => {
-										const Icon = resourceIcons[res.type] ?? FileText;
+										const Icon =
+											resourceIcons[res.type] ?? FileText;
 										return (
 											<a
 												key={`${skill.id}-r${i}`}
 												href={res.url}
 												target="_blank"
 												rel="noopener noreferrer"
-												className="inline-flex items-center gap-1.5 px-3 py-2 rounded-button bg-surface-1 hover:bg-surface-2 caption-sm text-ink-secondary hover:text-accent-blue transition-colors"
+												className="flex items-center gap-3 p-3 rounded-card bg-surface-0 border border-surface-3 hover:border-accent-blue hover:bg-surface-1 transition-colors group"
 											>
-												<Icon className="w-4 h-4" />
-												{res.title}
-												<ExternalLink className="w-3 h-3" />
+												<div className="w-8 h-8 rounded-sm bg-surface-2 flex items-center justify-center shrink-0 group-hover:bg-accent-blue/10 transition-colors">
+													<Icon className="w-4 h-4 text-ink-secondary group-hover:text-accent-blue transition-colors" />
+												</div>
+												<div className="flex-1 min-w-0">
+													<p className="body-sm font-semibold group-hover:text-accent-aqua transition-colors">
+														{res.title}
+													</p>
+													<p className="caption-sm">
+														{res.type === "docs"
+															? "AWS Documentation"
+															: res.type === "blog"
+																? "AWS Blog Post"
+																: res.type ===
+																	  "video"
+																	? "Video Tutorial"
+																	: res.type ===
+																		  "github"
+																		? "GitHub Repository"
+																		: "Workshop"}
+													</p>
+												</div>
+												<ArrowRight className="w-4 h-4 text-ink-muted group-hover:text-accent-blue shrink-0 transition-colors" />
 											</a>
 										);
 									})}
@@ -111,7 +164,7 @@ export default function SkillStepper({ skills }: SkillStepperProps) {
 				if (total === 0) return null;
 				return (
 					<span className="caption">
-						{viewed.length}/{total} scenarios
+						{viewed.length}/{total} explored
 					</span>
 				);
 			}}
@@ -121,11 +174,13 @@ export default function SkillStepper({ skills }: SkillStepperProps) {
 
 function SkillScenarioCard({
 	skillId,
+	skill,
 	scenario,
 	index,
 	isViewed,
 }: {
 	skillId: string;
+	skill: ExamSkill;
 	scenario: SkillScenario;
 	index: number;
 	isViewed: boolean;
@@ -138,41 +193,124 @@ function SkillScenarioCard({
 	}
 
 	return (
-		<div className={`rounded-card border p-4 ${revealed ? "border-accent-aqua bg-surface-2" : "border-surface-3 bg-surface-1"}`}>
-			<div className="flex items-center gap-2 mb-3">
-				<span className={`badge ${difficultyStyles[scenario.difficulty] ?? "bg-surface-2 text-ink-muted"}`}>
-					{scenario.difficulty}
-				</span>
-				{revealed && <CheckCircle className="w-4 h-4 text-accent-aqua" />}
+		<div
+			className={`rounded-card border overflow-hidden ${revealed ? "border-accent-aqua" : "border-surface-3"}`}
+		>
+			{/* Question section */}
+			<div
+				className={`p-5 ${revealed ? "bg-surface-1" : "bg-surface-1"}`}
+			>
+				<div className="flex items-center gap-2 mb-3">
+					<span
+						className={`badge ${difficultyStyles[scenario.difficulty] ?? "bg-surface-2 text-ink-muted"}`}
+					>
+						{scenario.difficulty}
+					</span>
+					{revealed && (
+						<CheckCircle className="w-4 h-4 text-accent-aqua" />
+					)}
+				</div>
+				<p className="body-sm text-ink font-medium">
+					{scenario.question}
+				</p>
 			</div>
-			<p className="body-sm text-ink font-medium mb-3">{scenario.question}</p>
 
 			{!revealed ? (
-				<>
+				<div className="p-5 pt-0 bg-surface-1">
+					{/* Think prompts */}
 					{scenario.thinkPrompts?.length > 0 && (
-						<div className="bg-surface-2 border border-accent-blue rounded-button p-3 mb-3">
-							<div className="flex items-center gap-1.5 mb-1.5">
-								<Lightbulb className="w-3.5 h-3.5 text-accent-blue" />
-								<span className="caption-sm font-semibold text-accent-blue">Think about</span>
+						<div className="bg-surface-2 border border-accent-blue rounded-card p-4 mb-4 mt-4">
+							<div className="flex items-center gap-1.5 mb-2">
+								<Lightbulb className="w-4 h-4 text-accent-blue" />
+								<span className="caption font-semibold text-accent-blue">
+									Think about
+								</span>
 							</div>
-							<ul className="space-y-1">
+							<ul className="space-y-1.5">
 								{scenario.thinkPrompts.map((p, i) => (
-									<li key={i} className="caption-sm text-accent-blue flex items-start gap-1.5">
-										<span className="text-accent-blue/50">&bull;</span>
+									<li
+										key={i}
+										className="caption-sm text-accent-blue flex items-start gap-1.5"
+									>
+										<span className="text-accent-blue/50">
+											&bull;
+										</span>
 										{p}
 									</li>
 								))}
 							</ul>
 						</div>
 					)}
-					<button type="button" onClick={handleReveal} className="btn-primary text-sm w-full justify-center">
+
+					<button
+						type="button"
+						onClick={handleReveal}
+						className="btn-primary text-sm w-full justify-center"
+					>
 						<Eye className="w-4 h-4" /> Reveal Answer
 					</button>
-				</>
+				</div>
 			) : (
-				<div className="bg-surface-2 border border-accent-aqua rounded-button p-3">
-					<p className="caption-sm font-semibold text-accent-aqua mb-1.5">Answer</p>
-					<p className="body-sm whitespace-pre-line">{scenario.answer}</p>
+				/* Revealed: rich answer with context */
+				<div className="bg-surface-0">
+					{/* Answer */}
+					<div className="p-5 border-t border-accent-aqua/30">
+						<div className="flex items-center gap-2 mb-3">
+							<CheckCircle className="w-4 h-4 text-accent-aqua" />
+							<span className="caption font-semibold text-accent-aqua">
+								Answer
+							</span>
+						</div>
+						<p className="body-text whitespace-pre-line leading-relaxed">
+							{scenario.answer}
+						</p>
+					</div>
+
+					{/* Why this matters — contextual insight */}
+					<div className="px-5 pb-5">
+						<div className="bg-accent-aqua/5 border border-accent-aqua/20 rounded-card p-4">
+							<div className="flex items-center gap-2 mb-2">
+								<Lightbulb className="w-4 h-4 text-accent-aqua" />
+								<span className="caption font-semibold text-accent-aqua">
+									Exam Insight
+								</span>
+							</div>
+							<p className="caption-sm text-ink-secondary">
+								This skill maps to{" "}
+								<span className="text-accent-aqua font-semibold">
+									{skill.id}
+								</span>{" "}
+								in the exam guide. Look for keywords like "
+								{scenario.thinkPrompts?.[0]
+									?.toLowerCase()
+									.replace("?", "") ?? skill.taskTitle.toLowerCase()}
+								" in exam questions — they signal this pattern.
+							</p>
+						</div>
+
+						{/* Inline resources for this specific topic */}
+						{skill.resources?.length > 0 && (
+							<div className="mt-4 flex flex-wrap gap-2">
+								{skill.resources.slice(0, 3).map((res, i) => {
+									const Icon =
+										resourceIcons[res.type] ?? FileText;
+									return (
+										<a
+											key={`inline-${skillId}-r${i}`}
+											href={res.url}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="inline-flex items-center gap-1.5 px-3 py-2 rounded-button bg-surface-1 border border-surface-3 hover:border-accent-blue hover:bg-surface-2 caption-sm text-ink-secondary hover:text-accent-blue transition-colors"
+										>
+											<Icon className="w-3.5 h-3.5" />
+											{res.title}
+											<ArrowRight className="w-3 h-3" />
+										</a>
+									);
+								})}
+							</div>
+						)}
+					</div>
 				</div>
 			)}
 		</div>
