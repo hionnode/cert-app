@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 
 interface ItemStepperProps<T> {
@@ -31,6 +31,22 @@ export default function ItemStepper<T>({
 	const isFirst = currentIndex === 0;
 	const isLast = currentIndex === items.length - 1;
 	const item = items[currentIndex];
+
+	// Listen for inner-nav events dispatched by StepFocus's keyboard handler.
+	// StepFocus owns the keyboard; this stepper just reacts.
+	useEffect(() => {
+		function onInnerNav(e: Event) {
+			const direction = (e as CustomEvent<{ direction: "prev" | "next" }>)
+				.detail?.direction;
+			if (direction === "prev" && !isFirst) {
+				onNavigate(currentIndex - 1);
+			} else if (direction === "next" && !isLast) {
+				onNavigate(currentIndex + 1);
+			}
+		}
+		window.addEventListener("focus-nav-inner", onInnerNav);
+		return () => window.removeEventListener("focus-nav-inner", onInnerNav);
+	}, [currentIndex, isFirst, isLast, onNavigate]);
 
 	if (!item) return null;
 

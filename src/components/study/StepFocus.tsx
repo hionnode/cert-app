@@ -226,7 +226,11 @@ export default function StepFocus({
 		else if (isLast) window.location.href = "/practice";
 	}
 
-	// Keyboard: Arrow keys + J/K. Skip when typing in input/textarea.
+	// Keyboard:
+	//   Inner (items within section):  ArrowLeft/Right, H/L
+	//   Outer (section-to-section):    J/K, Shift+ArrowLeft/Right
+	// Inner navigation is forwarded to whichever stepper is mounted via a
+	// window custom event. Text-input targets are ignored.
 	useEffect(() => {
 		function onKey(e: KeyboardEvent) {
 			const target = e.target as HTMLElement | null;
@@ -239,12 +243,50 @@ export default function StepFocus({
 				return;
 			}
 			if (e.metaKey || e.ctrlKey || e.altKey) return;
-			if (e.key === "ArrowRight" || e.key === "j" || e.key === "J") {
+
+			const key = e.key;
+			const shift = e.shiftKey;
+
+			// ── Outer section nav ────────────────────────────────────
+			if (shift && key === "ArrowRight") {
 				e.preventDefault();
 				goNext();
-			} else if (e.key === "ArrowLeft" || e.key === "k" || e.key === "K") {
+				return;
+			}
+			if (shift && key === "ArrowLeft") {
 				e.preventDefault();
 				goPrev();
+				return;
+			}
+			if (key === "j" || key === "J") {
+				e.preventDefault();
+				goNext();
+				return;
+			}
+			if (key === "k" || key === "K") {
+				e.preventDefault();
+				goPrev();
+				return;
+			}
+
+			// ── Inner item nav (dispatched to the mounted stepper) ──
+			if (key === "ArrowRight" || key === "l" || key === "L") {
+				e.preventDefault();
+				window.dispatchEvent(
+					new CustomEvent("focus-nav-inner", {
+						detail: { direction: "next" },
+					}),
+				);
+				return;
+			}
+			if (key === "ArrowLeft" || key === "h" || key === "H") {
+				e.preventDefault();
+				window.dispatchEvent(
+					new CustomEvent("focus-nav-inner", {
+						detail: { direction: "prev" },
+					}),
+				);
+				return;
 			}
 		}
 		window.addEventListener("keydown", onKey);
@@ -258,7 +300,7 @@ export default function StepFocus({
 	const sectionDoneCount = sections.filter((s) => s.isDone()).length;
 
 	return (
-		<div>
+		<div className="min-h-[calc(100vh-80px)] flex flex-col">
 			{/* Step header */}
 			<div className="flex items-center gap-3 mb-3">
 				<span className={`badge-domain-${day.domain}`}>
@@ -301,14 +343,15 @@ export default function StepFocus({
 				</div>
 			</div>
 
-			{/* Section body */}
-			<section className="mb-10">
+			{/* Section body — flex-1 absorbs slack; justify-center lets
+			    short content sit visually balanced instead of hugging the top. */}
+			<section className="flex-1 flex flex-col justify-center mb-10">
 				<h2 className="heading-2 mb-6">{section.label}</h2>
 				{section.body}
 			</section>
 
-			{/* Action bar */}
-			<div className="flex items-center justify-between gap-4 pt-6 border-t border-surface-3">
+			{/* Action bar — mt-auto pins it to bottom of viewport via flex */}
+			<div className="mt-auto flex items-center justify-between gap-4 pt-6 border-t border-surface-3">
 				<button
 					type="button"
 					onClick={goPrev}
@@ -321,8 +364,9 @@ export default function StepFocus({
 					</span>
 				</button>
 
-				<span className="caption hidden sm:inline">
-					Use ← → or J/K
+				<span className="caption hidden sm:inline text-center leading-tight">
+					<kbd className="text-ink">← →</kbd> items ·{" "}
+					<kbd className="text-ink">J/K</kbd> sections
 				</span>
 
 				<button
