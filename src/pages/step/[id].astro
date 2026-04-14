@@ -139,10 +139,8 @@ const FURTHER_READING_ICONS: Record<string, string> = {
 		<!-- Exam Skills Deep Dive -->
 		{daySkills.length > 0 && (
 			<section class="mb-8">
-				<div class="border-l-3 border-l-accent-blue pl-5 mb-4">
-					<h2 class="heading-3">Exam Skills Deep Dive</h2>
-					<p class="caption mt-1">Each skill maps directly to the exam guide. Explore scenarios, study the answers, and follow the resources to build deep understanding.</p>
-				</div>
+				<h2 class="heading-3 mb-1">Exam Skills Deep Dive</h2>
+				<p class="caption mb-4">Each skill maps directly to the exam guide. Study the answer, follow the references.</p>
 				<SkillStepper client:visible skills={daySkills} />
 			</section>
 		)}
