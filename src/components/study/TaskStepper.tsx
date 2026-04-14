@@ -1,11 +1,4 @@
 import {
-	BookOpen,
-	GraduationCap,
-	Newspaper,
-	Wrench,
-	PlayCircle,
-	RefreshCw,
-	FileCheck,
 	ExternalLink,
 	Clock,
 	Check,
@@ -15,16 +8,6 @@ import {
 import ItemStepper from "../shared/ItemStepper";
 import { TASK_TYPE_LABELS } from "../../lib/constants";
 import type { Task } from "../../lib/types";
-
-const typeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
-	read: BookOpen,
-	study: GraduationCap,
-	blog: Newspaper,
-	"hands-on": Wrench,
-	watch: PlayCircle,
-	review: RefreshCw,
-	"practice-exam": FileCheck,
-};
 
 const typeBadgeClasses: Record<string, string> = {
 	read: "bg-surface-2 text-accent-blue",
@@ -70,18 +53,16 @@ export default function TaskStepper({
 			totalDone={totalDone}
 			renderItem={(task) => {
 				const done = completed[task.id];
-				const Icon = typeIcons[task.type] ?? BookOpen;
 
 				return (
 					<>
 						<div className="flex items-center gap-3 mb-4">
 							<span
-								className={`badge gap-1 ${typeBadgeClasses[task.type] ?? "bg-surface-2 text-ink-secondary"}`}
+								className={`badge ${typeBadgeClasses[task.type] ?? "bg-surface-2 text-ink-secondary"}`}
 							>
-								<Icon className="w-4 h-4" />
 								{TASK_TYPE_LABELS[task.type] ?? task.type}
 							</span>
-							<span className="flex items-center gap-1 caption-sm">
+							<span className="flex items-center gap-1 caption">
 								<Clock className="w-4 h-4" />
 								{task.estimatedMinutes}m
 							</span>

@@ -46,7 +46,7 @@ export default function RulesSearch({ rules }: RulesSearchProps) {
           <button
             type="button"
             onClick={() => setQuery("")}
-            className="absolute right-4 top-1/2 -translate-y-1/2 caption-sm hover:text-ink transition-colors cursor-pointer"
+            className="absolute right-4 top-1/2 -translate-y-1/2 caption hover:text-ink transition-colors cursor-pointer"
           >
             Clear
           </button>

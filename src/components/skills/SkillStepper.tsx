@@ -67,7 +67,7 @@ export default function SkillStepper({ skills }: SkillStepperProps) {
 							<span className={`badge-domain-${skill.domain}`}>
 								{skill.id}
 							</span>
-							<span className="caption-sm flex-1 min-w-0 truncate">
+							<span className="caption flex-1 min-w-0 truncate">
 								Task {skill.taskId} · {skill.taskTitle}
 							</span>
 							{done && (
@@ -116,7 +116,7 @@ export default function SkillStepper({ skills }: SkillStepperProps) {
 
 function ReferenceRow({ resources }: { resources: ExamSkillResource[] }) {
 	return (
-		<div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 caption-sm">
+		<div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 caption">
 			<span className="text-ink-muted">References</span>
 			{resources.map((res, i) => {
 				const Icon = resourceIcons[res.type] ?? FileText;
@@ -167,7 +167,7 @@ function SkillScenarioBlock({
 			{/* Question */}
 			<div className="flex items-baseline gap-3 mb-2">
 				<span
-					className={`caption-sm uppercase tracking-wider ${difficultyColor[difficulty] ?? "text-ink-muted"}`}
+					className={`caption uppercase tracking-wider ${difficultyColor[difficulty] ?? "text-ink-muted"}`}
 				>
 					{difficulty}
 				</span>
@@ -181,7 +181,7 @@ function SkillScenarioBlock({
 
 			{/* Think prompts — single inline line */}
 			{prompts.length > 0 && (
-				<p className="caption-sm text-ink-muted italic mb-3">
+				<p className="caption text-ink-muted italic mb-3">
 					Consider: {prompts.join(" · ")}
 				</p>
 			)}

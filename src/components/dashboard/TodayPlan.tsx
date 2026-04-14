@@ -1,14 +1,17 @@
 import { useProgress } from "../../lib/hooks/use-progress";
+import { getDueReviews } from "../../lib/progress";
 import type { StudyDay } from "../../lib/types";
-import { CheckCircle, Circle, ArrowRight } from "lucide-react";
+import { CheckCircle, Circle, ArrowRight, Clock } from "lucide-react";
 
 interface TodayPlanProps {
 	days: StudyDay[];
 }
 
 export default function TodayPlan({ days }: TodayPlanProps) {
-	const { tasksCompleted, lastVisitedDay } = useProgress();
+	const progress = useProgress();
+	const { tasksCompleted, lastVisitedDay } = progress;
 	const day = days.find((d) => d.number === lastVisitedDay) ?? days[0];
+	const dueReviews = getDueReviews(progress);
 	if (!day || !days.length) {
 		return (
 			<div className="card-padded animate-pulse">
@@ -27,6 +30,18 @@ export default function TodayPlan({ days }: TodayPlanProps) {
 
 	return (
 		<div className="card-padded">
+			{dueReviews.length > 0 && (
+				<div className="flex items-center gap-2 mb-4 pb-3 border-b border-surface-3">
+					<Clock className="w-4 h-4 text-accent-yellow shrink-0" />
+					<p className="caption">
+						<span className="text-accent-yellow font-semibold">
+							{dueReviews.length} scenario
+							{dueReviews.length === 1 ? "" : "s"}
+						</span>{" "}
+						due for review today
+					</p>
+				</div>
+			)}
 			<div className="flex items-start justify-between gap-3 mb-4">
 				<div>
 					<p className="caption uppercase tracking-wide">
@@ -55,7 +70,7 @@ export default function TodayPlan({ days }: TodayPlanProps) {
 								<Circle className="w-4 h-4 text-ink-muted shrink-0" />
 							)}
 							<span
-								className={`body-sm leading-snug ${
+								className={`body-text leading-snug ${
 									done ? "line-through text-ink-muted" : "text-ink-secondary"
 								}`}
 							>
@@ -65,7 +80,7 @@ export default function TodayPlan({ days }: TodayPlanProps) {
 					);
 				})}
 				{day.tasks.length > 4 && (
-					<li className="caption-sm pl-7">+{day.tasks.length - 4} more tasks</li>
+					<li className="caption pl-7">+{day.tasks.length - 4} more tasks</li>
 				)}
 			</ul>
 

@@ -113,18 +113,16 @@ export default defineConfig({
 	},
 	shortcuts: {
 		// Layout
-		"page-container": "max-w-5xl mx-auto px-4 sm:px-6 lg:px-8",
+		"page-container": "w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10",
 		card: "bg-surface-1 border border-surface-3 rounded-card",
 		"card-padded": "bg-surface-1 border border-surface-3 rounded-card p-5",
 
 		// Typography
-		"heading-1": "text-3xl font-bold font-mono text-ink tracking-tight leading-tight",
-		"heading-2": "text-2xl font-bold font-mono text-ink tracking-tight leading-snug",
-		"heading-3": "text-lg font-semibold font-mono text-ink leading-snug",
-		"body-text": "text-base font-mono text-ink-secondary leading-relaxed",
-		"body-sm": "text-[15px] font-mono text-ink-secondary leading-relaxed",
-		caption: "text-sm font-mono text-ink-muted tracking-wide",
-		"caption-sm": "text-[13px] font-mono text-ink-muted tracking-wide",
+		"heading-1": "text-[32px] font-bold font-mono text-ink tracking-tight leading-tight",
+		"heading-2": "text-[24px] font-bold font-mono text-ink tracking-tight leading-snug",
+		"heading-3": "text-[20px] font-semibold font-mono text-ink leading-snug",
+		"body-text": "text-[18px] font-mono text-ink-secondary leading-[1.75]",
+		caption: "text-[14px] font-mono text-ink-muted tracking-wide",
 
 		// Buttons
 		"btn-primary":

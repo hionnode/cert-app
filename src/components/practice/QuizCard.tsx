@@ -201,7 +201,7 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 										}`}>
 											{letter}
 										</span>
-										<span className="body-sm text-ink">{opt.substring(3)}</span>
+										<span className="body-text text-ink">{opt.substring(3)}</span>
 									</div>
 								</button>
 							);
@@ -219,7 +219,7 @@ export default function QuizCard({ questions, title }: QuizCardProps) {
 								<><XCircle className="w-5 h-5 text-accent-red" /><span className="font-semibold text-accent-red">Incorrect</span></>
 							)}
 						</div>
-						<p className="body-sm whitespace-pre-line">{q.explanation}</p>
+						<p className="body-text whitespace-pre-line">{q.explanation}</p>
 						{q.examSkills.length > 0 && (
 							<div className="flex flex-wrap gap-1.5 mt-3">
 								{q.examSkills.map((skill) => (

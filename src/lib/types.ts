@@ -192,6 +192,11 @@ export interface ExamAttempt {
 
 export type ScenarioRating = "got-it" | "partial" | "missed";
 
+export interface QuestionResult {
+	correct: boolean;
+	answeredAt: string;
+}
+
 export interface UserProgress {
 	version: number;
 	tasksCompleted: Record<string, boolean>;
@@ -202,6 +207,7 @@ export interface UserProgress {
 	drillScores: Record<string, number>;
 	skillScenariosViewed: Record<string, number[]>;
 	handsOnCompleted: Record<string, boolean>;
+	questionResults: Record<string, QuestionResult>;
 	streak: { current: number; lastDate: string };
 	lastVisitedDay: number;
 }

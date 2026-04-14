@@ -81,7 +81,7 @@ export default function HandsOnStepper({ activities }: HandsOnStepperProps) {
 								{activity.difficulty}
 							</span>
 							{activity.estimatedMinutes && (
-								<span className="flex items-center gap-1 caption-sm">
+								<span className="flex items-center gap-1 caption">
 									<Clock className="w-4 h-4" />
 									{activity.estimatedMinutes}m
 								</span>
@@ -101,7 +101,7 @@ export default function HandsOnStepper({ activities }: HandsOnStepperProps) {
 								{activity.steps.map((step, i) => (
 									<li
 										key={i}
-										className="flex items-start gap-2 body-sm"
+										className="flex items-start gap-2 body-text"
 									>
 										<span className="text-accent-aqua font-bold w-5 text-center">
 											{i + 1}

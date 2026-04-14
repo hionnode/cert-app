@@ -41,13 +41,13 @@ const integrationCount = allQuestions.filter((q: any) => q.integrationDomains?.l
 					{(orderingSequences as any[]).map((seq: any) => (
 						<details class="card group">
 							<summary class="p-4 cursor-pointer flex items-center justify-between hover:bg-surface-2 transition-colors">
-								<h4 class="body-sm font-semibold">{seq.title}</h4>
+								<h4 class="body-text font-semibold">{seq.title}</h4>
 								<div class="i-lucide-chevron-down w-4 h-4 text-ink-muted group-open:rotate-180 transition-transform" />
 							</summary>
 							<div class="px-4 pb-4">
 								<ol class="space-y-2">
 									{seq.steps.map((step: string, i: number) => (
-										<li class="flex items-center gap-2 p-2 bg-surface-0 border border-surface-3 rounded-sm body-sm">
+										<li class="flex items-center gap-2 p-2 bg-surface-0 border border-surface-3 rounded-sm body-text">
 											<span class="text-accent-aqua font-bold w-5 text-center">{i + 1}</span>
 											<span>{step}</span>
 										</li>
@@ -63,7 +63,7 @@ const integrationCount = allQuestions.filter((q: any) => q.integrationDomains?.l
 					{(matchingExercises as any[]).map((exercise: any) => (
 						<details class="card group">
 							<summary class="p-4 cursor-pointer flex items-center justify-between hover:bg-surface-2 transition-colors">
-								<h4 class="body-sm font-semibold">{exercise.title}</h4>
+								<h4 class="body-text font-semibold">{exercise.title}</h4>
 								<div class="i-lucide-chevron-down w-4 h-4 text-ink-muted group-open:rotate-180 transition-transform" />
 							</summary>
 							<div class="px-4 pb-4 overflow-x-auto">
@@ -99,22 +99,22 @@ const integrationCount = allQuestions.filter((q: any) => q.integrationDomains?.l
 			<div class="px-5 pb-5 space-y-2">
 				<a href="https://explore.skillbuilder.aws/" target="_blank" rel="noopener" class="flex items-center justify-between p-4 border border-surface-3 rounded-sm hover:bg-surface-2 transition-colors">
 					<div>
-						<div class="body-sm font-semibold">AWS Official Practice Set</div>
-						<div class="caption-sm">20 free exam-caliber questions</div>
+						<div class="body-text font-semibold">AWS Official Practice Set</div>
+						<div class="caption">20 free exam-caliber questions</div>
 					</div>
 					<span class="badge border border-accent-green text-accent-green">Free</span>
 				</a>
 				<a href="https://certificationpractice.com/practice-exams/aws-certified-generative-ai-developer-professional" target="_blank" rel="noopener" class="flex items-center justify-between p-4 border border-surface-3 rounded-sm hover:bg-surface-2 transition-colors">
 					<div>
-						<div class="body-sm font-semibold">CertificationPractice.com</div>
-						<div class="caption-sm">510 questions across 6 practice exams</div>
+						<div class="body-text font-semibold">CertificationPractice.com</div>
+						<div class="caption">510 questions across 6 practice exams</div>
 					</div>
 					<span class="badge border border-accent-green text-accent-green">Free</span>
 				</a>
 				<a href="https://portal.tutorialsdojo.com/courses/aws-certified-generative-ai-developer-professional-practice-exams-aip-c01-2025/" target="_blank" rel="noopener" class="flex items-center justify-between p-4 border border-surface-3 rounded-sm hover:bg-surface-2 transition-colors">
 					<div>
-						<div class="body-sm font-semibold">Tutorials Dojo</div>
-						<div class="caption-sm">275+ questions with detailed explanations</div>
+						<div class="body-text font-semibold">Tutorials Dojo</div>
+						<div class="caption">275+ questions with detailed explanations</div>
 					</div>
 					<span class="badge border border-accent-yellow text-accent-yellow">~$15</span>
 				</a>

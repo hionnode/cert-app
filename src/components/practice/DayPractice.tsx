@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
-import { Brain, ChevronRight, CheckCircle, XCircle, ArrowRight, RotateCcw } from "lucide-react";
-import { DOMAINS } from "../../lib/constants";
+import { CheckCircle, XCircle, ArrowRight, RotateCcw } from "lucide-react";
+import { saveQuestionResult } from "../../lib/progress";
 import type { PracticeQuestion } from "../../lib/types";
 
 interface DayPracticeProps {
@@ -22,6 +22,7 @@ export default function DayPractice({ questions, dayNumber }: DayPracticeProps) 
 	const [showFeedback, setShowFeedback] = useState(false);
 	const [score, setScore] = useState(0);
 	const [answered, setAnswered] = useState(0);
+	const [sessionResults, setSessionResults] = useState<Array<{ domain: number; correct: boolean }>>([]);
 
 	const byLevel = useMemo(() => {
 		const groups: Record<number, PracticeQuestion[]> = { 1: [], 2: [], 3: [] };
@@ -43,6 +44,7 @@ export default function DayPractice({ questions, dayNumber }: DayPracticeProps) 
 		setShowFeedback(false);
 		setScore(0);
 		setAnswered(0);
+		setSessionResults([]);
 	}
 
 	function checkAnswer() {
@@ -55,6 +57,8 @@ export default function DayPractice({ questions, dayNumber }: DayPracticeProps) 
 			const expected = [...(q.correctAnswers ?? [])].sort();
 			correct = sorted.length === expected.length && sorted.every((v, i) => v === expected[i]);
 		}
+		saveQuestionResult(q.id, correct);
+		setSessionResults((rs) => [...rs, { domain: q.domain, correct }]);
 		if (correct) setScore((s) => s + 1);
 		setAnswered((a) => a + 1);
 		setShowFeedback(true);
@@ -93,8 +97,8 @@ export default function DayPractice({ questions, dayNumber }: DayPracticeProps) 
 									<span className={`badge ${cfg.cls}`}>Level {level}</span>
 									<span className="caption">{count} Qs</span>
 								</div>
-								<h4 className="body-sm font-semibold text-ink">{cfg.label}</h4>
-								<p className="caption-sm mt-1">
+								<h4 className="body-text font-semibold text-ink">{cfg.label}</h4>
+								<p className="caption mt-1">
 									{level === 1 && "Recall & identification"}
 									{level === 2 && "Scenario-based application"}
 									{level === 3 && "Complex trade-off analysis"}
@@ -113,17 +117,71 @@ export default function DayPractice({ questions, dayNumber }: DayPracticeProps) 
 	// Complete view
 	if (isComplete) {
 		const pct = Math.round((score / answered) * 100);
+		const byDomain = sessionResults.reduce<Record<number, { correct: number; total: number }>>(
+			(acc, r) => {
+				acc[r.domain] ??= { correct: 0, total: 0 };
+				acc[r.domain].total += 1;
+				if (r.correct) acc[r.domain].correct += 1;
+				return acc;
+			},
+			{},
+		);
+		const domainRows = Object.entries(byDomain).sort(
+			([, a], [, b]) => a.correct / a.total - b.correct / b.total,
+		);
 		return (
 			<div className="card-padded text-center py-8">
-				<div className="text-3xl font-bold font-mono mb-1" style={{ color: pct >= 75 ? "var(--grv-green)" : "var(--grv-orange)" }}>
+				<div
+					className="text-3xl font-bold font-mono mb-1"
+					style={{ color: pct >= 75 ? "var(--grv-green)" : "var(--grv-orange)" }}
+				>
 					{score}/{answered}
 				</div>
-				<p className="caption mb-4">Level {activeLevel}: {levelLabels[activeLevel]?.label} — {pct}%</p>
+				<p className="caption mb-4">
+					Level {activeLevel}: {levelLabels[activeLevel]?.label} — {pct}%
+				</p>
+				{domainRows.length > 1 && (
+					<div className="max-w-md mx-auto mb-4">
+						<p className="caption mb-2 text-left">By domain</p>
+						<ul className="space-y-1">
+							{domainRows.map(([d, s]) => {
+								const dp = Math.round((s.correct / s.total) * 100);
+								return (
+									<li
+										key={d}
+										className="flex items-center justify-between caption"
+									>
+										<span>Domain {d}</span>
+										<span
+											className={
+												dp < 60
+													? "text-accent-red"
+													: dp < 80
+														? "text-accent-yellow"
+														: "text-accent-aqua"
+											}
+										>
+											{s.correct}/{s.total} · {dp}%
+										</span>
+									</li>
+								);
+							})}
+						</ul>
+					</div>
+				)}
 				<div className="flex items-center justify-center gap-3">
-					<button type="button" onClick={() => startLevel(activeLevel)} className="btn-ghost text-sm">
+					<button
+						type="button"
+						onClick={() => startLevel(activeLevel)}
+						className="btn-ghost text-sm"
+					>
 						<RotateCcw className="w-4 h-4" /> Retry
 					</button>
-					<button type="button" onClick={() => setActiveLevel(null)} className="btn-primary text-sm">
+					<button
+						type="button"
+						onClick={() => setActiveLevel(null)}
+						className="btn-primary text-sm"
+					>
 						Back to Levels
 					</button>
 				</div>
@@ -154,7 +212,7 @@ export default function DayPractice({ questions, dayNumber }: DayPracticeProps) 
 				</div>
 				<div className="flex items-center gap-2">
 					<span className="caption">{currentIdx + 1}/{activeQuestions.length}</span>
-					<button type="button" onClick={() => setActiveLevel(null)} className="caption-sm hover:text-ink">
+					<button type="button" onClick={() => setActiveLevel(null)} className="caption hover:text-ink">
 						Exit
 					</button>
 				</div>
@@ -169,7 +227,7 @@ export default function DayPractice({ questions, dayNumber }: DayPracticeProps) 
 
 			{/* Question */}
 			<div className="px-4 pb-4">
-				<p className="body-sm font-medium text-ink mb-4">{q.question}</p>
+				<p className="body-text font-medium text-ink mb-4">{q.question}</p>
 
 				{/* Options (multiple-choice / multiple-response) */}
 				{(q.type === "multiple-choice" || q.type === "multiple-response") && q.options && (
@@ -196,7 +254,7 @@ export default function DayPractice({ questions, dayNumber }: DayPracticeProps) 
 								>
 									<div className="flex items-start gap-2">
 										<span className={`w-6 h-6 rounded-sm flex items-center justify-center text-xs font-bold flex-shrink-0 ${isSel ? "bg-accent-blue text-surface-0" : "bg-surface-2 text-ink-muted"}`}>{letter}</span>
-										<span className="body-sm text-ink">{opt.substring(3)}</span>
+										<span className="body-text text-ink">{opt.substring(3)}</span>
 									</div>
 								</button>
 							);
@@ -214,7 +272,7 @@ export default function DayPractice({ questions, dayNumber }: DayPracticeProps) 
 								<><XCircle className="w-4 h-4 text-accent-red" /><span className="font-semibold text-accent-red">Incorrect</span></>
 							)}
 						</div>
-						<p className="text-ink-secondary whitespace-pre-line caption-sm">{q.explanation}</p>
+						<p className="text-ink-secondary whitespace-pre-line caption">{q.explanation}</p>
 					</div>
 				)}
 

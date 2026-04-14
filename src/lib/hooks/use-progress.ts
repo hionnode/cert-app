@@ -1,19 +1,8 @@
 import { useState, useEffect } from "react";
-import { loadProgress } from "../progress";
+import { loadProgress, defaultProgress } from "../progress";
 import type { UserProgress } from "../types";
 
-const DEFAULT_PROGRESS: UserProgress = {
-	version: 1,
-	tasksCompleted: {},
-	scenarioRatings: {},
-	scenarioNextReview: {},
-	servicesChecked: [],
-	examAttempts: [],
-	drillScores: {},
-	skillScenariosViewed: {},
-	streak: { current: 0, lastDate: "" },
-	lastVisitedDay: 1,
-};
+const DEFAULT_PROGRESS: UserProgress = defaultProgress();
 
 export function useProgress(): UserProgress {
 	const [progress, setProgress] = useState<UserProgress>(DEFAULT_PROGRESS);

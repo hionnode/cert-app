@@ -43,15 +43,19 @@ describe("ScenarioCard", () => {
 			expect(screen.getByText(/How would you design a RAG pipeline/)).toBeInTheDocument();
 		});
 
-		it("renders think prompts", () => {
+		it("renders think prompts inline", () => {
 			render(<ScenarioCard scenario={scenario} />);
-			expect(screen.getByText("What embedding model would you use?")).toBeInTheDocument();
-			expect(screen.getByText("How would you chunk the documents?")).toBeInTheDocument();
+			expect(
+				screen.getByText(/What embedding model would you use\?/),
+			).toBeInTheDocument();
+			expect(
+				screen.getByText(/How would you chunk the documents\?/),
+			).toBeInTheDocument();
 		});
 
-		it("renders Think First label", () => {
+		it("renders Consider prefix for think prompts", () => {
 			render(<ScenarioCard scenario={scenario} />);
-			expect(screen.getByText("Think First")).toBeInTheDocument();
+			expect(screen.getByText(/^Consider:/)).toBeInTheDocument();
 		});
 
 		it("renders difficulty badge", () => {
@@ -129,7 +133,7 @@ describe("ScenarioCard", () => {
 			await user.click(screen.getByRole("button", { name: /got it/i }));
 
 			expect(progress.rateScenario).toHaveBeenCalledWith("s-1", "got-it");
-			expect(screen.getByText(/marked as mastered/)).toBeInTheDocument();
+			expect(screen.getByText(/Mastered/)).toBeInTheDocument();
 		});
 
 		it("calls rateScenario with partial and shows 3-day review message", async () => {
@@ -171,7 +175,7 @@ describe("ScenarioCard", () => {
 		it("renders without think prompts", () => {
 			const noPrompts = { ...scenario, thinkPrompts: [] };
 			render(<ScenarioCard scenario={noPrompts} />);
-			expect(screen.queryByText("Think First")).not.toBeInTheDocument();
+			expect(screen.queryByText(/^Consider:/)).not.toBeInTheDocument();
 		});
 
 		it("renders without why explanation", async () => {

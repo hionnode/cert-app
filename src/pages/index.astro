@@ -4,7 +4,13 @@ import DomainProgressRings from "../components/dashboard/DomainProgressRings";
 import TodayPlan from "../components/dashboard/TodayPlan";
 import StudyStreak from "../components/dashboard/StudyStreak";
 import WeekOverview from "../components/dashboard/WeekOverview";
+import WeakAreas from "../components/dashboard/WeakAreas";
 import days from "../data/days.json";
+import scenarios from "../data/scenarios.json";
+
+let allPractice: any[] = [];
+try { const d1d2 = await import("../data/practice-d1d2.json"); allPractice = allPractice.concat(d1d2.default ?? d1d2); } catch {}
+try { const d3d4d5 = await import("../data/practice-d3d4d5.json"); allPractice = allPractice.concat(d3d4d5.default ?? d3d4d5); } catch {}
 ---
 
 <Layout title="Dashboard">
@@ -14,6 +20,11 @@ import days from "../data/days.json";
 		<!-- Current Step (primary focus) -->
 		<section class="mb-8">
 			<TodayPlan client:load days={days as any} />
+		</section>
+
+		<!-- Weak Areas (only renders when there is data) -->
+		<section class="mb-8">
+			<WeakAreas client:load scenarios={scenarios as any} questions={allPractice as any} />
 		</section>
 
 		<!-- Domain Progress + Streak -->

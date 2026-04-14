@@ -108,8 +108,8 @@ export default function PracticeHub({ questions }: PracticeHubProps) {
 							<span className="badge bg-surface-2 text-accent-aqua">All</span>
 							<span className="caption">{totalByDomain.all} Qs</span>
 						</div>
-						<h3 className="body-sm font-semibold text-ink">All Domains</h3>
-						<p className="caption-sm">Full practice across everything</p>
+						<h3 className="body-text font-semibold text-ink">All Domains</h3>
+						<p className="caption">Full practice across everything</p>
 					</button>
 
 					{/* Per domain */}
@@ -130,8 +130,8 @@ export default function PracticeHub({ questions }: PracticeHubProps) {
 								<span className={`badge-domain-${d.id}`}>D{d.id}</span>
 								<span className="caption">{totalByDomain[d.id] ?? 0} Qs</span>
 							</div>
-							<h3 className="body-sm font-semibold text-ink">{d.shortName}</h3>
-							<p className="caption-sm">{d.weight}% of exam</p>
+							<h3 className="body-text font-semibold text-ink">{d.shortName}</h3>
+							<p className="caption">{d.weight}% of exam</p>
 						</button>
 					))}
 
@@ -147,8 +147,8 @@ export default function PracticeHub({ questions }: PracticeHubProps) {
 							<span className="badge border border-accent-purple text-accent-purple">Cross</span>
 							<span className="caption">{totalByDomain.integration} Qs</span>
 						</div>
-						<h3 className="body-sm font-semibold text-ink">Cross-Domain</h3>
-						<p className="caption-sm">Integration questions spanning multiple domains</p>
+						<h3 className="body-text font-semibold text-ink">Cross-Domain</h3>
+						<p className="caption">Integration questions spanning multiple domains</p>
 					</button>
 				</div>
 			</section>
@@ -165,8 +165,8 @@ export default function PracticeHub({ questions }: PracticeHubProps) {
 						}`}
 					>
 						<Shuffle className="w-5 h-5 text-accent-aqua mb-2" />
-						<h3 className="body-sm font-semibold">All Levels</h3>
-						<p className="caption-sm">{totalByLevel.all} questions</p>
+						<h3 className="body-text font-semibold">All Levels</h3>
+						<p className="caption">{totalByLevel.all} questions</p>
 					</button>
 					{levelConfig.map(({ value, label, icon: Icon, desc, cls }) => (
 						<button
@@ -178,9 +178,9 @@ export default function PracticeHub({ questions }: PracticeHubProps) {
 							}`}
 						>
 							<Icon className="w-5 h-5 mb-2 text-ink-secondary" />
-							<h3 className="body-sm font-semibold">Level {value}: {label}</h3>
-							<p className="caption-sm">{desc}</p>
-							<p className="caption-sm mt-1">{totalByLevel[value] ?? 0} questions</p>
+							<h3 className="body-text font-semibold">Level {value}: {label}</h3>
+							<p className="caption">{desc}</p>
+							<p className="caption mt-1">{totalByLevel[value] ?? 0} questions</p>
 						</button>
 					))}
 				</div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, ThumbsUp, Minus, X, Lightbulb, ShieldCheck } from "lucide-react";
+import { Eye, ThumbsUp, Minus, X, ShieldCheck } from "lucide-react";
 import DomainBadge from "../shared/DomainBadge";
 import { rateScenario } from "../../lib/progress";
 import type { Scenario, ScenarioRating } from "../../lib/types";
@@ -70,20 +70,9 @@ export default function ScenarioCard({ scenario, onRated, embedded }: ScenarioCa
 
             {/* Think prompts */}
             {scenario.thinkPrompts.length > 0 && (
-              <div className="bg-surface-2 border border-accent-blue rounded-card p-4 mb-5">
-                <div className="flex items-center gap-2 mb-2">
-                  <Lightbulb className="w-4 h-4 text-accent-blue" />
-                  <span className="text-sm font-semibold text-accent-blue">Think First</span>
-                </div>
-                <ul className="space-y-1.5">
-                  {scenario.thinkPrompts.map((prompt, i) => (
-                    <li key={i} className="text-sm text-accent-blue flex items-start gap-2">
-                      <span className="text-accent-blue/50 shrink-0">&bull;</span>
-                      {prompt}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <p className="caption italic text-ink-muted mb-5">
+                Consider: {scenario.thinkPrompts.join(" · ")}
+              </p>
             )}
 
             <button
@@ -158,36 +147,14 @@ export default function ScenarioCard({ scenario, onRated, embedded }: ScenarioCa
 
         {/* STATE 3: Rated */}
         {state === "rated" && selectedRating && (
-          <div className="text-center py-4">
-            <div className="flex items-center justify-center gap-2 mb-3">
-              {selectedRating === "got-it" && (
-                <>
-                  <ThumbsUp className="w-6 h-6 text-accent-aqua" />
-                  <span className="text-lg font-bold text-accent-aqua">Got it!</span>
-                </>
-              )}
-              {selectedRating === "partial" && (
-                <>
-                  <Minus className="w-6 h-6 text-accent-yellow" />
-                  <span className="text-lg font-bold text-accent-yellow">Partial</span>
-                </>
-              )}
-              {selectedRating === "missed" && (
-                <>
-                  <X className="w-6 h-6 text-accent-red" />
-                  <span className="text-lg font-bold text-accent-red">Missed</span>
-                </>
-              )}
-            </div>
-
-            <p className="caption mb-4">
+          <div className="flex items-center justify-between gap-4 py-2">
+            <p className="caption">
               {selectedRating === "got-it"
-                ? "Great job! This scenario is marked as mastered."
+                ? "Mastered · no review scheduled."
                 : selectedRating === "partial"
-                ? "This will come up for review in 3 days."
-                : "This will come up for review tomorrow."}
+                ? "Marked partial · review in 3 days."
+                : "Marked missed · review tomorrow."}
             </p>
-
             <button
               type="button"
               onClick={handleReset}

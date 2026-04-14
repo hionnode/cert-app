@@ -22,8 +22,8 @@ import days from "../data/days.json";
 						if (!day) return null;
 						return (
 							<a href={`/step/${day.number}`} class="flex items-center gap-3 px-4 py-3 hover:bg-surface-2 rounded-sm transition-colors group">
-								<span class="body-sm font-mono text-ink-muted w-12">Step {day.number}</span>
-								<span class="body-sm font-semibold flex-1 group-hover:text-accent-aqua transition-colors">{day.title}</span>
+								<span class="body-text font-mono text-ink-muted w-12">Step {day.number}</span>
+								<span class="body-text font-semibold flex-1 group-hover:text-accent-aqua transition-colors">{day.title}</span>
 								<span class={`badge-domain-${day.domain}`}>D{day.domain}</span>
 								<span class="caption w-16 text-right">{day.tasks.length} tasks</span>
 							</a>

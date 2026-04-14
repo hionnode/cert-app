@@ -64,7 +64,7 @@ export default function SkillReviewCard({ skill, compact }: SkillReviewCardProps
 			>
 				{allViewed && <CheckCircle className="w-5 h-5 text-accent-aqua flex-shrink-0" />}
 				<span className={`badge-domain-${skill.domain} flex-shrink-0`}>{skill.id}</span>
-				<span className={`body-sm flex-1 ${allViewed ? "text-ink-muted" : "text-ink"} ${!isOpen ? "line-clamp-1" : ""}`}>
+				<span className={`body-text flex-1 ${allViewed ? "text-ink-muted" : "text-ink"} ${!isOpen ? "line-clamp-1" : ""}`}>
 					{skill.description}
 				</span>
 				{totalScenarios > 0 && (
@@ -80,7 +80,7 @@ export default function SkillReviewCard({ skill, compact }: SkillReviewCardProps
 				<div className="overflow-hidden">
 					<div className="px-5 pb-6 space-y-4">
 						<p className="caption">Task {skill.taskId}: {skill.taskTitle}</p>
-						<p className="body-sm">{skill.description}</p>
+						<p className="body-text">{skill.description}</p>
 
 						{/* Scenarios */}
 						{skill.scenarios?.length > 0 ? (
@@ -112,7 +112,7 @@ export default function SkillReviewCard({ skill, compact }: SkillReviewCardProps
 												href={res.url}
 												target="_blank"
 												rel="noopener noreferrer"
-												className="inline-flex items-center gap-1.5 px-3 py-2 rounded-button bg-surface-1 hover:bg-surface-2 caption-sm text-ink-secondary hover:text-accent-blue transition-colors"
+												className="inline-flex items-center gap-1.5 px-3 py-2 rounded-button bg-surface-1 hover:bg-surface-2 caption text-ink-secondary hover:text-accent-blue transition-colors"
 											>
 												<Icon className="w-3.5 h-3.5" />
 												{res.title}
@@ -160,7 +160,7 @@ function ScenarioMini({
 			</div>
 
 			{/* Question */}
-			<p className="body-sm text-ink font-medium mb-3">{scenario.question}</p>
+			<p className="body-text text-ink font-medium mb-3">{scenario.question}</p>
 
 			{!revealed ? (
 				<>
@@ -169,11 +169,11 @@ function ScenarioMini({
 						<div className="bg-surface-2 border border-accent-blue rounded-button p-3 mb-3">
 							<div className="flex items-center gap-1.5 mb-1.5">
 								<Lightbulb className="w-3.5 h-3.5 text-accent-blue" />
-								<span className="caption-sm font-semibold text-accent-blue">Think about</span>
+								<span className="caption font-semibold text-accent-blue">Think about</span>
 							</div>
 							<ul className="space-y-1">
 								{scenario.thinkPrompts.map((p, i) => (
-									<li key={i} className="caption-sm text-accent-blue flex items-start gap-1.5">
+									<li key={i} className="caption text-accent-blue flex items-start gap-1.5">
 										<span className="text-accent-blue/50">&bull;</span>
 										{p}
 									</li>
@@ -188,8 +188,8 @@ function ScenarioMini({
 				</>
 			) : (
 				<div className="bg-surface-2 border border-accent-aqua rounded-button p-3">
-					<p className="caption-sm font-semibold text-accent-aqua mb-1.5">Answer</p>
-					<p className="body-sm whitespace-pre-line">{scenario.answer}</p>
+					<p className="caption font-semibold text-accent-aqua mb-1.5">Answer</p>
+					<p className="body-text whitespace-pre-line">{scenario.answer}</p>
 				</div>
 			)}
 		</div>

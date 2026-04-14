@@ -105,14 +105,14 @@ export default function TaskChecklist({ tasks, dayNumber }: TaskChecklistProps) 
                     <Icon className="w-4 h-4" />
                     {TASK_TYPE_LABELS[task.type] ?? task.type}
                   </span>
-                  <span className="flex items-center gap-1 caption-sm">
+                  <span className="flex items-center gap-1 caption">
                     <Clock className="w-4 h-4" />
                     {task.estimatedMinutes}m
                   </span>
                 </div>
 
                 <p
-                  className={`body-sm leading-snug ${
+                  className={`body-text leading-snug ${
                     done ? "line-through text-ink-muted" : "text-ink"
                   }`}
                 >

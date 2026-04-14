@@ -98,15 +98,6 @@ export default function ItemStepper<T>({
 							);
 						})}
 					</div>
-
-					<div className="flex items-center justify-between mb-4">
-						<span className="caption">
-							{itemLabel} {currentIndex + 1} of {items.length}
-						</span>
-						<span className="caption">
-							{totalDone}/{items.length} completed
-						</span>
-					</div>
 				</>
 			)}
 

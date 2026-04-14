@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
 	loadProgress,
 	toggleTask,
@@ -11,10 +11,16 @@ import {
 	markSkillScenarioViewed,
 	exportProgress,
 	importProgress,
+	saveQuestionResult,
+	getStepProgress,
+	getDueReviews,
+	getDomainWeaknesses,
+	defaultProgress,
 } from "../progress";
 import type { UserProgress } from "../types";
 
 const STORAGE_KEY = "aip-c01-progress";
+const CURRENT_VERSION = 2;
 
 function getStored(): UserProgress {
 	return JSON.parse(localStorage.getItem(STORAGE_KEY)!);
@@ -22,16 +28,7 @@ function getStored(): UserProgress {
 
 function seedProgress(overrides: Partial<UserProgress> = {}) {
 	const base: UserProgress = {
-		version: 1,
-		tasksCompleted: {},
-		scenarioRatings: {},
-		scenarioNextReview: {},
-		servicesChecked: [],
-		examAttempts: [],
-		drillScores: {},
-		skillScenariosViewed: {},
-		streak: { current: 0, lastDate: "" },
-		lastVisitedDay: 1,
+		...defaultProgress(),
 		...overrides,
 	};
 	localStorage.setItem(STORAGE_KEY, JSON.stringify(base));
@@ -48,7 +45,7 @@ describe("progress", () => {
 	describe("loadProgress", () => {
 		it("returns default progress when localStorage is empty", () => {
 			const p = loadProgress();
-			expect(p.version).toBe(1);
+			expect(p.version).toBe(CURRENT_VERSION);
 			expect(p.tasksCompleted).toEqual({});
 			expect(p.servicesChecked).toEqual([]);
 			expect(p.streak).toEqual({ current: 0, lastDate: "" });
@@ -65,14 +62,37 @@ describe("progress", () => {
 		it("returns default when version mismatches", () => {
 			localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: 999 }));
 			const p = loadProgress();
-			expect(p.version).toBe(1);
+			expect(p.version).toBe(CURRENT_VERSION);
 			expect(p.tasksCompleted).toEqual({});
 		});
 
 		it("returns default when stored JSON is invalid", () => {
 			localStorage.setItem(STORAGE_KEY, "not-json");
 			const p = loadProgress();
-			expect(p.version).toBe(1);
+			expect(p.version).toBe(CURRENT_VERSION);
+		});
+
+		it("migrates v1 data forward, preserving fields", () => {
+			const v1Data = {
+				version: 1,
+				tasksCompleted: { t1: true },
+				scenarioRatings: {},
+				scenarioNextReview: {},
+				servicesChecked: ["S3"],
+				examAttempts: [],
+				drillScores: {},
+				skillScenariosViewed: {},
+				handsOnCompleted: {},
+				streak: { current: 3, lastDate: "2026-04-01" },
+				lastVisitedDay: 7,
+			};
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(v1Data));
+			const p = loadProgress();
+			expect(p.version).toBe(CURRENT_VERSION);
+			expect(p.tasksCompleted.t1).toBe(true);
+			expect(p.servicesChecked).toEqual(["S3"]);
+			expect(p.lastVisitedDay).toBe(7);
+			expect(p.questionResults).toEqual({});
 		});
 	});
 
@@ -250,6 +270,126 @@ describe("progress", () => {
 		it("throws on version mismatch during import", () => {
 			const bad = JSON.stringify({ version: 99 });
 			expect(() => importProgress(bad)).toThrow("Incompatible version");
+		});
+	});
+
+	// ── saveQuestionResult ────────────────────────────────────────
+
+	describe("saveQuestionResult", () => {
+		it("stores a question result with timestamp", () => {
+			seedProgress();
+			saveQuestionResult("q1", true);
+			const stored = getStored();
+			expect(stored.questionResults.q1.correct).toBe(true);
+			expect(stored.questionResults.q1.answeredAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+		});
+
+		it("overwrites previous result for same question", () => {
+			seedProgress();
+			saveQuestionResult("q1", false);
+			saveQuestionResult("q1", true);
+			expect(getStored().questionResults.q1.correct).toBe(true);
+		});
+	});
+
+	// ── getStepProgress ───────────────────────────────────────────
+
+	describe("getStepProgress", () => {
+		const step = {
+			number: 1,
+			domain: 1,
+			tasks: [{ id: "t1" }, { id: "t2" }],
+			handsOn: [{ id: "h1" }],
+			scenarioIds: ["s1", "s2"],
+			examSkills: ["1.1.1"],
+		};
+		const scenarios = [
+			{ id: "s1", domain: 1 },
+			{ id: "s2", domain: 1 },
+		];
+		const skills = [{ id: "1.1.1", scenarios: [{}, {}] }];
+
+		it("returns zero progress for a fresh user", () => {
+			const p = defaultProgress();
+			const res = getStepProgress(step, p, scenarios, skills);
+			expect(res.tasks).toEqual({ done: 0, total: 2 });
+			expect(res.overall).toBe(0);
+		});
+
+		it("averages buckets when some sections are done", () => {
+			const p = {
+				...defaultProgress(),
+				tasksCompleted: { t1: true, t2: true },
+				scenarioRatings: { s1: "got-it" as const },
+			};
+			const res = getStepProgress(step, p, scenarios, skills);
+			expect(res.tasks).toEqual({ done: 2, total: 2 });
+			expect(res.scenarios).toEqual({ done: 1, total: 2 });
+			// 1.0 + 0.5 + 0 + 0 = 1.5 / 4 buckets
+			expect(res.overall).toBeCloseTo(1.5 / 4);
+		});
+	});
+
+	// ── getDueReviews ─────────────────────────────────────────────
+
+	describe("getDueReviews", () => {
+		it("returns scenario ids due on or before today", () => {
+			seedProgress({
+				scenarioNextReview: {
+					s1: "2026-01-01",
+					s2: "2026-04-13",
+					s3: "2099-12-31",
+				},
+			});
+			const p = loadProgress();
+			const due = getDueReviews(p, "2026-04-14");
+			expect(due).toContain("s1");
+			expect(due).toContain("s2");
+			expect(due).not.toContain("s3");
+		});
+
+		it("returns empty when no reviews scheduled", () => {
+			seedProgress();
+			expect(getDueReviews(loadProgress())).toEqual([]);
+		});
+	});
+
+	// ── getDomainWeaknesses ───────────────────────────────────────
+
+	describe("getDomainWeaknesses", () => {
+		const scenarios = [
+			{ id: "s1", domain: 2 },
+			{ id: "s2", domain: 2 },
+			{ id: "s3", domain: 3 },
+		];
+		const questions = [
+			{ id: "q1", domain: 2 },
+			{ id: "q2", domain: 2 },
+			{ id: "q3", domain: 3 },
+		];
+
+		it("ranks domains by weakness score", () => {
+			const p = {
+				...defaultProgress(),
+				scenarioRatings: { s1: "missed" as const, s2: "partial" as const, s3: "got-it" as const },
+				questionResults: {
+					q1: { correct: false, answeredAt: "2026-04-13T10:00:00Z" },
+					q2: { correct: false, answeredAt: "2026-04-13T10:00:00Z" },
+					q3: { correct: true, answeredAt: "2026-04-13T10:00:00Z" },
+				},
+			};
+			const weak = getDomainWeaknesses(p, scenarios, questions);
+			expect(weak.length).toBeGreaterThan(0);
+			expect(weak[0].domain).toBe(2);
+			expect(weak[0].missedScenarios).toBe(1);
+			expect(weak[0].partialScenarios).toBe(1);
+			expect(weak[0].accuracy).toBe(0);
+		});
+
+		it("filters out domains with no weakness signal", () => {
+			const p = defaultProgress();
+			const weak = getDomainWeaknesses(p, scenarios, questions);
+			expect(weak).toEqual([]);
 		});
 	});
 

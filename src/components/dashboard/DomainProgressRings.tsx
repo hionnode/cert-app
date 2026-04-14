@@ -29,7 +29,7 @@ export default function DomainProgressRings({ days }: DomainProgressRingsProps) 
 								<p className="text-sm font-semibold text-ink leading-tight">
 									{domain.shortName}
 								</p>
-								<p className="caption-sm mt-0.5">
+								<p className="caption mt-0.5">
 									{dp.completed}/{dp.total} tasks
 								</p>
 							</div>

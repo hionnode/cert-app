@@ -165,13 +165,13 @@ export default function ResourceGrid({ resources }: ResourceGridProps) {
               </div>
 
               {/* Title */}
-              <h3 className="body-sm font-semibold text-ink leading-snug group-hover:text-accent-aqua transition-colors">
+              <h3 className="body-text font-semibold text-ink leading-snug group-hover:text-accent-aqua transition-colors">
                 {resource.title}
               </h3>
 
               {/* Description */}
               {resource.description && (
-                <p className="caption-sm text-ink-secondary leading-relaxed line-clamp-2">
+                <p className="caption text-ink-secondary leading-relaxed line-clamp-2">
                   {resource.description}
                 </p>
               )}

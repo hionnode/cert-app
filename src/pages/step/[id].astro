@@ -1,10 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import TaskView from "../../components/study/TaskView";
-import ScenarioStepper from "../../components/scenarios/ScenarioStepper";
-import SkillStepper from "../../components/skills/SkillStepper";
-import HandsOnStepper from "../../components/study/HandsOnStepper";
-import DayPractice from "../../components/practice/DayPractice";
+import StepFocus from "../../components/study/StepFocus";
 import days from "../../data/days.json";
 import scenarios from "../../data/scenarios.json";
 import examSkills from "../../data/exam-skills.json";
@@ -28,6 +24,7 @@ const dayScenarios = (scenarios as any[]).filter((s: any) => day.scenarioIds.inc
 const domain = DOMAINS.find((d) => d.id === day.domain);
 const prevStep = day.number > 1 ? day.number - 1 : null;
 const nextStep = day.number < 28 ? day.number + 1 : null;
+const isLast = day.number === 28;
 const daySkills = (examSkills as any[]).filter((s: any) => day.examSkills.includes(s.id));
 
 function getStepPractice(stepNum: number, domain: number, phase: number): any[] {
@@ -53,156 +50,20 @@ function getStepPractice(stepNum: number, domain: number, phase: number): any[] 
 }
 
 const stepPractice = getStepPractice(day.number, day.domain, day.week);
-
-const FURTHER_READING_ICONS: Record<string, string> = {
-	blog: "i-lucide-newspaper",
-	video: "i-lucide-play-circle",
-	docs: "i-lucide-file-text",
-	github: "i-lucide-code",
-	workshop: "i-lucide-flask-conical",
-};
 ---
 
 <Layout title={`Step ${day.number}: ${day.title}`}>
 	<div class="page-container py-6">
-		<!-- Navigation -->
-		<div class="flex items-center justify-between mb-6">
-			{prevStep ? (
-				<a href={`/step/${prevStep}`} class="btn-ghost text-sm">
-					<div class="i-lucide-chevron-left w-4 h-4" /> Step {prevStep}
-				</a>
-			) : <div />}
-			<a href="/plan" class="btn-ghost text-sm">
-				<div class="i-lucide-list w-4 h-4" /> All Steps
-			</a>
-			{nextStep ? (
-				<a href={`/step/${nextStep}`} class="btn-ghost text-sm">
-					Step {nextStep} <div class="i-lucide-chevron-right w-4 h-4" />
-				</a>
-			) : <div />}
-		</div>
-
-		<!-- Header -->
-		<div class="mb-6">
-			<div class="flex items-center gap-3 mb-2">
-				<span class={`badge-domain-${day.domain}`}>{domain?.shortName}</span>
-				<span class="caption">Step {day.number} of 28</span>
-			</div>
-			<h1 class="heading-1">{day.title}</h1>
-		</div>
-
-		<!-- Learning Objectives (always visible) -->
-		{day.learningObjectives?.length > 0 && (
-			<section class="mb-8 border-l-3 border-l-accent-aqua pl-5">
-				<h2 class="heading-3 mb-2">What you'll learn</h2>
-				<ul class="space-y-1.5">
-					{day.learningObjectives.map((obj: string) => (
-						<li class="flex items-start gap-2 body-sm text-ink-secondary">
-							<span class="text-accent-aqua mt-0.5">-</span>
-							{obj}
-						</li>
-					))}
-				</ul>
-			</section>
-		)}
-
-		<!-- Tasks -->
-		<section class="mb-8">
-			<h2 class="heading-3 mb-4">Tasks</h2>
-			<TaskView client:load tasks={day.tasks} stepNumber={day.number} />
-		</section>
-
-		<!-- Scenarios -->
-		{dayScenarios.length > 0 && (
-			<section class="mb-8">
-				<h2 class="heading-3 mb-4">Scenarios</h2>
-				<ScenarioStepper client:visible scenarios={dayScenarios} />
-			</section>
-		)}
-
-		<!-- Hands-On Lab -->
-		{day.handsOn?.length > 0 && (
-			<section class="mb-8">
-				<h2 class="heading-3 mb-4">Hands-On Lab</h2>
-				<HandsOnStepper client:load activities={day.handsOn} />
-			</section>
-		)}
-
-		<!-- Practice Questions -->
-		{stepPractice.length > 0 && (
-			<section class="mb-8">
-				<h2 class="heading-3 mb-4">Practice Questions</h2>
-				<DayPractice client:visible questions={stepPractice} dayNumber={day.number} />
-			</section>
-		)}
-
-		<!-- Exam Skills Deep Dive -->
-		{daySkills.length > 0 && (
-			<section class="mb-8">
-				<h2 class="heading-3 mb-1">Exam Skills Deep Dive</h2>
-				<p class="caption mb-4">Each skill maps directly to the exam guide. Study the answer, follow the references.</p>
-				<SkillStepper client:visible skills={daySkills} />
-			</section>
-		)}
-
-		<!-- Spaced Repetition (collapsed) -->
-		{day.spacedRepetitionReview?.length > 0 && (
-			<details class="card mb-6">
-				<summary class="heading-3 cursor-pointer flex items-center justify-between p-5">
-					Review Today ({day.spacedRepetitionReview.length} topics)
-					<div class="i-lucide-chevron-down w-5 h-5 text-ink-muted" />
-				</summary>
-				<div class="px-5 pb-5 border-l-3 border-l-accent-yellow ml-5 mr-5">
-					<p class="caption mb-3">Spaced repetition — revisit these:</p>
-					<ul class="space-y-2">
-						{day.spacedRepetitionReview.map((topic: string) => (
-							<li class="flex items-start gap-2 body-sm">
-								<span class="text-accent-yellow">-</span>
-								{topic}
-							</li>
-						))}
-					</ul>
-				</div>
-			</details>
-		)}
-
-		<!-- Further Reading (always visible, grid) -->
-		{day.furtherReading?.length > 0 && (
-			<section class="mb-8">
-				<h2 class="heading-3 mb-4">Further Reading</h2>
-				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-					{day.furtherReading.map((item: any) => (
-						<a href={item.url} target="_blank" rel="noopener" class="card p-4 hover:bg-surface-2 transition-colors group flex gap-3">
-							<div class={`${FURTHER_READING_ICONS[item.type] ?? "i-lucide-link"} w-4 h-4 text-accent-blue flex-shrink-0 mt-0.5`} />
-							<div class="flex-1 min-w-0">
-								<h4 class="body-sm font-semibold group-hover:text-accent-aqua transition-colors line-clamp-2">{item.title}</h4>
-								<p class="caption-sm mt-0.5 line-clamp-2">{item.description}</p>
-								{item.estimatedMinutes && (
-									<span class="caption-sm mt-1 block">{item.estimatedMinutes} min</span>
-								)}
-							</div>
-						</a>
-					))}
-				</div>
-			</section>
-		)}
-
-		<!-- Step Navigation (bottom) -->
-		<div class="flex items-center justify-between mt-12 pt-6 border-t border-surface-3">
-			{prevStep ? (
-				<a href={`/step/${prevStep}`} class="btn-ghost">
-					<div class="i-lucide-chevron-left w-4 h-4" /> Step {prevStep}
-				</a>
-			) : <div />}
-			{nextStep ? (
-				<a href={`/step/${nextStep}`} class="btn-primary">
-					Step {nextStep} <div class="i-lucide-chevron-right w-4 h-4" />
-				</a>
-			) : (
-				<a href="/practice" class="btn-primary">
-					Practice Exams <div class="i-lucide-chevron-right w-4 h-4" />
-				</a>
-			)}
-		</div>
+		<StepFocus
+			client:load
+			day={day}
+			domainName={domain?.shortName ?? ""}
+			scenarios={dayScenarios}
+			skills={daySkills}
+			practice={stepPractice}
+			prevStep={prevStep}
+			nextStep={nextStep}
+			isLast={isLast}
+		/>
 	</div>
 </Layout>
