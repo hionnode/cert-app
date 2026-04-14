@@ -300,7 +300,7 @@ export default function StepFocus({
 	const sectionDoneCount = sections.filter((s) => s.isDone()).length;
 
 	return (
-		<div className="min-h-[calc(100vh-80px)] flex flex-col">
+		<div className="flex flex-col min-h-[calc(100vh-80px)]">
 			{/* Step header */}
 			<div className="flex items-center gap-3 mb-3">
 				<span className={`badge-domain-${day.domain}`}>
@@ -343,15 +343,18 @@ export default function StepFocus({
 				</div>
 			</div>
 
-			{/* Section body — flex-1 absorbs slack; justify-center lets
-			    short content sit visually balanced instead of hugging the top. */}
-			<section className="flex-1 flex flex-col justify-center mb-10">
+			{/* Section body — flows naturally below the progress bar. */}
+			<section className="mb-10">
 				<h2 className="heading-2 mb-6">{section.label}</h2>
 				{section.body}
 			</section>
 
-			{/* Action bar — mt-auto pins it to bottom of viewport via flex */}
-			<div className="mt-auto flex items-center justify-between gap-4 pt-6 border-t border-surface-3">
+			{/* Spacer absorbs remaining viewport so the action bar sits
+			    at the bottom without centering the section body. */}
+			<div className="flex-1" />
+
+			{/* Action bar */}
+			<div className="flex items-center justify-between gap-4 pt-6 border-t border-surface-3">
 				<button
 					type="button"
 					onClick={goPrev}
