@@ -5,6 +5,8 @@ import HandsOnStepper from "./HandsOnStepper";
 import ScenarioStepper from "../scenarios/ScenarioStepper";
 import SkillStepper from "../skills/SkillStepper";
 import DayPractice from "../practice/DayPractice";
+import SummarySection from "./SummarySection";
+import FlashcardStepper from "./FlashcardStepper";
 import { useProgress } from "../../lib/hooks/use-progress";
 import { getStepProgress } from "../../lib/progress";
 import type {
@@ -135,6 +137,34 @@ export default function StepFocus({
 						<SkillStepper skills={skills} />
 					</>
 				),
+			});
+		}
+
+		if (day.summary) {
+			out.push({
+				id: "summary",
+				label: "Summary",
+				isDone: () =>
+					stepProgress.summary.total > 0 &&
+					stepProgress.summary.done >= stepProgress.summary.total,
+				body: (
+					<SummarySection
+						summary={day.summary}
+						stepNumber={day.number}
+						domain={day.domain}
+					/>
+				),
+			});
+		}
+
+		if (day.flashcards && day.flashcards.length > 0) {
+			out.push({
+				id: "flashcards",
+				label: "Flashcards",
+				isDone: () =>
+					stepProgress.flashcards.total > 0 &&
+					stepProgress.flashcards.done >= stepProgress.flashcards.total,
+				body: <FlashcardStepper cards={day.flashcards} />,
 			});
 		}
 

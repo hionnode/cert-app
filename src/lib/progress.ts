@@ -1,7 +1,7 @@
 import type { UserProgress, ScenarioRating, ExamAttempt, QuestionResult } from "./types";
 
 const STORAGE_KEY = "aip-c01-progress";
-const CURRENT_VERSION = 2;
+const CURRENT_VERSION = 3;
 
 export function defaultProgress(): UserProgress {
 	return {
@@ -15,6 +15,8 @@ export function defaultProgress(): UserProgress {
 		skillScenariosViewed: {},
 		handsOnCompleted: {},
 		questionResults: {},
+		summaryViewed: {},
+		flashcardsFlipped: {},
 		streak: { current: 0, lastDate: "" },
 		lastVisitedDay: 1,
 	};
@@ -22,8 +24,7 @@ export function defaultProgress(): UserProgress {
 
 function migrate(data: Partial<UserProgress> & { version?: number }): UserProgress {
 	const base = defaultProgress();
-	// Merge v1 fields forward; unknown versions fall back to defaults.
-	if (data.version === 1 || data.version === 2) {
+	if (data.version === 1 || data.version === 2 || data.version === 3) {
 		return { ...base, ...data, version: CURRENT_VERSION };
 	}
 	return base;
@@ -145,6 +146,22 @@ export function markSkillScenarioViewed(skillId: string, scenarioIndex: number) 
 	save(p);
 }
 
+export function markSummaryViewed(stepNumber: number) {
+	const p = loadProgress();
+	if (!p.summaryViewed) p.summaryViewed = {};
+	if (p.summaryViewed[stepNumber]) return;
+	p.summaryViewed[stepNumber] = true;
+	save(p);
+}
+
+export function markFlashcardFlipped(cardId: string) {
+	const p = loadProgress();
+	if (!p.flashcardsFlipped) p.flashcardsFlipped = {};
+	if (p.flashcardsFlipped[cardId]) return;
+	p.flashcardsFlipped[cardId] = true;
+	save(p);
+}
+
 export function exportProgress(): string {
 	return localStorage.getItem(STORAGE_KEY) || JSON.stringify(defaultProgress());
 }
@@ -173,6 +190,8 @@ interface StepLike {
 	handsOn?: { id: string }[];
 	scenarioIds: string[];
 	examSkills: string[];
+	summary?: unknown;
+	flashcards?: { id: string }[];
 }
 
 export interface StepProgress {
@@ -180,6 +199,8 @@ export interface StepProgress {
 	scenarios: { done: number; total: number };
 	handsOn: { done: number; total: number };
 	skills: { done: number; total: number };
+	summary: { done: number; total: number };
+	flashcards: { done: number; total: number };
 	overall: number; // 0..1 weighted across sections that exist
 }
 
@@ -204,12 +225,20 @@ export function getStepProgress(
 		const total = sk.scenarios?.length ?? 0;
 		return total === 0 || viewed.length >= total;
 	}).length;
+	const summaryTotal = step.summary ? 1 : 0;
+	const summaryDone = summaryTotal > 0 && progress.summaryViewed?.[step.number] ? 1 : 0;
+	const flashcardsAll = step.flashcards ?? [];
+	const flashcardsDone = flashcardsAll.filter(
+		(c) => progress.flashcardsFlipped?.[c.id],
+	).length;
 
 	const buckets = [
 		{ done: tasksDone, total: step.tasks.length },
 		{ done: scenariosDone, total: scenariosForDay.length },
 		{ done: handsOnDone, total: handsOnTotal },
 		{ done: skillsDone, total: skillsForDay.length },
+		{ done: summaryDone, total: summaryTotal },
+		{ done: flashcardsDone, total: flashcardsAll.length },
 	].filter((b) => b.total > 0);
 
 	const overall =
@@ -222,6 +251,8 @@ export function getStepProgress(
 		scenarios: { done: scenariosDone, total: scenariosForDay.length },
 		handsOn: { done: handsOnDone, total: handsOnTotal },
 		skills: { done: skillsDone, total: skillsForDay.length },
+		summary: { done: summaryDone, total: summaryTotal },
+		flashcards: { done: flashcardsDone, total: flashcardsAll.length },
 		overall,
 	};
 }

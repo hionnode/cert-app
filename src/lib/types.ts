@@ -20,6 +20,51 @@ export interface StudyDay {
 	scenarioIds: string[];
 	examSkills: string[];
 	spacedRepetitionReview?: string[];
+	summary?: StepSummary;
+	flashcards?: Flashcard[];
+}
+
+export interface StepSummaryConcept {
+	term: string;
+	definition: string;
+	accent?: "aqua" | "yellow" | "orange" | "blue" | "purple";
+}
+
+export interface StepSummaryDiagram {
+	id: string;
+	title: string;
+	ascii: string;
+	caption?: string;
+	alt: string;
+}
+
+export interface StepSummaryGotcha {
+	trap: string;
+	correction: string;
+}
+
+export interface StepSummaryExamHook {
+	trigger: string;
+	pointsTo: string;
+}
+
+export interface StepSummary {
+	tldr: string;
+	readMinutes: number;
+	keyConcepts: StepSummaryConcept[];
+	howItWorks: string;
+	diagrams: StepSummaryDiagram[];
+	gotchas: StepSummaryGotcha[];
+	examHooks: StepSummaryExamHook[];
+}
+
+export interface Flashcard {
+	id: string;
+	stepNumber: number;
+	question: string;
+	answer: string;
+	hint?: string;
+	tags?: string[];
 }
 
 export interface HandsOnActivity {
@@ -208,6 +253,8 @@ export interface UserProgress {
 	skillScenariosViewed: Record<string, number[]>;
 	handsOnCompleted: Record<string, boolean>;
 	questionResults: Record<string, QuestionResult>;
+	summaryViewed: Record<number, boolean>;
+	flashcardsFlipped: Record<string, boolean>;
 	streak: { current: number; lastDate: string };
 	lastVisitedDay: number;
 }

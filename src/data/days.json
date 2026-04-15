@@ -125,6 +125,201 @@
         ]
       }
     ],
+    "summary": {
+      "tldr": "AIP-C01 is a 75-question, 180-minute pro-level exam weighted toward Domain 1 (31%). For almost every 'which GenAI service?' question, Bedrock is the default — and inside Bedrock, Converse is the default API.",
+      "readMinutes": 4,
+      "keyConcepts": [
+        {
+          "term": "AIP-C01 exam structure",
+          "definition": "5 domains weighted by question count: FM Integration 31%, Implementation 26%, Safety 20%, Optimization 12%, Testing 11%. 75 questions total (65 scored), 180 minutes, 750/1000 to pass.",
+          "accent": "aqua"
+        },
+        {
+          "term": "Amazon Bedrock",
+          "definition": "Serverless, multi-provider API for foundation models (Anthropic, Amazon Nova, Meta, Mistral, Cohere, Stability). No infrastructure to manage. The default answer for hosted-FM questions.",
+          "accent": "blue"
+        },
+        {
+          "term": "Converse API",
+          "definition": "Bedrock's unified request/response shape that works across every supported model. Supports multi-turn messages, system prompts, tool use (function calling), and streaming via ConverseStream.",
+          "accent": "aqua"
+        },
+        {
+          "term": "InvokeModel vs Converse",
+          "definition": "InvokeModel takes the raw per-model body (you format JSON differently for Claude vs Llama). Converse abstracts that. Prefer Converse unless you need a model-specific feature not yet surfaced.",
+          "accent": "yellow"
+        },
+        {
+          "term": "ConverseStream",
+          "definition": "Streaming variant that yields tokens as they're generated — reduces time-to-first-token. Required for production chat UX where wall-of-text latency is unacceptable.",
+          "accent": "purple"
+        },
+        {
+          "term": "Service selection: Bedrock vs SageMaker vs self-hosted",
+          "definition": "Bedrock = use an FM via API. SageMaker = host/fine-tune your own model (JumpStart for pre-built, endpoints for custom). EC2/ECS = full DIY, only when the other two don't fit.",
+          "accent": "orange"
+        },
+        {
+          "term": "Well-Architected GenAI Lens",
+          "definition": "Six-pillar framework extended for GenAI: Operational Excellence, Security, Reliability, Performance, Cost, Sustainability — each with GenAI-specific questions (eval, guardrails, RAG, drift).",
+          "accent": "purple"
+        },
+        {
+          "term": "Tool use (function calling)",
+          "definition": "Via Converse's toolConfig: you pass a JSON schema of callable tools; the model returns a toolUse block; you execute it and feed toolResult back. This is how agents call real APIs.",
+          "accent": "blue"
+        }
+      ],
+      "howItWorks": "The exam is written to test *judgment*, not recall. Most questions give you a realistic stem and four plausible services — your job is to pick the one AWS would recommend. The weights matter: Domain 1 is almost a third of the exam, so master Bedrock end-to-end before touching SageMaker specifics.\n\nFor hosted foundation models on AWS, Bedrock is the default. Use SageMaker only when you need to host your own model (JumpStart for a pre-built deployment, endpoints for a custom container). Reach for EC2/ECS only if neither fits — e.g., you need a specific model not on Bedrock and can't use a SageMaker endpoint. If the stem says 'serverless,' 'no infrastructure,' or 'API access to multiple model providers,' it's Bedrock. If it says 'fine-tune my own proprietary model,' it's SageMaker.\n\nInside Bedrock, the API choices stack like this. InvokeModel takes a per-model request body — you write Claude's message format for Claude, Llama's format for Llama. Converse unifies that: the same request shape works across providers, which is why it's the right default. ConverseStream is the streaming variant — critical for production chat because users tolerate a token-by-token reveal but abandon a 15-second blank screen. InvokeModelWithResponseStream is the older streaming API; use it only when Converse doesn't yet surface what you need.\n\nThe Well-Architected GenAI Lens adds GenAI-specific questions to the usual six pillars. It frames how the exam thinks about every subsequent domain — reliability means Cross-Region Inference, security means Guardrails and KMS, performance means eval and prompt caching, cost means model selection and inference profiles. When a scenario asks for 'AWS best practices,' the Lens is the source.\n\nTool use is the thing that turns a chat model into an agent. With Converse's toolConfig you describe callable functions as JSON schemas; the model decides whether to call one and responds with a toolUse block. Your code executes it, wraps the result in a toolResult message, and sends the conversation back. This is the primitive under Bedrock Agents — worth understanding before Step 9 gets into the managed abstraction.",
+      "diagrams": [
+        {
+          "id": "d1-diag-service-selection",
+          "title": "Which AWS service for a GenAI workload?",
+          "alt": "A decision tree. First ask whether a pre-trained foundation model is enough. If yes, use Amazon Bedrock. If you need to host or fine-tune your own model, use SageMaker — JumpStart for pre-built or endpoints for custom. Only drop to EC2 or ECS if neither fits.",
+          "ascii": "Do you need a pre-trained foundation model?\n             │\n       ┌─────┴─────┐\n      Yes          No\n       │           │\n       ▼           ▼\n ┌───────────┐  Need custom training\n │  Bedrock  │  or hosting?\n │ (default) │       │\n └───────────┘  ┌────┴────┐\n               Yes        No\n                │          │\n                ▼          ▼\n         ┌──────────────┐  Unusual case:\n         │  SageMaker   │  EC2 / ECS / EKS\n         │  JumpStart = │  with your own\n         │  pre-built   │  inference stack\n         │  Endpoints = │\n         │  custom      │\n         └──────────────┘",
+          "caption": "In doubt, start with Bedrock. You only leave it when the stem tells you to."
+        },
+        {
+          "id": "d1-diag-converse-flow",
+          "title": "Converse API — multi-turn with tool use",
+          "alt": "A multi-turn conversation flow. The client sends a messages array with system prompt, user message, and optional toolConfig. Bedrock returns either an assistant text response or a toolUse block. If toolUse, the client executes the tool, sends a toolResult, and the model produces the final answer.",
+          "ascii": "Client                           Bedrock Converse\n  │                                     │\n  │ messages = [ system, user ]         │\n  │ toolConfig = [ get_weather schema ] │\n  │────────────────────────────────────>│\n  │                                     │\n  │                  response           │\n  │<────────────────────────────────────│\n  │                                     │\n  │   stopReason = \"tool_use\"           │\n  │   content    = [ toolUse(...) ]     │\n  │                                     │\n  │ (client executes get_weather)       │\n  │                                     │\n  │ messages += [ assistant, user ]     │\n  │ user content = [ toolResult(...) ]  │\n  │────────────────────────────────────>│\n  │                                     │\n  │                  final response     │\n  │<────────────────────────────────────│\n  │   content = [ text(...) ]           │\n  │                                     │",
+          "caption": "ConverseStream is identical except responses stream back token by token."
+        }
+      ],
+      "gotchas": [
+        {
+          "trap": "Bedrock and SageMaker are interchangeable for hosting models.",
+          "correction": "They solve different problems. Bedrock is managed access to third-party and Amazon FMs — no endpoint to run. SageMaker is yours to host/fine-tune. Exam default for 'API to an FM' is Bedrock."
+        },
+        {
+          "trap": "Converse and InvokeModel produce the same output.",
+          "correction": "The response schema is different. Converse returns a unified `output.message.content[]` with typed blocks (text, toolUse, image). InvokeModel returns whatever the provider's native body is. Your parsing code is not portable across the two."
+        },
+        {
+          "trap": "Streaming only matters for UX.",
+          "correction": "It also matters for cost and reliability — you can stop generation early on a stop condition, and you surface partial output before a timeout. Exam questions about 'reducing perceived latency' want ConverseStream."
+        },
+        {
+          "trap": "Function calling is a separate Bedrock feature.",
+          "correction": "It's part of Converse (`toolConfig`). There's no separate 'function calling API.' The model produces a toolUse block and your code is responsible for executing the function and returning a toolResult."
+        },
+        {
+          "trap": "Well-Architected Lens is optional reading.",
+          "correction": "The exam frames 'best practice' questions directly from the Lens. If a stem says 'which design principle applies' or 'following AWS best practices,' the answer traces back to one of the six pillars."
+        },
+        {
+          "trap": "You need to memorize every model's exact parameter ranges.",
+          "correction": "You don't. You need to know *which* parameters exist (temperature, top-p, top-k, maxTokens, stopSequences) and *what each controls*. Exact ranges are provider docs."
+        }
+      ],
+      "examHooks": [
+        {
+          "trigger": "serverless access to foundation models from multiple providers",
+          "pointsTo": "Amazon Bedrock"
+        },
+        {
+          "trigger": "one API that works across Claude, Nova, Llama",
+          "pointsTo": "Converse API"
+        },
+        {
+          "trigger": "reduce time-to-first-token in a chat UI",
+          "pointsTo": "ConverseStream"
+        },
+        {
+          "trigger": "fine-tune and host a proprietary model",
+          "pointsTo": "Amazon SageMaker (endpoints or JumpStart)"
+        },
+        {
+          "trigger": "model calls an external function / tool",
+          "pointsTo": "Converse toolConfig (tool use / function calling)"
+        },
+        {
+          "trigger": "pre-built model deployment with one click",
+          "pointsTo": "SageMaker JumpStart"
+        },
+        {
+          "trigger": "follow AWS GenAI best practices / design principles",
+          "pointsTo": "Well-Architected GenAI Lens"
+        },
+        {
+          "trigger": "asynchronous, long-running inference job",
+          "pointsTo": "Bedrock StartAsyncInvoke"
+        }
+      ]
+    },
+    "flashcards": [
+      {
+        "id": "d1-fc-01",
+        "stepNumber": 1,
+        "question": "How many questions are on the AIP-C01 exam, how many are scored, and what's the passing score?",
+        "answer": "75 questions total, 65 scored (10 unscored pretest), 180 minutes. Passing score is 750 out of 1000.",
+        "tags": ["exam-structure"]
+      },
+      {
+        "id": "d1-fc-02",
+        "stepNumber": 1,
+        "question": "Which AIP-C01 domain carries the most weight and what's roughly its percentage?",
+        "answer": "Domain 1 — FM Integration, Data Management, and Compliance — at roughly 31%. Implementation (26%) is second.",
+        "tags": ["exam-structure", "domains"]
+      },
+      {
+        "id": "d1-fc-03",
+        "stepNumber": 1,
+        "question": "Which Bedrock API should you default to for new applications, and why?",
+        "answer": "Converse. Its request/response schema is unified across all supported providers, so you don't rewrite parsing code when you switch models.",
+        "tags": ["bedrock", "converse-api"]
+      },
+      {
+        "id": "d1-fc-04",
+        "stepNumber": 1,
+        "question": "When would you use InvokeModel instead of Converse?",
+        "answer": "When you need a model-specific request/response feature not yet surfaced through Converse (edge cases — Converse is the default otherwise).",
+        "tags": ["bedrock", "converse-api"]
+      },
+      {
+        "id": "d1-fc-05",
+        "stepNumber": 1,
+        "question": "Bedrock vs SageMaker — one-line rule of thumb?",
+        "answer": "Bedrock = call someone else's FM via API (serverless). SageMaker = host/fine-tune your own model (endpoints or JumpStart). Exam default for FM API is Bedrock.",
+        "tags": ["service-selection"]
+      },
+      {
+        "id": "d1-fc-06",
+        "stepNumber": 1,
+        "question": "How does tool use (function calling) work in the Converse API?",
+        "answer": "You pass a toolConfig with JSON-schema tool definitions. The model returns a toolUse block; your code executes the tool and sends a toolResult back as a user message; the model replies with the final answer.",
+        "tags": ["converse-api", "tool-use"]
+      },
+      {
+        "id": "d1-fc-07",
+        "stepNumber": 1,
+        "question": "Which Bedrock operation would you use for asynchronous, long-running inference?",
+        "answer": "StartAsyncInvoke — submits an inference job and returns a jobId; you fetch the result later. Used when latency isn't interactive-grade.",
+        "tags": ["bedrock", "async"]
+      },
+      {
+        "id": "d1-fc-08",
+        "stepNumber": 1,
+        "question": "Which AWS framework codifies GenAI best practices across six pillars, and when does the exam reference it?",
+        "answer": "The Well-Architected GenAI Lens. Any 'AWS best practices' or 'which design principle applies' question traces back to one of its six pillars.",
+        "tags": ["well-architected"]
+      },
+      {
+        "id": "d1-fc-09",
+        "stepNumber": 1,
+        "question": "A product team wants one-click deployment of a pre-built LLM for fine-tuning. Which AWS service?",
+        "answer": "Amazon SageMaker JumpStart — pre-built model deployment with templates, fine-tuning hooks, and endpoint hosting.",
+        "tags": ["sagemaker", "service-selection"]
+      },
+      {
+        "id": "d1-fc-10",
+        "stepNumber": 1,
+        "question": "Why is ConverseStream the production-recommended API for interactive chat?",
+        "answer": "It streams tokens as they're generated, cutting time-to-first-token and letting users read partial output — the difference between a responsive chat UI and an abandoned one.",
+        "tags": ["converse-api", "streaming"]
+      }
+    ],
     "furtherReading": [
       {
         "title": "Amazon Bedrock Deep Dive — SimpleAWS Newsletter",
@@ -295,6 +490,197 @@
           "Verify that requests are routed to available regions",
           "Monitor request distribution in CloudWatch metrics"
         ]
+      }
+    ],
+    "summary": {
+      "tldr": "Pick the cheapest model that clears your quality bar, then wrap it in a Cross-Region Inference Profile and a circuit breaker so one region's outage never takes you down.",
+      "readMinutes": 4,
+      "keyConcepts": [
+        {
+          "term": "Cross-Region Inference Profile",
+          "definition": "A Bedrock profile ID (prefixed with 'us.', 'eu.', etc.) that transparently routes InvokeModel/Converse calls across a pre-defined region set — automatic failover and pooled throughput without client-side logic.",
+          "accent": "aqua"
+        },
+        {
+          "term": "Converse API",
+          "definition": "A unified Bedrock API that abstracts per-model message formats, so the same request shape works across Claude, Nova, Llama, Mistral — making model switching a one-line config change.",
+          "accent": "blue"
+        },
+        {
+          "term": "Inference parameters",
+          "definition": "Runtime knobs that shape generation: temperature (randomness), top-p (nucleus sampling), top-k (candidate count), maxTokens (output cap), stopSequences (early halt).",
+          "accent": "yellow"
+        },
+        {
+          "term": "Circuit breaker",
+          "definition": "Resilience pattern where repeated failures flip a breaker state in DynamoDB so downstream calls fast-fail to a fallback model or cached response instead of piling up timeouts.",
+          "accent": "orange"
+        },
+        {
+          "term": "Model selection funnel",
+          "definition": "Filter by modality first (text / image / multimodal), then context window, then latency and cost, then quality benchmarks — never the other way around.",
+          "accent": "purple"
+        },
+        {
+          "term": "Amazon Nova family",
+          "definition": "AWS-native FMs: Nova Micro (text, cheapest), Nova Lite (multimodal, low-cost), Nova Pro (multimodal, balanced), Nova Premier (highest quality).",
+          "accent": "blue"
+        },
+        {
+          "term": "AppConfig dynamic model selection",
+          "definition": "Store modelId (and a fallback list) in AWS AppConfig so Lambda reads the active model at invocation time — rolling model swaps with no redeploy.",
+          "accent": "purple"
+        }
+      ],
+      "howItWorks": "Model selection in Bedrock is a three-step funnel. First, filter by modality and context window — if you need multimodal input or a 200K window, most models are out before cost even enters the picture. Second, within the surviving set, compare price per 1K input/output tokens and p50 latency in your region. Third, pick the cheapest model whose quality clears your evaluation bar (LLM-as-a-judge or golden-set accuracy). Only then do you wire it up.\n\nOnce chosen, the model becomes a dependency — and dependencies fail. Bedrock's answer is the Cross-Region Inference Profile: a profile ID that looks like a model ID but internally load-balances and fails over across a region set (for example us-east-1, us-west-2, us-east-2 for US profiles). Your code keeps calling InvokeModel or Converse; Bedrock handles the routing. This also raises effective throughput because quota is pooled across regions.\n\nFor graceful degradation layer a circuit breaker on top. A Step Functions state machine tracks consecutive failures in DynamoDB; after N errors the breaker opens and subsequent invocations route to a fallback (smaller model, cached response, or a polite error). The breaker half-opens on a timer to probe recovery.\n\nModel switching at runtime uses AWS AppConfig. Lambda fetches the current modelId from an AppConfig feature flag on cold start (and on a TTL refresh). When you want to roll from Claude 3.5 Sonnet to Claude 3.7 Sonnet, you update AppConfig — no deploy, no code change. The Converse API makes this safe because the message schema is identical across models.\n\nInference parameters are model-agnostic levers but have model-specific ranges. Temperature 0 gives deterministic-ish output (useful for extraction); 0.7–1.0 for creative tasks. Top-p trims the tail of the probability distribution; lower = tighter. maxTokens protects your bill and latency budget. Stop sequences are the cheapest way to end generation early when you know the terminator.",
+      "diagrams": [
+        {
+          "id": "d2-diag-failover",
+          "title": "Cross-Region Inference failover path",
+          "alt": "Client calls Bedrock using a cross-region inference profile ID. Bedrock routes to us-east-1 primary, then us-west-2, then us-east-2 as fallbacks. If all three fail, a Step Functions circuit breaker opens and falls back to Nova Lite or a cached response.",
+          "ascii": "Client (Lambda)\n    │  Converse(modelId = \"us.anthropic.claude-3-5-sonnet-v1:0\")\n    ▼\n┌────────────────────────────────────────────┐\n│  Bedrock Cross-Region Inference Profile    │\n└─────┬────────────┬────────────┬────────────┘\n      │            │            │\n      ▼            ▼            ▼\n ┌─────────┐  ┌─────────┐  ┌─────────┐\n │us-east-1│  │us-west-2│  │us-east-2│\n │ primary │  │fallback │  │  last   │\n └────┬────┘  └────┬────┘  └────┬────┘\n      │            │            │\n      └──────── response ───────┘\n\n                  All 3 fail?\n                       │\n                       ▼\n          ┌──────────────────────────────┐\n          │ Step Functions + DynamoDB    │\n          │ breaker opens → Nova Lite    │\n          │ or cached response           │\n          └──────────────────────────────┘",
+          "caption": "The 'us.' prefix is the tell that you're using a cross-region profile, not a single-region model."
+        },
+        {
+          "id": "d2-diag-selection",
+          "title": "Model selection decision tree",
+          "alt": "A decision tree for picking a Bedrock model. First ask whether the workload needs image or video input. Multimodal branches to Nova Lite, Nova Pro, or Claude 3.x. Text-only branches to Nova Micro, Claude Haiku, or Llama. Then narrow by context window and latency.",
+          "ascii": "    Needs image or video input?\n              │\n        ┌─────┴─────┐\n       Yes          No\n        │           │\n        ▼           ▼\n   Multimodal   Text-only\n    Nova Lite    Nova Micro\n    Nova Pro     Claude Haiku\n    Claude 3.x   Llama 3\n        │           │\n        ▼           ▼\n   Context >100K?  Latency-critical?\n        │            │\n     ┌──┴──┐     ┌───┴───┐\n    Yes   No    Yes     No\n     │     │     │       │\n     ▼     ▼     ▼       ▼\n   Claude  Nova  Micro / Premier /\n   Sonnet  Pro   Haiku   Sonnet\n                 (speed) (quality)",
+          "caption": "Modality and context window are hard gates; cost, latency, and quality are the soft trade-off after."
+        }
+      ],
+      "gotchas": [
+        {
+          "trap": "Cross-Region Inference means 'invoke in any region.'",
+          "correction": "It means 'invoke one profile ID that Bedrock routes across a fixed region set.' The profile itself is region-scoped — you still call a specific regional endpoint to use it."
+        },
+        {
+          "trap": "Converse API and InvokeModel are interchangeable.",
+          "correction": "Converse is the portable, schema-unified one — use it for agents and multi-model apps. InvokeModel is still needed for some raw/streaming edge cases and per-model features not yet surfaced through Converse."
+        },
+        {
+          "trap": "Temperature 0 guarantees the same output every time.",
+          "correction": "It minimizes randomness but does not guarantee determinism — FMs can still vary due to floating-point non-associativity and backend updates. For true repeatability use evaluation jobs, not test-by-re-invoke."
+        },
+        {
+          "trap": "Bedrock quotas are per-model.",
+          "correction": "They're per-model AND per-region. Cross-Region Inference Profiles pool quota across the profile's regions — a main value prop alongside failover."
+        },
+        {
+          "trap": "Circuit breakers belong inside Lambda.",
+          "correction": "For FM calls the exam-favored pattern is Step Functions + DynamoDB — the state is durable across Lambda cold starts and shared across concurrent executions."
+        },
+        {
+          "trap": "AppConfig is for application config, not model selection.",
+          "correction": "AppConfig's feature flags and dynamic configuration profiles are the AWS-native answer for runtime model swaps — the expected answer when the stem says 'change models without redeployment.'"
+        }
+      ],
+      "examHooks": [
+        {
+          "trigger": "automatic failover across regions + Bedrock",
+          "pointsTo": "Cross-Region Inference Profile"
+        },
+        {
+          "trigger": "single API across multiple model providers",
+          "pointsTo": "Converse API"
+        },
+        {
+          "trigger": "change the model without redeploying Lambda",
+          "pointsTo": "AWS AppConfig feature flag"
+        },
+        {
+          "trigger": "stop runaway costs on open-ended generation",
+          "pointsTo": "maxTokens + stopSequences"
+        },
+        {
+          "trigger": "deterministic extraction / structured output",
+          "pointsTo": "Temperature = 0 (or very low)"
+        },
+        {
+          "trigger": "detect repeated FM failures and fall back",
+          "pointsTo": "Step Functions circuit breaker with DynamoDB state"
+        },
+        {
+          "trigger": "cheapest multimodal model on Bedrock",
+          "pointsTo": "Amazon Nova Lite"
+        },
+        {
+          "trigger": "raise effective Bedrock throughput beyond one region's quota",
+          "pointsTo": "Cross-Region Inference Profile (pools quota)"
+        }
+      ]
+    },
+    "flashcards": [
+      {
+        "id": "d2-fc-01",
+        "stepNumber": 2,
+        "question": "What AWS feature gives Bedrock automatic cross-region failover with no client-side code changes?",
+        "answer": "A Cross-Region Inference Profile. You pass the profile ID (e.g. 'us.anthropic.claude-3-5-sonnet-v1:0') to InvokeModel or Converse; Bedrock routes across the profile's regions.",
+        "tags": ["resilience", "cross-region"]
+      },
+      {
+        "id": "d2-fc-02",
+        "stepNumber": 2,
+        "question": "Which Bedrock API lets you swap models (Claude, Nova, Llama) without changing request/response parsing code?",
+        "answer": "The Converse API — it unifies the message schema across providers.",
+        "tags": ["converse-api"]
+      },
+      {
+        "id": "d2-fc-03",
+        "stepNumber": 2,
+        "question": "Name the four members of the Amazon Nova family and their key differentiator.",
+        "answer": "Nova Micro (text-only, cheapest), Nova Lite (multimodal, low cost), Nova Pro (multimodal, balanced quality/cost), Nova Premier (highest quality).",
+        "tags": ["nova", "model-catalog"]
+      },
+      {
+        "id": "d2-fc-04",
+        "stepNumber": 2,
+        "question": "Which inference parameter caps generation length to control cost and latency?",
+        "answer": "maxTokens (sometimes maxOutputTokens or max_tokens depending on the model) — the hard upper bound on generated tokens.",
+        "hint": "It starts with 'max'.",
+        "tags": ["inference-params"]
+      },
+      {
+        "id": "d2-fc-05",
+        "stepNumber": 2,
+        "question": "Difference between top-p and top-k in one line each?",
+        "answer": "top-k keeps the k highest-probability tokens; top-p (nucleus) keeps the smallest set whose cumulative probability ≥ p. top-p adapts to distribution shape; top-k is fixed-size.",
+        "tags": ["inference-params"]
+      },
+      {
+        "id": "d2-fc-06",
+        "stepNumber": 2,
+        "question": "What AWS service combination implements a circuit breaker for Bedrock FM calls?",
+        "answer": "AWS Step Functions (state machine) + Amazon DynamoDB (breaker state + failure counters). Step Functions orchestrates; DynamoDB persists open/closed/half-open state.",
+        "tags": ["resilience", "circuit-breaker"]
+      },
+      {
+        "id": "d2-fc-07",
+        "stepNumber": 2,
+        "question": "How do you change the active Bedrock model for a production Lambda without redeploying code?",
+        "answer": "Store the modelId in AWS AppConfig (feature flag or dynamic configuration profile). Lambda reads it at cold start / on TTL refresh. Update AppConfig to roll models.",
+        "tags": ["appconfig", "model-switching"]
+      },
+      {
+        "id": "d2-fc-08",
+        "stepNumber": 2,
+        "question": "Besides failover, what quota-related benefit do Cross-Region Inference Profiles give?",
+        "answer": "They pool invocation quota across the profile's regions, raising effective throughput for a single logical model.",
+        "tags": ["cross-region", "quotas"]
+      },
+      {
+        "id": "d2-fc-09",
+        "stepNumber": 2,
+        "question": "For a data-extraction task that must return the same structure every time, what temperature do you pick and why?",
+        "answer": "Temperature 0 (or very near zero). It minimizes sampling randomness so outputs stay as deterministic as the model allows — ideal for structured extraction.",
+        "tags": ["inference-params"]
+      },
+      {
+        "id": "d2-fc-10",
+        "stepNumber": 2,
+        "question": "What's the first filter to apply when selecting a Bedrock model for a new workload?",
+        "answer": "Modality — does it need to accept/produce text, images, video, or embeddings? Modality eliminates most of the catalog before cost or quality even matter.",
+        "tags": ["model-selection"]
       }
     ],
     "furtherReading": [

@@ -142,6 +142,11 @@ export default defineConfig({
 		"badge-domain-4": "badge border border-domain-4 text-domain-4",
 		"badge-domain-5": "badge border border-domain-5 text-domain-5",
 
+		// Long-form content
+		"ascii-diagram":
+			"block font-mono text-[13px] leading-[1.4] text-ink-secondary bg-surface-0 border border-surface-3 rounded-card px-5 py-4 overflow-x-auto whitespace-pre my-4",
+		"backface-hidden": "[backface-visibility:hidden]",
+
 		// Nav
 		"nav-link":
 			"flex items-center gap-2.5 px-5 py-2.5 text-base font-mono text-ink-muted hover:text-ink hover:bg-surface-2 transition-colors",

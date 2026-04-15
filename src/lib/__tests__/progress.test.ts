@@ -20,7 +20,7 @@ import {
 import type { UserProgress } from "../types";
 
 const STORAGE_KEY = "aip-c01-progress";
-const CURRENT_VERSION = 2;
+const CURRENT_VERSION = 3;
 
 function getStored(): UserProgress {
 	return JSON.parse(localStorage.getItem(STORAGE_KEY)!);
